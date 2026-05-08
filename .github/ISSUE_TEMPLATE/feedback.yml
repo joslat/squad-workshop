@@ -1,0 +1,63 @@
+name: Workshop feedback
+description: Share your experience after completing one or more modules
+labels: ["feedback"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Honest feedback — positive or negative — helps improve the workshop. You don't need to finish all three modules to leave feedback.
+
+  - type: checkboxes
+    id: completed
+    attributes:
+      label: Modules completed
+      options:
+        - label: "Module 1 — Basic"
+        - label: "Module 2 — Intermediate"
+        - label: "Module 3 — Advanced"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: verdict
+    attributes:
+      label: Would you use Squad on a real project after this workshop?
+      options:
+        - "Yes — it clearly reduced context friction"
+        - "Maybe — some parts were useful, others weren't"
+        - "No — overhead outweighed the value"
+        - "Too early to say"
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-worked
+    attributes:
+      label: What worked well
+      description: Steps, prompts, or team behaviors that delivered clear value.
+    validations:
+      required: false
+
+  - type: textarea
+    id: what-didnt
+    attributes:
+      label: What didn't work
+      description: Steps that were confusing, slow, or produced poor results.
+    validations:
+      required: false
+
+  - type: textarea
+    id: artifacts
+    attributes:
+      label: Artifact quality (Step 9 in Module 2)
+      description: "If you reached Step 9: did decisions.md, agent histories, and wisdom.md contain useful information — or was it AI confetti?"
+    validations:
+      required: false
+
+  - type: input
+    id: squad-version
+    attributes:
+      label: Squad CLI version
+      placeholder: "e.g. 0.9.4"
+    validations:
+      required: false

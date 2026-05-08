@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Questions and discussion
+    url: https://github.com/joslat/squad-workshop/discussions
+    about: Ask questions, share experiences, and discuss the workshop here.
+  - name: Squad CLI issues
+    url: https://github.com/bradygaster/squad-cli
+    about: Bugs in Squad itself (not the workshop content) go to the Squad CLI repo.

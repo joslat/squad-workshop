@@ -1,0 +1,13 @@
+# IDE and editor
+.vscode/
+.idea/
+*.suo
+*.user
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Workshop lab repo (created during Module 1 — not part of this repo)
+reading-list-squad-lab/

@@ -1,0 +1,66 @@
+name: Broken step
+description: Report a step in the workshop that failed or gave unexpected results
+labels: ["bug", "workshop-content"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting. The more detail you provide, the faster this gets fixed.
+        Run `.\scripts\Verify-Prerequisites.ps1` and paste its output in the Tool versions field below.
+
+  - type: dropdown
+    id: module
+    attributes:
+      label: Module
+      options:
+        - "1 — Basic"
+        - "2 — Intermediate"
+        - "3 — Advanced"
+    validations:
+      required: true
+
+  - type: input
+    id: step
+    attributes:
+      label: Step number or heading
+      placeholder: "e.g. Step 0f — squad doctor, or Step 3 — Make the team explore first"
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: Paste the exact command you ran and the full error output or unexpected result.
+      placeholder: |
+        Command:
+        squad doctor
+
+        Output:
+        ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: tool-versions
+    attributes:
+      label: Tool versions
+      description: Paste the full output of `.\scripts\Verify-Prerequisites.ps1`
+      render: text
+    validations:
+      required: true
+
+  - type: input
+    id: os
+    attributes:
+      label: OS and terminal
+      placeholder: "e.g. Windows 11 23H2, PowerShell 7.4.2"
+    validations:
+      required: true
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: Anything else
+      description: Workaround you found, related issues, anything else relevant.
+      required: false
