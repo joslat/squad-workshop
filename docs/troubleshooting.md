@@ -122,7 +122,7 @@ Should show `✓ Logged in to github.com account <your-username>`.
 
 ### `ralph-stop` file blocks the next Ralph run
 
-**Symptom:** `squad triage` or `squad loop` exits immediately on the next run with a message about a stop file.
+**Symptom:** `squad watch` or `squad loop` exits immediately on the next run with a message about a stop file.
 
 **Cause:** You stopped Ralph cleanly last time by creating `.squad/ralph-stop`, and the file wasn't deleted.
 
@@ -132,7 +132,7 @@ Should show `✓ Logged in to github.com account <your-username>`.
 Remove-Item .squad\ralph-stop -ErrorAction SilentlyContinue
 ```
 
-Then re-run your `squad triage` or `squad loop` command.
+Then re-run your `squad watch` or `squad loop` command.
 
 ---
 
@@ -185,7 +185,7 @@ Error [ERR_MODULE_NOT_FOUND]: Cannot find module
 Did you mean to import "vscode-jsonrpc/node.js"?
 ```
 
-**Cause:** `@github/copilot-sdk` 0.1.32 has a broken import path that fails on Windows. Upstream [issue #1062](https://github.com/bradygaster/squad/issues/1062).
+**Cause:** `@github/copilot-sdk` 0.1.32 had a broken import path that failed on Windows. This was fixed upstream — upgrade to Squad CLI 0.9.4+ to resolve. ([issue #1062](https://github.com/bradygaster/squad/issues/1062) — closed)
 
 **Fix:** Add an override to your lab repo's `package.json` (create one in the root of `reading-list-squad-lab` if it doesn't exist):
 
@@ -205,7 +205,7 @@ Then run `npm install` in the lab repo. This forces the patched version to be us
 
 **Symptom:** Squad stops dispatching to team members. Work gets done inline by the coordinator. Commits go directly to `main` without branch creation or PR workflow. The session "feels like regular Copilot."
 
-**Cause:** The 92KB coordinator file (`squad.agent.md`) was silently dropped from the Copilot context budget due to pressure from a prior long session's summary. When this happens, Squad degrades to vanilla Copilot with no warning and no error message. Upstream [issue #1017](https://github.com/bradygaster/squad/issues/1017).
+**Cause:** The 92KB coordinator file (`squad.agent.md`) was silently dropped from the Copilot context budget due to pressure from a prior long session's summary. When this happens, Squad degrades to vanilla Copilot with no warning and no error message. This was fixed upstream — upgrade to Squad CLI 0.9.4+ to resolve. ([issue #1017](https://github.com/bradygaster/squad/issues/1017) — closed)
 
 **Fix:** Start a completely fresh Copilot CLI session:
 
@@ -237,11 +237,11 @@ Then verify your real changes are still there and commit normally. The `.gitattr
 
 ---
 
-### `squad triage --execute` agents don't behave like the assigned specialist (formerly `squad watch`)
+### `squad watch --execute` agents don't behave like the assigned specialist
 
 **Symptom:** You labeled an issue `squad:backend` (or `squad:bishop`, etc.) and Ralph's `--execute` mode picked it up — but the spawned agent behaves like a generic assistant, not like your Backend agent with its specific charter and personality.
 
-**Cause:** `squad triage --execute` (the command was renamed from `squad watch` upstream) uses the `squad:{member}` label only as a routing filter. When it spawns a Copilot session to work on the issue, it uses a **generic Ralph prompt** — the specialist's charter is never injected into the spawn prompt. Upstream [issue #1081](https://github.com/bradygaster/squad/issues/1081).
+**Cause:** `squad watch --execute` uses the `squad:{member}` label only as a routing filter. When it spawns a Copilot session to work on the issue, it uses a **generic Ralph prompt** — the specialist's charter is never injected into the spawn prompt. This is by design in the current release (upstream [issue #1081](https://github.com/bradygaster/squad/issues/1081) — closed).
 
 **Workaround:** For work that requires specialist quality (code architecture, nuanced review, expert domain knowledge), use interactive mode instead:
 

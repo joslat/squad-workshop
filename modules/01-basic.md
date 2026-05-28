@@ -245,6 +245,14 @@ dir .squad\agents\
 
 You should see directories for each team member (e.g. `ralph/`, `scribe/`, and your newly cast agents).
 
+> **Tip — add yourself as a human member.** Open `.squad/team.md` and add yourself to the `## Members` table with role `👤 Human — Project Owner` and no charter path. This tells every agent that you are the decision-maker and that notifications/escalations should reach you:
+>
+> ```markdown
+> | Your Name | 👤 Human — Project Owner | — | 👤 Human |
+> ```
+>
+> Agents read `team.md` at the start of each session. With you listed, they will address uncertainty to you instead of blocking or guessing.
+
 ---
 
 ## Step 3: Make the team explore first
