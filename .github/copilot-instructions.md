@@ -78,7 +78,7 @@ The 2 `ℹ️` info lines about `vscode-jsonrpc` and `copilot-sdk session.js` ar
 - **"Why is the Aspire dashboard empty?"** → Three causes: Docker not running (most common — `✓ lies when Docker is down`), Squad version too old, or firewall blocking `localhost:4317`.
 - **"The inbox under `.squad/decisions/inbox/` is empty"** → This is correct. The Scribe merged the decision into `.squad/decisions.md`.
 - **"squad doctor shows warnings"** → If on v0.9.1, upgrade with `npm install -g @bradygaster/squad-cli@latest`. If on v0.9.4+ and still seeing warnings (not info), paste the full output.
-- **"Should I use the coach agent?"** → Yes — `copilot --agent squad-coach` from within the `reading-list-squad-lab` directory gives step-by-step help and Squad expertise on demand.
+- **"Should I use the coach agent?"** → Yes. Run `.\scripts\Install-WorkshopAgents.ps1` once from the workshop repo root to install the coach into the lab repo's `.github/agents/`, then `copilot --agent squad-coach` from inside `reading-list-squad-lab` gives step-by-step help and Squad expertise on demand.
 
 ---
 

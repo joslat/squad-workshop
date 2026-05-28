@@ -237,11 +237,11 @@ Then verify your real changes are still there and commit normally. The `.gitattr
 
 ---
 
-### `squad watch --execute` agents don't behave like the assigned specialist
+### `squad triage --execute` agents don't behave like the assigned specialist (formerly `squad watch`)
 
 **Symptom:** You labeled an issue `squad:backend` (or `squad:bishop`, etc.) and Ralph's `--execute` mode picked it up — but the spawned agent behaves like a generic assistant, not like your Backend agent with its specific charter and personality.
 
-**Cause:** `squad watch --execute` uses the `squad:{member}` label only as a routing filter. When it spawns a Copilot session to work on the issue, it uses a **generic Ralph prompt** — the specialist's charter is never injected into the spawn prompt. Upstream [issue #1081](https://github.com/bradygaster/squad/issues/1081).
+**Cause:** `squad triage --execute` (the command was renamed from `squad watch` upstream) uses the `squad:{member}` label only as a routing filter. When it spawns a Copilot session to work on the issue, it uses a **generic Ralph prompt** — the specialist's charter is never injected into the spawn prompt. Upstream [issue #1081](https://github.com/bradygaster/squad/issues/1081).
 
 **Workaround:** For work that requires specialist quality (code architecture, nuanced review, expert domain knowledge), use interactive mode instead:
 

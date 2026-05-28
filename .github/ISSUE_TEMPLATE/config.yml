@@ -4,5 +4,5 @@ contact_links:
     url: https://github.com/joslat/squad-workshop/discussions
     about: Ask questions, share experiences, and discuss the workshop here.
   - name: Squad CLI issues
-    url: https://github.com/bradygaster/squad-cli
-    about: Bugs in Squad itself (not the workshop content) go to the Squad CLI repo.
+    url: https://github.com/bradygaster/squad
+    about: Bugs in Squad itself (not the workshop content) go to the Squad CLI repo. The npm package is `@bradygaster/squad-cli`; the source repo is `bradygaster/squad`.

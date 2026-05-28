@@ -86,7 +86,7 @@ Before requesting review:
 ## What this repo is not
 
 Please don't open issues or PRs for:
-- **Squad CLI bugs** — those go to [@bradygaster/squad-cli](https://github.com/bradygaster/squad-cli)
+- **Squad CLI bugs** — those go to [bradygaster/squad](https://github.com/bradygaster/squad) (the npm package is `@bradygaster/squad-cli`; the source repo is `bradygaster/squad`)
 - **GitHub Copilot CLI issues** — those go to GitHub support
 - Feature requests for Squad itself — this repo documents Squad, it doesn't build it
 

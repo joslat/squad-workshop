@@ -2,8 +2,11 @@
 
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 [![Check links](https://github.com/joslat/squad-workshop/actions/workflows/check-links.yml/badge.svg)](https://github.com/joslat/squad-workshop/actions/workflows/check-links.yml)
+[![Verify script](https://github.com/joslat/squad-workshop/actions/workflows/verify-script.yml/badge.svg)](https://github.com/joslat/squad-workshop/actions/workflows/verify-script.yml)
 
 > Workshop: assemble your AI dev team with Squad and ship a full-stack app in minutes.
+
+> **Targets Squad CLI `0.9.4`.** Newer Squad CLI versions should work — if `squad doctor` reports `0 failed`, you're fine even if the `passed` / `info` counts differ from what the workshop shows. The minimums for every other tool are in the [prerequisites table](#prerequisites) below.
 
 You've used AI assistants. You've pasted context fifty times. You've re-explained the architecture to a new chat window.
 
@@ -32,7 +35,7 @@ The app is a vehicle. The point is to experience the team model, not to ship the
 |---|---|---|---|---|
 | 1 | [Basic](modules/01-basic.md) | A working .NET 10 + React reading list app, built by the team end-to-end with one architectural decision and a real review pass. | ~90 min | None beyond the prereqs below. |
 | 2 | [Intermediate](modules/02-intermediate.md) | A second-wave feature on the same app — filtering, validation, regression-aware tests — to see whether persistent memory actually compounds. Inspect the team's artifacts. | ~45 min | Completed module 1. |
-| 3 | [Advanced](modules/03-advanced.md) | Observe Squad with .NET Aspire, then graduate to autonomous mode with **Ralph** — `squad triage`, watch mode, and prompt-driven loops. | ~60 min | Completed module 1 (module 2 recommended). **Docker Desktop running** for Aspire. |
+| 3 | [Advanced](modules/03-advanced.md) | Observe Squad with .NET Aspire, then graduate to autonomous mode with **Ralph** — `squad triage` (polling and `--execute`), plus prompt-driven `squad loop`. | ~60 min | Completed module 1 (module 2 recommended). **Docker Desktop running** for Aspire. |
 
 > **Honest about scope:** modules 1 and 2 are the workshop. Module 3 is more of a guided tour of the riskier corners — autonomous execution, observability — and it deliberately doesn't ask you to leave Ralph running on your repo unsupervised.
 
@@ -77,27 +80,17 @@ Then open [modules/01-basic.md](modules/01-basic.md) and follow from Step 0.
 
 ---
 
-## Module summaries
-
-### [Module 1 — Basic](modules/01-basic.md)
-
-Get from zero to a real, working full-stack app driven by the team. Cover the essential muscle memory: scaffolding the team, planning before building, recording a decision, building a vertical slice, and using the reviewer on purpose.
-
-You can stop here and have a complete answer for "should I keep using Squad?"
-
-### [Module 2 — Intermediate](modules/02-intermediate.md)
-
-The compounding-memory test. Add a second feature on top of module 1 and see whether the team gets faster because the repo remembers, or just retraces steps. Then inspect the artifacts the team left behind.
-
-### [Module 3 — Advanced](modules/03-advanced.md)
-
-Two optional capabilities — .NET Aspire observability and Ralph (autonomous triage/loop mode). Neither is needed for daily work; both are worth knowing they exist. Treat this module as a guided tour, not a build exercise.
-
----
-
 ## Getting help
 
-**Stuck on a step?** Use the Squad Coach agent — it knows every module step, every troubleshooting pattern, and the failure modes of Squad itself. Run this from inside your `reading-list-squad-lab` directory:
+**Stuck on a step?** Use the Squad Coach agent — it knows every module step, every troubleshooting pattern, and the failure modes of Squad itself.
+
+One-time setup (from the workshop repo root):
+
+```powershell
+.\scripts\Install-WorkshopAgents.ps1
+```
+
+This copies the coach agent and the two helper prompts into `reading-list-squad-lab\.github\` so Copilot CLI can discover them. Then from inside the lab repo:
 
 ```powershell
 copilot --agent squad-coach
@@ -107,7 +100,8 @@ Then ask anything: "I'm on Module 1 Step 4 and the team isn't generating tests" 
 
 **Using VS Code?** GitHub Copilot in this repo is pre-configured with Squad context — ask questions in Chat and it will give Squad-aware answers without any setup.
 
-**Structured help:**
+**Structured help.** The two `.prompt.md` files below are GitHub Copilot Chat reusable prompts (front-matter `mode: ask`) — in VS Code with Copilot Chat, invoke them by name from the Chat prompt picker, or open the file and copy its templated content into any Copilot CLI session.
+
 - [Prompt: debug a stuck step](.github/prompts/debug-step.prompt.md) — paste your error, get a diagnosis
 - [Prompt: inspect Squad artifacts](.github/prompts/inspect-squad-artifacts.prompt.md) — honest evaluation of your `.squad/` files after Module 2
 - [docs/troubleshooting.md](docs/troubleshooting.md) — known failure patterns with exact fixes

@@ -80,6 +80,8 @@ gh repo create reading-list-squad-lab --public --source . --push
 
 > This creates the GitHub repo, links it as `origin`, and pushes the initial commit in one command. `--push` uses your current branch name automatically — no need to specify `master` or `main`.
 >
+> If you'd rather not publish a workshop exercise, use `--private` instead of `--public`. No subsequent step depends on the repo being public.
+>
 > If the repo already exists on GitHub, link it manually and push:
 > ```powershell
 > git remote add origin https://github.com/<your-username>/reading-list-squad-lab.git
@@ -93,6 +95,8 @@ squad init
 ```
 
 **Expected output:** A list of created files under `.squad/`, `.github/`, and `.copilot/`, ending with `Your team is ready. Run squad to start.`
+
+> **Note on Squad's "Run squad to start" line:** ignore it. The interactive `squad` shell is deprecated. Use `copilot --agent squad` as shown in Step 1 below.
 
 ### 0e. Commit the Squad scaffolding
 
@@ -126,7 +130,7 @@ Mode: local
 ✅  casting/registry.json exists — file present, valid JSON
 ✅  decisions.md exists — file present
 ✅  .github/agents/squad.agent.md — file present (Copilot agent discovery file)
-✅  Node.js ≥22.5.0 (node:sqlite) — vXX.XX.X — node:sqlite available
+✅  Node.js ≥22.5.0 (node:sqlite) — v22.5.0 — node:sqlite available
 ℹ️  vscode-jsonrpc exports field — not found in node_modules (expected for global installs)
 ℹ️  copilot-sdk session.js ESM patch — not found in node_modules (expected for global installs)
 
@@ -135,7 +139,17 @@ Summary: 9 passed, 0 failed, 0 warnings, 2 info
 
 The two `ℹ️` info lines are not warnings — Squad explicitly tells you they're expected when the CLI is installed globally (which it is, in this workshop). Both packages are bundled inside the Squad CLI itself, not in your project's `node_modules/`. No action needed.
 
+> The exact `v22.5.0` Node line will show your installed Node version — anything ≥22.5.0 is fine.
+
 > **If you're stuck on v0.9.1:** `squad init` won't scaffold `casting/registry.json` and `squad doctor` will report two warnings instead of info. Either upgrade (`npm install -g @bradygaster/squad-cli@latest`) or check the [CHANGELOG](https://github.com/bradygaster/squad/blob/main/CHANGELOG.md) for your version.
+
+> **If you're on a newer Squad CLI than this workshop targets** (see the version declared at the top of the [README](../README.md)) and the summary numbers differ — different `passed` count, different `info` count — that's expected. Squad CLI adds checks on minor bumps. The signal that matters is **`0 failed`**.
+
+> **Optional — install the workshop coach now.** From a separate terminal in the workshop repo root:
+> ```powershell
+> .\scripts\Install-WorkshopAgents.ps1
+> ```
+> Then in your lab terminal, `copilot --agent squad-coach` is available any time you get stuck.
 
 ---
 

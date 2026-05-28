@@ -19,9 +19,8 @@ param()
 
 $ErrorActionPreference = 'SilentlyContinue'
 
-$pass  = 0
-$fail  = 0
-$results = @()
+$pass = 0
+$fail = 0
 
 function Test-Result {
     param(
@@ -92,7 +91,7 @@ if ($r.Ok) { $pass++ } else { $fail++ }
 
 # --- 5. GitHub CLI auth ---
 $ghAuthRaw = gh auth status 2>&1
-$ghAuthOk  = ($ghAuthRaw | Select-String 'Logged in') -ne $null
+$ghAuthOk  = $null -ne ($ghAuthRaw | Select-String 'Logged in')
 $ghAuthMsg = if ($ghAuthOk) { ($ghAuthRaw | Select-String 'Logged in').ToString().Trim() } else { 'not authenticated' }
 $r = Test-Result 'GH auth' $ghAuthOk $ghAuthMsg 'logged in' `
     'gh auth login'
