@@ -203,6 +203,8 @@ copilot --agent squad --yolo
 
 By default, Copilot CLI may start with a mid-tier model (e.g. `GPT-5.4 (medium)`). For a workshop that involves multi-agent coordination, code generation across .NET and React, architectural decisions, and code review — **use the strongest model available.**
 
+> **Want different models per agent?** The `/model` choice here applies to the whole session. To run Ralph and the Scribe on a cheap model while the Lead reviews on a premium one, see [docs/budget-and-models.md](../docs/budget-and-models.md) (`squad config model --agent …`).
+
 Check the current model and available options:
 
 ```
