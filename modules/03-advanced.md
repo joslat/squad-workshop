@@ -271,7 +271,7 @@ New-Item -ItemType Directory -Path $squadDir -Force | Out-Null
 
 To get a webhook URL: in Teams, go to your channel → **Manage channel** → **Connectors** → **Incoming Webhook** → **Configure**. Copy the URL and paste it above.
 
-Ralph reads this file at startup. No code changes needed — if the file exists and is non-empty, Teams alerts are enabled automatically.
+The `ralph-watch.ps1` wrapper you'll set up in Step 11h reads this file and posts an alert to your channel each round — set the webhook URL here, then run Ralph through that wrapper. (Prefer OAuth over a webhook? Squad also ships a built-in `teams-graph` adapter + `notification-routing` skill — see [Module 4 B3](04-bonus.md#b3--notifications-via-teams).)
 
 ### 11h. "Ralph, Go!" — running Ralph with a custom prompt script
 

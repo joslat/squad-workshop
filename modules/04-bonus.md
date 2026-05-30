@@ -143,35 +143,32 @@ If you finished the workshop and never touch MCP, that's fine — the Reading Li
 
 ## B3 — Notifications via Teams
 
-If you want Ralph to *announce* — "triaged 3 issues, here are the labels" — there are two genuinely different paths, and it matters which one you're on.
+If you want Ralph to *announce* — "triaged 3 issues, here are the labels" — there are two ways to wire it up. The practical one, and the one Tamir Dresher's workshop teaches, is the webhook wrapper.
 
-### Path 1 — the built-in `teams-graph` adapter (the real, shipped mechanism)
+### The wrapper path (recommended — Tamir's `ralph-watch.ps1`)
 
-Squad ships a Microsoft Graph–based Teams integration. The communication channel is `teams-graph`: a `TeamsCommunicationAdapter` that authenticates via OAuth against `login.microsoftonline.com`, talks to `https://graph.microsoft.com/v1.0`, and caches its tokens at `$HOME/.squad/teams-tokens-<hash>.json`. Topic-to-channel routing is handled by the shipped **`notification-routing`** skill, which maps notification types to channels via `.squad/teams-channels.json`. There's also an opt-in `--monitor-teams` watch capability — but note that one is **WorkIQ-MCP based**: it queries Teams messages and turns them into GitHub issues labelled `teams-bridge`, rather than posting outbound notifications.
-
-This is the "correct" path, but it's enterprise-grade: you need an Entra app registration and OAuth consent. Worth it for a real team channel; overkill for a solo experiment.
-
-### Path 2 — a DIY webhook wrapper (the easy path — and a common misconception)
-
-The simple path is a Power Automate "Workflows" incoming webhook that your own script POSTs to. This is exactly what Tamir Dresher's `ralph-watch.ps1` wrapper does — and it's where a widely-copied misconception comes from:
-
-> ⚠️ **`squad watch` does NOT read `$HOME/.squad/teams-webhook.url`.** Verified against the binary — the shipped `watch`/`triage` command has no webhook code at all. That file is a convention of *Tamir's `ralph-watch.ps1` wrapper script*, which reads it and POSTs to it. So this works only when **that script** runs — not when you run `squad watch` by itself.
-
-If you want the DIY path, own it explicitly — write the post into your own wrapper:
+The simplest path is a Power Automate "Workflows" incoming webhook that the **`ralph-watch.ps1` wrapper** — the "Ralph, Go!" pattern from [Module 3 Step 11h](03-advanced.md) — reads and posts to. Save the webhook URL to `~/.squad/teams-webhook.url`, and the wrapper handles the rest each round:
 
 ```powershell
 # In Teams: create a Power Automate "Workflows" incoming webhook, copy the URL.
 # (Classic O365 "Incoming Webhook" connectors are being retired — use Workflows.)
-# Save it where YOUR wrapper script reads it — Ralph does NOT read this on its own:
-Set-Content -Path "$HOME/.squad/teams-webhook.url" -Value "https://....webhook.office.com/..."
+"https://....webhook.office.com/..." | Set-Content -Path "$HOME/.squad/teams-webhook.url"
 ```
 
+The wrapper reads that file and posts after each triage round:
+
 ```powershell
-# ...then in your wrapper loop, after a triage round:
+# Inside ralph-watch.ps1, after a round:
 $webhook = Get-Content "$HOME/.squad/teams-webhook.url" -Raw
 $body = @{ text = "Ralph triaged 3 issues this round." } | ConvertTo-Json
 Invoke-RestMethod -Uri $webhook -Method Post -Body $body -ContentType 'application/json'
 ```
+
+> **Run Ralph through the wrapper to get the posts** — `~/.squad/teams-webhook.url` is the wrapper's mechanism (Step 11h), so the alerts fire when you run `ralph-watch.ps1`. That's how Tamir runs his.
+
+### The built-in path (`teams-graph` OAuth)
+
+For teams that want OAuth instead of a webhook, Squad also ships a Microsoft Graph–based integration: the `teams-graph` channel (a `TeamsCommunicationAdapter` against `login.microsoftonline.com` / `https://graph.microsoft.com/v1.0`, tokens cached at `$HOME/.squad/teams-tokens-<hash>.json`), with topic-to-channel routing handled by the shipped **`notification-routing`** skill via `.squad/teams-channels.json`. There's also a `--monitor-teams` watch capability, but it runs the *other* direction — it reads Teams messages (via WorkIQ MCP) and files them as GitHub issues labelled `teams-bridge`. The OAuth path is enterprise-grade (Entra app registration + consent): worth it for a real team channel, overkill for a solo experiment.
 
 ### Tradeoff
 

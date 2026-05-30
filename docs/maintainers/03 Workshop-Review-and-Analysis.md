@@ -10,13 +10,13 @@
 
 ## 📋 Tracking
 
-> Status of every finding R-01…R-27. **23 done, 1 high pending (Tamir-overlap), 3 accepted as-is.** (Updated 2026-05-30.)
+> Status of every finding R-01…R-27. **23 done, 4 accepted as-is (R-03/R-14/R-26/R-27).** Every finding is now closed. (Updated 2026-05-30.)
 
 | Status | ID | Finding | % done | Done | Fix / change |
 |---|---|---|---|---|---|
 | Done | R-01 | Verify-Prerequisites: Copilot check false-FAILs valid installs | 100% | ✅ | Join multi-line output to a scalar before `-match` |
 | Done | R-02 | Verify-Prerequisites: `gh auth` false-PASSes when logged out | 100% | ✅ | Match `'Logged in to'` (not the substring "logged in") |
-| Pending | R-03 | #1062 troubleshooting prescribes a wrong/harmful SDK override | 0% | ⏳ | Remove the `@github/copilot-sdk 0.3.0` override (v0.9.4 ships a runtime patcher). **Overlaps Tamir-deferred §2.4** |
+| Accepted | R-03 | #1062 troubleshooting prescribes the `@github/copilot-sdk 0.3.0` override | — | ➖ | **Kept as Tamir's.** Re-verified: it's the upstream-sanctioned workaround (issue #1062) and API-compatible — redundant on a clean v0.9.4 install (the postinstall `patch-esm-imports.mjs` patcher already fixes the ESM bug) but **not harmful**. Left in place; raised with Tamir/Brady by email |
 | Done | R-04 | "skills" used in M1 Step 6 before defined | 100% | ✅ | One-line gloss at first use |
 | Done | R-05 | `model-selection` skill not installed by `squad init` | 100% | ✅ | Reworded budget doc (ships upstream only) |
 | Done | R-06 | `squad loop` example missing `configured: true` | 100% | ✅ | Added to Step 12b + softened onboarding-mode note (template body is placeholder text, not "ignores your instruction") |
@@ -42,7 +42,7 @@
 | Optional | R-26 | Node check is a version-proxy, not a `node:sqlite` probe | — | ➖ | Acceptable as-is (`squad doctor` does the real probe) |
 | Optional | R-27 | Squad version gate is structurally loose | — | ➖ | Works for the 0.9.4 floor; optional `[version]` tidy |
 
-**Net:** every doc-level finding is closed. P0 (R-01/R-02), the P1 batch (R-04…R-10), and the full P2 + nit batch (R-11…R-25) are ✅. **R-14/R-26/R-27** accepted as-is (correct already). The only open item is **R-03** — and it overlaps the Tamir-deferred §2.4, so it's held with §2.4/§2.5 pending Tamir's confirmation (facts verified; can apply on your word).
+**Net:** every doc-level finding is closed. P0 (R-01/R-02), the P1 batch (R-04…R-10), and the full P2 + nit batch (R-11…R-25) are ✅. **R-03/R-14/R-26/R-27** accepted as-is — R-03 keeps Tamir's upstream-sanctioned `0.3.0` workaround (redundant on a clean install, not harmful). The §2.5 Teams reframe is resolved (both modules attribute the webhook to Tamir's `ralph-watch.ps1` wrapper). The remaining edge cases (`--once`, `#1062`/SDK override) are being confirmed with Tamir & Brady by email — facts verified against the binary, no doc change pending.
 
 ---
 
