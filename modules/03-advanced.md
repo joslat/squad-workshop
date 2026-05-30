@@ -214,8 +214,8 @@ What happens each round:
 
 1. Ralph polls GitHub for triage-eligible issues.
 2. Builds a context snapshot (issue list + decisions + team state).
-3. Writes the snapshot to a temp file.
-4. Invokes `copilot -p <context-file>` with the flags you passed.
+3. Builds the agent prompt in memory — the issue list plus Ralph's charter.
+4. Invokes `copilot -p "<prompt>"` (the prompt is passed inline) with the flags you passed.
 5. The agent picks an issue and works on it — code, tests, branch, PR.
 6. Ralph monitors execution, updates issue labels/status, and logs everything to `ralph.log`.
 
@@ -227,7 +227,7 @@ If something fails, Ralph applies the **4-tier escalation**: circuit-breaker res
 squad watch --health
 ```
 
-Shows PID, uptime, last poll time, auth state, and which round he's on.
+Shows PID, uptime, the `gh` auth account (with drift detection), poll interval, repo, and enabled capabilities.
 
 ### 11f. Stop Ralph cleanly
 

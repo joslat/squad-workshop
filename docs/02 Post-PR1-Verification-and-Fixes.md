@@ -33,8 +33,8 @@
 |---|---|---|---|
 | 1 | Adopt `squad watch` as primary (vs `squad triage`) | ✅ **Correct to adopt** — both names route to the same command; `watch` is the original/native name and the only one accepting `--health`. (`triage` remains the help-surfaced label — so frame it as an alias, not as "wrong".) | ✅ **Done** — sweep applied (§3.1) |
 | 2 | `.squad/loop.md` → `./loop.md` (repo root) | ✅ **Correct** — binary-confirmed `path.join(workTreeRoot, 'loop.md')` | ✅ **Done** — 2 spots PR missed now fixed (§3.2) |
-| 3 | #1017 / #1062 "fixed upstream — upgrade to **0.9.4+**" | ❌ **Inaccurate version** — both closed *completed*, but fixed **after** v0.9.4; only in `v0.9.6-insider.3`/dev. v0.9.4 still ships the broken `@github/copilot-sdk ^0.1.32`. | ⏳ Pending (§3.4) |
-| 4 | #1081 "closed **by design**" | ❌ **Inaccurate** — closed *completed* by a real code fix ([PR #1133](https://github.com/bradygaster/squad/pull/1133) adds `loadAgentCharter`), not "by design". Also only in dev/insider. | ⏳ Pending (§3.4) |
+| 3 | #1017 / #1062 "fixed upstream — upgrade to **0.9.4+**" | ⚠️ **Defensible (reading-dependent)** — both closed *completed* and fixed in `v0.9.6-insider.3`/dev (i.e. **> 0.9.4**), so "0.9.4+" read as "a version after 0.9.4" is accurate. Caveat: no *stable* release past v0.9.4 yet; v0.9.4 itself still ships the broken `@github/copilot-sdk ^0.1.32`. | ⏳ Tamir (§3.4) |
+| 4 | #1081 "closed **by design**" | ⚠️ **Wording nit** — closed *completed* by a real code fix ([PR #1133](https://github.com/bradygaster/squad/pull/1133) adds `loadAgentCharter`) in dev/insider, so "by design" is imprecise. In v0.9.4 the limitation still holds (charter not injected), so the module's caveat stays correct for the stable target. | ⏳ Tamir (§3.4) |
 | 5 | Human-member tip in `team.md` (Module 1) | ✅ **Correct — keep** — matches documented Squad behavior + doc 01 T-016 | ✅ Keep |
 | 6 | Teams via `~/.squad/teams-webhook.url`, "Ralph reads it at startup, auto-enabled" (Step 11g) | ❌ **Mis-attributed (not fabricated)** — the path is **real in Tamir's `ralph-watch.ps1` wrapper** (it reads the file and POSTs), but the **built-in `squad watch`/Ralph does NOT read it** (zero `webhook` references anywhere in the shipped `squad-cli` binary). So Step 11g only works if you *also* run the Step 11h wrapper. | ⏳ Pending — reframe (§3.5) |
 | 7 | "Ralph, Go!" script: `gh copilot -p … --agent squad --yolo` (Step 11h) | ❌ **Wrong binary** — `gh copilot` (extension) has no `-p`/`--agent`/`--yolo` (deprecated 2025-10-25). Squad spawns the standalone `copilot`. Correct: `copilot -p "…" --agent squad --yolo`. | ✅ **Done** — fixed at `:218` + the Step 11h script (§3.3) |
@@ -98,10 +98,24 @@ PR #1 fixed the Module 3 occurrences. This pass fixed the 2 it missed:
 PR #1 rewrote `docs/troubleshooting.md` to "fixed in 0.9.4+" / "by design". Replace with:
 
 > **Status (verified 2026-05-30):** closed as *completed* and fixed on `dev` (ships in `v0.9.6-insider.3`) — **not in v0.9.4 stable, which the workshop targets and which still ships the bug.** Keep the workaround until a stable release after v0.9.4. (#1081 was a real code fix, not "by design".)
+>
+> **Update (dev re-check, 2026-05-30):** if "0.9.4+" is read as *versions after 0.9.4*, the PR's wording is essentially correct — the fixes are confirmed present in `v0.9.6-insider.3` and on the current `dev` source (HEAD `c4f9d58`), both > 0.9.4. So this is a low-priority wording nuance, left to Tamir: the only precise caveats are (a) no *stable* release past v0.9.4 exists yet and (b) #1081 was a code fix, not "by design".
 
 ### 3.5 Teams (Step 11g + doc 01 §B3) — ⏳ DEFERRED to Tamir (trust vote)
 
 Either (a) move the `teams-webhook.url` instructions under Step 11h and say *the script* reads them, or (b) describe the built-in path (`teams-graph` OAuth + `notification-routing` skill / `.squad/teams-channels.json`). Per doc 01, Teams belongs in **bonus**, not mainline.
+
+### 3.6 `.squad/ralph-stop` — KEEP (project decision, 2026-05-30)
+
+Review flagged that `ralph-stop` appears **nowhere** in the shipped binary — re-verified against **both v0.9.4 stable and the current `dev` source** (HEAD `c4f9d58`): `squad watch` stops only on `SIGINT`/`SIGTERM` (Ctrl+C), and `--sentinel-file` (no default; doc comment says "shuts down when *removed*") isn't wired into the watch run path. Even Tamir's `ralph-watch.ps1` says *"To stop: Ctrl+C"*.
+
+**Decision: keep `.squad/ralph-stop` as-is** across the workshop (modules + cheat-sheet) — retained as a workshop convention pending confirmation with the Squad authors. **No edits made.** Recorded so the finding isn't lost; revisit if the authors confirm it is/isn't honored (e.g. by the agent persona).
+
+### 3.7 Review-pass fixes applied (2026-05-30)
+
+From the adversarial review of the Tier 1 PR:
+- **Cheat sheet (PR #3):** removed two fabricated aliases — `squad init` "(alias: `squad hire`)" (`hire` is a separate unimplemented stub) and `squad doctor` "(alias: `squad heartbeat`)" (no such command); softened the `squad aspire` Docker note (dotnet path needs no Docker).
+- **Module 3 (main):** Step 11d "writes a temp file / `copilot -p <context-file>`" → corrected to inline `copilot -p "<prompt>"`; Step 11e `--health` output fields corrected (PID, uptime, gh-auth + drift, interval, repo, capabilities — no "last poll"/"round").
 
 ---
 
