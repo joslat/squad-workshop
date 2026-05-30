@@ -14,19 +14,19 @@
 
 ## 📋 Adoption tracking
 
-> Live status of every adoption in this plan. **Mainline (Tier 1 + Tier 2) is fully shipped and merged.** Tier 3 is blocked/pending. (Updated 2026-05-30.)
+> Live status of every adoption in this plan. **Mainline (Tier 1 + Tier 2) is fully shipped and merged; Tier 3 bonus appendix is now authored (`modules/04-bonus.md`).** (Updated 2026-05-30.)
 
 | Status | Name | Description | % done | Done | Fix / change |
 |---|---|---|---|---|---|
 | Done | **Tier 1 — formats + cheat-sheet** (T-004/005/026/027) | "Try if interested" side-quests (M3), `docs/cheat-sheet.md`, per-module "At a glance" maps + ⏱️ badges, light tone | 100% | ✅ | Shipped in **PR #3** (merged) |
 | Done | **Tier 2a — team extensions** (T-001 Skills, T-006 @copilot) | Module 2 Step 9.5 "Skills", Module 3 Step 11.6 "@copilot" — no dependency on the unmaintained `squad-skills` repo | 100% | ✅ | Shipped in **PR #4** (merged) |
 | Done | **Tier 2b — models & budget** (T-003) | `docs/budget-and-models.md` (per-agent `squad config model`, tiers, budget) + README & Module 1 links | 100% | ✅ | Shipped in **PR #5** (merged); documents the W-012 budget gap (measured numbers still estimates) |
-| Blocked | **Tier 3 — Actions Ralph** (T-002) | Ralph as a GitHub Actions cron (the no-laptop tier) | 0% | ❌ | **Blocked:** `squad watch --once` does not exist in v0.9.4/dev. Needs a verified single-pass mechanism before authoring |
-| Pending | **Tier 3 — bonus appendix** (T-012/013/014/015/016/025) | `modules/04-bonus.md`: MCP, Teams, DevBox, cross-machine, human members, multi-person Squad | 0% | ⬜ | Not created. Each topic needs binary verification + authoring; Teams overlaps the Tamir-deferred reframe ([02 §2.5](02%20Post-PR1-Verification-and-Fixes.md)) |
+| Done | **Tier 3 — Actions Ralph** (T-002) | Ralph as a GitHub Actions cron (the no-laptop tier) | 100% | ✅ | Authored in `modules/04-bonus.md` §B4. The phantom `squad watch --once` was dropped — verified there's no single-pass flag, so the workflow uses the real mechanism: cron = interval, and `timeout --signal=TERM` kills the process right after the immediate first round (exit 124 = success) |
+| Done | **Tier 3 — bonus appendix** (T-012/013/014/015/016/025) | `modules/04-bonus.md`: team/multi-person, MCP, Teams, always-on, cross-machine, decision framework | 100% | ✅ | Authored. Every command/path binary-verified: Teams → real `teams-graph` adapter + `notification-routing` skill (webhook is Tamir's wrapper convention); cross-machine → the shipped `cross-machine-coordination` skill (labelled "Specification") + `squad link` for shared state; MCP → `$HOME/.copilot/mcp-config.json` (no `.vscode/mcp.json` for the standalone CLI) |
 | Optional | **Partial-adoption** (T-007/008/009/010/011) | ceremonies, directive capture, `squad.config.ts`, resources table, themed casting ("we have it; theirs is sharper") | 0% | ⬜ | Light-touch polish; not started (low priority) |
 | N/A | **Already-have / Reject** (T-019–024 / T-017,018) | doctor, decisions flow, failure-mode honesty, verifier, coach, build target / `ralph-watch.ps1`, webhook diagram | — | ➖ | No action by design |
 
-**Net:** mainline adoptions ✅ done; remaining = Tier 3 (Actions-Ralph blocked, bonus appendix unwritten) + optional partials.
+**Net:** mainline adoptions ✅ done; **Tier 3 Actions-Ralph + bonus appendix now ✅ shipped** (`modules/04-bonus.md`). Remaining = only the optional partials (low priority).
 
 ---
 
@@ -73,7 +73,9 @@ Throughout this doc (§1, §2, §4 T-002, §5) the assumption is "`squad watch` 
 
 The §5.2 proposal (Step 11.5) and the §4 T-002 note schedule a cron running `squad triage --once`. **There is no `--once` flag** on `watch`/`triage` in v0.9.4 or dev — `runWatch` always enters a `setInterval` loop after the first round (verified in `cli-entry.ts` flag-parsing and `watch/index.ts`). The "single safe pass" the proposal relies on doesn't exist as written.
 
-**Corrected approach:** bound a single round at the *job* level (e.g. `timeout`-wrap `squad watch`, or let the Actions cron schedule be the interval and kill the process after one round) and **verify the real one-shot mechanism on the target build before drafting the YAML.** Until then, T-002 Step 11.5 is **ADOPT-pending-verification**, not ready-to-ship.
+**Corrected approach:** bound a single round at the *job* level (e.g. `timeout`-wrap `squad watch`, or let the Actions cron schedule be the interval and kill the process after one round) and **verify the real one-shot mechanism on the target build before drafting the YAML.**
+
+> ✅ **RESOLVED (2026-05-30) — shipped in [`modules/04-bonus.md`](../../modules/04-bonus.md) §B4.** Re-verified against the v0.9.4 binary: `runWatch` runs its first round immediately, then a never-resolving `setInterval` that exits only on SIGINT/SIGTERM (`watch/index.js:805-849`); there is no `--once` and no `--output-format`. The shipped workflow uses `timeout --signal=TERM 6m … watch --interval 60 …` so the immediate first round runs and the process is killed right after (exit code 124 treated as success), with a `timeout-minutes` backstop. The stale `squad triage --once` YAML in §5.2 below is **superseded** by that module — do not ship it.
 
 ### 0.3 `loop.md` is repo-root, not `.squad/loop.md`
 
@@ -798,8 +800,10 @@ jobs:
       - name: Run Ralph one round (triage only, no execute)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: squad triage --once
+        run: squad triage --once   # ⚠️ SUPERSEDED — --once does not exist; see banner below
 ```
+
+> ⚠️ **SUPERSEDED — do not use this YAML.** `squad triage --once` is not a real command (no `--once` flag; `watch`/`triage` never self-terminate). The corrected, binary-verified workflow lives in [`modules/04-bonus.md`](../../modules/04-bonus.md) §B4 (cron-as-interval + `timeout --signal=TERM`). The block below is kept only as the historical proposal that §0.2 reverses.
 
 ### 11.5b. Commit and watch the first run
 

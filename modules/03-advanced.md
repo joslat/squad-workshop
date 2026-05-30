@@ -447,6 +447,8 @@ You've now seen Squad's three modes:
 
 Whether to keep Squad on a real project is now a judgement call you can make with evidence instead of marketing. That's the whole point of the workshop.
 
+> **Want to go further?** [Module 4 — Bonus](04-bonus.md) covers six optional topics: bringing Squad to a team, MCP integrations, Teams notifications, always-on Ralph (a *corrected* GitHub Actions workflow), cross-machine coordination, and a decision framework for adopting Squad on real work.
+
 ---
 
 ## Learn more
