@@ -29,15 +29,15 @@ The lab repo created *during* the workshop is called **`reading-list-squad-lab`*
 | `squad init` | Scaffold the team workspace in a new repo |
 | `squad doctor` | Health-check: validates `.squad/` structure, checks Node.js version, confirms everything is wired |
 | `squad aspire` | Launch the .NET Aspire dashboard (via Docker) to receive OpenTelemetry traces from live Squad sessions |
-| `squad triage` | Run Ralph in polling mode — reads GitHub Issues, labels/triages, optionally executes |
-| `squad loop` | Run Ralph on a schedule using a prompt file (`.squad/loop.md`) for recurring housekeeping |
+| `squad watch` | Run Ralph in polling mode — reads GitHub Issues, labels/triages, optionally executes (alias: `squad triage`) |
+| `squad loop` | Run Ralph on a schedule using a prompt file (`./loop.md`, repo root) for recurring housekeeping |
 | `copilot --agent squad` | Start the Copilot CLI session with the Squad agent attached |
 
 ### Decisions flow
 Agents write draft decisions to `.squad/decisions/inbox/<agent>-<topic>.md`. The Scribe merges them into `.squad/decisions.md` and clears the inbox. The inbox being empty after a step is **expected and correct** — decisions live in `.squad/decisions.md`.
 
 ### Ralph
-Ralph is the name for Squad's polling persona (`squad triage` / `squad loop`). He reads GitHub Issues as his queue. He does **not** read chat history, scan TODO comments, or invent work. To stop Ralph cleanly: `New-Item -Path .squad\ralph-stop -ItemType File`. Delete that file before the next run.
+Ralph is the name for Squad's polling persona (`squad watch` / `squad loop`). He reads GitHub Issues as his queue. He does **not** read chat history, scan TODO comments, or invent work. To stop Ralph cleanly: `New-Item -Path .squad\ralph-stop -ItemType File`. Delete that file before the next run.
 
 ### `squad doctor` healthy output (v0.9.4)
 ```

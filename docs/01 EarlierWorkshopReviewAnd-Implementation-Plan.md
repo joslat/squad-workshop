@@ -61,9 +61,9 @@ The §5.2 proposal (Step 11.5) and the §4 T-002 note schedule a cron running `s
 
 `squad loop` reads `./loop.md` from the repo root (`loop.ts`: `path.join(workTreeRoot, 'loop.md')`); `squad loop --init` writes there. The `.squad/loop.md` references in this doc (e.g. line ~905) and any §5.1/§5.9 mentions are wrong — use `./loop.md`.
 
-### 0.4 Teams `~/.squad/teams-webhook.url` (§B3) is fabricated
+### 0.4 Teams `~/.squad/teams-webhook.url` (§B3) — read by Tamir's wrapper, not by `squad watch`
 
-§B3 tells the reader to save a webhook "where Ralph will look" at `~/.squad/teams-webhook.url`. **Ralph does not read that file.** Real Teams paths: the built-in `teams-graph` OAuth adapter in `.squad/config.json`, or a BYO MCP server in `.vscode/mcp.json` with `TEAMS_WEBHOOK_URL` ([notifications.md](https://github.com/bradygaster/squad/blob/main/docs/src/content/docs/features/notifications.md)). A manual `Invoke-RestMethod` POST is a valid *DIY* trick, but Ralph won't trigger it. **PR #1's Step 11g repeats the same fabricated path** — see companion §2.5.
+§B3 (and PR #1 Step 11g) tell the reader to save a webhook at `~/.squad/teams-webhook.url` "where Ralph will look." Precisely: **the built-in `squad watch` does not read that file** (zero `webhook` references in the shipped `squad-cli` binary, both v0.9.4 and v0.9.6-insider.3) — but **Tamir's `ralph-watch.ps1` wrapper does** (`Test-Path`s it and POSTs). So the instruction is accurate *for that script*, not for the CLI daemon. The built-in Teams path is the `teams-graph` OAuth adapter (tokens cached at `~/.squad/teams-tokens-{hash}.json`) plus the shipped `notification-routing` skill (`.squad/teams-channels.json`). Reframe §B3 accordingly. Full proof in companion [§2 / §4](02%20Post-PR1-Verification-and-Fixes.md).
 
 ### 0.5 Invocation: `copilot`, never `gh copilot`; `agency copilot` is non-canonical
 
@@ -959,7 +959,7 @@ Apply the same pattern to Steps 11, 11.5 (new from T-002), 12. Two-line "Try if 
 | `squad triage --interval 5` | Run Ralph as a local watchdog every 5 minutes |
 | `squad triage --execute` | **Caution** — Ralph autonomously works on issues (see Module 3 caveats) |
 | `squad aspire` | Launch Aspire telemetry dashboard (requires Docker) |
-| `squad loop` | Run a recurring prompt from `.squad/loop.md` |
+| `squad loop` | Run a recurring prompt from `./loop.md` (repo root) |
 | `New-Item -Path .squad\ralph-stop -ItemType File` | Stop a running Ralph cleanly |
 
 ## Files you should know
@@ -1344,7 +1344,7 @@ The full Adaptive Card / multi-channel routing setup is enterprise-grade and liv
 
 ### Teams webhook — minimum viable
 
-> ⚠️ **Correction (see [§0.4](#0-reassessment-2026-05-30)):** Ralph does **not** auto-read `~/.squad/teams-webhook.url` — that path is not real. The built-in Teams path is the `teams-graph` OAuth adapter in `.squad/config.json`, or a BYO MCP server in `.vscode/mcp.json` with `TEAMS_WEBHOOK_URL`. The POST below works only as a DIY script *you* invoke (prefer a Power Automate **Workflows** URL — classic O365 Incoming Webhook connectors are being retired).
+> ⚠️ **Correction (see [§0.4](#0-reassessment-2026-05-30)):** the built-in `squad watch` does **not** auto-read `~/.squad/teams-webhook.url` — but **Tamir's `ralph-watch.ps1` wrapper does** read it and POST below, so this works only when *that script* runs (not `squad watch` alone). Built-in Teams uses the `teams-graph` OAuth adapter + the `notification-routing` skill. Prefer a Power Automate **Workflows** URL — classic O365 Incoming Webhook connectors are being retired.
 
 ```powershell
 # In Teams: create a Power Automate "Workflows" incoming webhook → copy URL

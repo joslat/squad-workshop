@@ -29,8 +29,8 @@ The team roles: **Lead** (architecture, review, coordination), **Backend**, **Fr
 | `squad init` | Scaffolds `.squad/`, `.github/agents/squad.agent.md`, and team configuration |
 | `squad doctor` | Health-checks `.squad/` structure, Node.js version, `node:sqlite` availability |
 | `squad aspire` | Launches the .NET Aspire OTLP dashboard via Docker (requires Docker Desktop running first) |
-| `squad triage` | Polls GitHub Issues; with `--execute` spawns Copilot sessions to work on them |
-| `squad loop` | Reads `.squad/loop.md` and runs that instruction on a schedule |
+| `squad watch` | Polls GitHub Issues; with `--execute` spawns Copilot sessions to work on them (alias: `squad triage`) |
+| `squad loop` | Reads `./loop.md` (repo root) and runs that instruction on a schedule |
 | `copilot --agent squad` | The primary workshop interface — use this for all interactive work |
 
 ### Decisions flow — the most common confusion point

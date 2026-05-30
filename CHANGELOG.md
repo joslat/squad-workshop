@@ -49,12 +49,13 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - `docs/prerequisites.md`: fixed `../scripts/Verify-Prerequisites.ps1` path in opening callout (same issue — now `.\scripts\...`)
 - `docs/prerequisites.md`: fixed mixed .NET version numbers — summary table showed `9.0.0` while body example showed `10.0.102`, now consistently `10.x.x`
 - `modules/02-intermediate.md`: fixed `squad status` → `squad doctor` (`squad status` is undocumented in workshop context; `squad doctor` covers both active-squad confirmation and health checks)
+- **Completed the `squad triage` → `squad watch` sweep** across the active workshop (the spots PR #1 left): `modules/03-advanced.md` (`--interval`, `--health`, walk-away table), `.github/copilot-instructions.md`, `.github/agents/squad-coach.agent.md` — alias phrasing standardized to "`squad watch` (alias: `squad triage`)". Fixes a latent bug: `--health` is only handled for `watch`, so `squad triage --health` was a no-op.
+- **Completed `.squad/loop.md` → `./loop.md`** (repo root) in `.github/copilot-instructions.md` + `.github/agents/squad-coach.agent.md` (the 2 spots PR #1 missed); binary-verified (`loop.js`: `path.join(workTreeRoot, 'loop.md')`)
+- `modules/03-advanced.md`: `gh copilot -p` → `copilot -p` at the round description (`:218`) and in the "Ralph, Go!" script — `gh copilot` (extension) has no `-p`/`--agent`/`--yolo`; Squad spawns the standalone `copilot`
 
-### Pending verification (PR #1 follow-ups — see `docs/02 Post-PR1-Verification-and-Fixes.md`)
+### Pending verification — deferred to Tamir (trust vote; see `docs/02 Post-PR1-Verification-and-Fixes.md`)
 - Correct troubleshooting for upstream #1017 / #1062 / #1081 — verified fixed on `dev` / `v0.9.6-insider.3`, **not** in v0.9.4 stable (PR #1's "fixed in 0.9.4+" and "#1081 by design" are both inaccurate; v0.9.4 still pins the broken `@github/copilot-sdk ^0.1.32`)
-- Replace the fabricated Teams `~/.squad/teams-webhook.url` auto-enable path with the real `teams-graph` (`.squad/config.json`) or BYO-MCP (`TEAMS_WEBHOOK_URL`) mechanism — affects PR #1 Step 11g and `docs/01` §B3
-- Fix `gh copilot -p` → `copilot -p` at `modules/03-advanced.md:218` and in PR #1's "Ralph, Go!" script (`gh copilot` has no `-p` / `--agent` / `--yolo`)
-- Finish the `squad triage` → `squad watch` sweep (8 active spots PR #1 leaves, incl. `--health` and the inconsistent walk-away table row) and `.squad/loop.md` → `./loop.md` (2 spots PR #1 misses: `.github/copilot-instructions.md`, `.github/agents/squad-coach.agent.md`)
+- Reframe the Teams `~/.squad/teams-webhook.url` instructions (PR #1 Step 11g + `docs/01` §B3): that path is read by **Tamir's `ralph-watch.ps1` wrapper**, not by the built-in `squad watch`; built-in Teams uses the `teams-graph` OAuth adapter + the `notification-routing` skill
 
 ### Deferred
 - Premium-request budget guidance (W-012) — requires a measured end-to-end workshop run

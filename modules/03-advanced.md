@@ -173,7 +173,7 @@ The `squad` label puts it in Ralph's inbox.
 This is the safe one — Ralph polls, reads issues, applies `squad:{member}` labels, and comments triage notes. **No code is written.** Use it to verify routing works the way you expect *before* you let him execute.
 
 ```powershell
-squad triage --interval 1
+squad watch --interval 1
 ```
 
 `--interval 1` polls every minute (default is 10). Watch the output — Ralph should pick up your issue, decide which member should own it, apply a `squad:{member}` label, and add a comment.
@@ -215,7 +215,7 @@ What happens each round:
 1. Ralph polls GitHub for triage-eligible issues.
 2. Builds a context snapshot (issue list + decisions + team state).
 3. Writes the snapshot to a temp file.
-4. Invokes `gh copilot -p <context-file>` with the flags you passed.
+4. Invokes `copilot -p <context-file>` with the flags you passed.
 5. The agent picks an issue and works on it — code, tests, branch, PR.
 6. Ralph monitors execution, updates issue labels/status, and logs everything to `ralph.log`.
 
@@ -224,7 +224,7 @@ If something fails, Ralph applies the **4-tier escalation**: circuit-breaker res
 ### 11e. Monitor a running Ralph
 
 ```powershell
-squad triage --health
+squad watch --health
 ```
 
 Shows PID, uptime, last poll time, auth state, and which round he's on.
@@ -277,7 +277,7 @@ actionable issues simultaneously.
 while ($true) {
     $start = Get-Date
     Write-Host "[$(Get-Date -Format 'HH:mm:ss')] Ralph round starting..."
-    gh copilot -p $prompt --agent squad --yolo
+    copilot -p "$prompt" --agent squad --yolo
     $elapsed = ((Get-Date) - $start).TotalSeconds
     Write-Host "[$(Get-Date -Format 'HH:mm:ss')] Round complete in $([math]::Round($elapsed))s. Waiting 5 min..."
     Start-Sleep -Seconds 300
@@ -358,7 +358,7 @@ A short, opinionated checklist before you commit Ralph to anything that matters:
 | You should... | If... |
 |---|---|
 | Use `squad watch --execute` | You have a real issue backlog of small, well-scoped tickets, branch protection on `main`, and a CI pipeline that catches the obvious mistakes. |
-| Use `squad triage` (no execute) | You want to see how Ralph routes work before letting him write code. Always start here. |
+| Use `squad watch` (no execute) | You want to see how Ralph routes work before letting him write code. Always start here. |
 | Use `squad loop` | You have a recurring hygiene task that's idempotent and narrow. |
 | Walk away | Issues are vague, tests are thin, you're sitting and watching, or you can't articulate what "done" looks like for a round. |
 

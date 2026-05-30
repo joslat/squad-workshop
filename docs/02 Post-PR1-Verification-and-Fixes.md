@@ -1,12 +1,17 @@
-# Post-PR #1 — Verification & Fix-Later Checklist
+# Post-PR #1 — Verification & Fix Checklist
 
 > **Document type:** Post-merge verification log + actionable fix inventory
-> **Created:** 2026-05-30
-> **Author:** Claude (independent verification against the live Squad CLI source)
-> **Trigger PR:** [joslat/squad-workshop#1](https://github.com/joslat/squad-workshop/pull/1) — *"fix: command names, loop.md path, closed bug refs, + human member / Teams / Ralph Go sections"* (authored by Tamir Dresher's squad agent via issue #3492)
-> **Decision context:** PR #1 is being **accepted as authoritative** (Tamir Dresher is a co-creator of Squad). Per that decision, **`squad watch` is adopted as the primary command name** workshop-wide. This document records what was verified, what is still wrong after the merge, and exactly where to fix it — **we verify and fix these later.**
+> **Created:** 2026-05-30 · **Last verified:** 2026-05-30 (exhaustive, binary-level)
+> **Author:** Claude (independent verification against the live Squad CLI source **and the published npm binaries**)
+> **Trigger PR:** [joslat/squad-workshop#1](https://github.com/joslat/squad-workshop/pull/1) — *"fix: command names, loop.md path, closed bug refs, + human member / Teams / Ralph Go sections"* (authored by **Tamir Dresher**, Squad co-creator). **Merged** to `main` 2026-05-30.
+> **Decision context:** PR #1 is **authoritative**. Per that decision, **`squad watch` is adopted as the primary command name** workshop-wide.
 
-> **Ground-truth basis:** `bradygaster/squad` source (tags `v0.9.4` and branch `dev`/`main`) and the published npm package `@bradygaster/squad-cli`. npm dist-tags confirmed 2026-05-30: `latest = 0.9.4`, `insider = 0.9.6-insider.3`, `preview = 0.8.17-preview`. **v0.9.4 is the newest *stable* release**; the workshop targets it.
+> **Ground-truth basis.** Two independent sources, both checked:
+> 1. **Published npm binaries** — `npm pack @bradygaster/squad-cli@latest` (**0.9.4**) and `@insider` (**0.9.6-insider.3**); compiled `dist/` grepped directly. Plus `@bradygaster/squad-sdk@0.9.4`.
+> 2. **GitHub source** — `bradygaster/squad` at tag `v0.9.4` / branch `main`, and issue/PR state via `gh api`.
+> npm dist-tags (2026-05-30): `latest = 0.9.4`, `insider = 0.9.6-insider.3`, `preview = 0.8.17-preview`. **v0.9.4 is the newest *stable* release** (the workshop's target).
+
+> ⚠️ **A note on method.** A claim is only marked wrong when contradicted by the **shipped binary or source** — never by "the file isn't on this machine." Paths like `~/.squad/teams-webhook.url` are home-directory paths created on demand; their absence on an uninstalled machine proves nothing. Every verdict below cites reproducible evidence in §4.
 
 ---
 
@@ -14,114 +19,146 @@
 
 | Mark | Meaning |
 |---|---|
-| ✅ **Correct** | PR claim verified true against source — keep as-is |
-| 🟡 **Correct-but-incomplete** | PR fix is right but doesn't cover every occurrence — finish the sweep |
-| ❌ **Wrong** | PR claim contradicted by source — fix after merge |
-| 🔧 **Latent bug exposed** | A pre-existing workshop bug surfaced during verification |
+| ✅ **Done** | Verified + already fixed in the working tree |
+| ✅ **Correct** | PR claim verified true — keep as-is |
+| ⏳ **Pending** | Verdict reached; fix not yet applied (awaiting decision / Tamir's input) |
+| ❌ **Inaccurate** | Contradicted by binary/source — needs correction |
+| 🔧 **Latent bug** | Pre-existing workshop bug surfaced during verification |
 
 ---
 
-## 1. PR #1 item-by-item verdict (expanded, with source + proof)
+## 1. PR #1 item-by-item verdict
 
-| # | PR change | Verdict | Source & proof (verified) | Fix-later action |
-|---|---|---|---|---|
-| 1 | Rename `squad triage` → `squad watch` as primary; calls `watch` "preferred", `triage` the "alias" | ✅ **Adopt** (per decision) — but note the nuance | Both names are accepted: `cli-entry.ts` dispatch `if (cmd === 'triage' \|\| cmd === 'watch')` ([blob](https://github.com/bradygaster/squad/blob/v0.9.4/packages/squad-cli/src/cli-entry.ts)). The implementation dir is `commands/watch/` (`runWatch`), command was **born as `squad watch`** in [release v0.5.1](https://github.com/bradygaster/squad/releases/tag/v0.5.1) (2026-02-20). **Counter-signal:** `squad --help` lists only `triage`, and the official CLI reference says *"`squad triage` … (primary name; `watch` is an alias)"* ([cli.md](https://github.com/bradygaster/squad/blob/main/docs/src/content/docs/reference/cli.md)); FAQ: *"squad triage is the new primary command name (as of v0.8.26)"* ([faq.md](https://github.com/bradygaster/squad/blob/main/docs/src/content/docs/guide/faq.md)). **Net:** both work; `watch` is the original/native name + co-creator's preference, `triage` is the docs-surfaced label. Adopting `watch` is valid **and** fixes item 7 below. | Sweep all remaining `squad triage` command invocations → `squad watch` (see §2.1). Keep the english verb "triage". |
-| 2 | `.squad/loop.md` → `./loop.md` (repo root) | ✅ **Correct** | `loop.ts`: `const loopFilePath = options.filePath ? path.resolve(workTreeRoot, options.filePath) : path.join(workTreeRoot, 'loop.md')` ([blob](https://github.com/bradygaster/squad/blob/v0.9.4/packages/squad-cli/src/cli/commands/loop.ts)). CLI docs: *"`--file <path>` — Path to loop file (default: `loop.md` in project root)"* ([cli.md](https://github.com/bradygaster/squad/blob/v0.9.4/docs/src/content/docs/reference/cli.md)). | 🟡 PR fixes Module 3 only — **2 spots still wrong** (see §2.2). |
-| 3 | #1017, #1062 "fixed upstream — upgrade to **0.9.4+**" | ❌ **Wrong version** | Both **closed as `completed`** (verified via `gh api`: #1017 closed 2026-05-22, #1062 closed 2026-05-20) — but fixed **after** v0.9.4. #1017 by [PR #1035](https://github.com/bradygaster/squad/pull/1035); #1062 by [PR #1134](https://github.com/bradygaster/squad/pull/1134) (bumped `@github/copilot-sdk` to `^0.3.0`). **Decisive:** at tag `v0.9.4`, `packages/squad-sdk/package.json` still pins the **broken** `@github/copilot-sdk ^0.1.32`. Fixes are contained only in `v0.9.6-insider.3`/`dev`. | Reword troubleshooting (see §2.4): "fixed on **dev / v0.9.6-insider.3** — **not** in v0.9.4 stable." |
-| 4 | #1081 "closed **by design**" | ❌ **Wrong — it was a real fix** | Closed as `completed` (not `not_planned`/wontfix) 2026-05-19 by [PR #1133](https://github.com/bradygaster/squad/pull/1133): `execute.ts` now imports `loadAgentCharter` and prepends Ralph's charter. So the specialist-charter limitation **was fixed** (on dev), not declared intended. | Reword to "fixed on dev/insider; v0.9.4 still affected." (see §2.4) |
-| 5 | Human-member tip in `team.md` (Module 1 Step 2) | ✅ **Keep** | Matches documented Squad behavior (agents read `.squad/team.md` at session start); aligns with doc 01 technique **T-016**. | None. (Optional: doc 01 would file human-members under bonus — placement only.) |
-| 6 | Teams via `~/.squad/teams-webhook.url`, "auto-enabled, no code changes" (Step 11g) | ❌ **Fabricated path** | No such path or file-presence auto-enable exists in source. Teams = either the **`teams-graph` OAuth adapter** configured in `.squad/config.json` (tokens cached at `~/.squad/teams-tokens-{hash}.json`, [comms-teams.ts](https://github.com/bradygaster/squad/blob/main/packages/squad-sdk/src/platform/comms-teams.ts)), or a **BYO MCP server** in `.vscode/mcp.json` with env `TEAMS_WEBHOOK_URL` ([notifications.md](https://github.com/bradygaster/squad/blob/main/docs/src/content/docs/features/notifications.md)). `comms.ts` `readTeamsConfig()` reads **only** `.squad/config.json`. | Rewrite Step 11g to the real mechanism (see §2.5). **Same bug in doc 01 §B3.** |
-| 7 | "Ralph, Go!" script: `gh copilot -p $prompt --agent squad --yolo` (Step 11h) | ❌ **Wrong binary** | `gh copilot` (extension) supports only `suggest`/`explain` — no `-p`/`--agent`/`--yolo`; deprecated 2025-10-25 ([gh-copilot](https://github.com/github/gh-copilot)). The flags exist only on the standalone `copilot` CLI ([GitHub Copilot CLI docs](https://docs.github.com/en/copilot/concepts/agents/about-copilot-cli)). Squad's own spawn code uses `{ cmd: 'copilot', args: ['-p', prompt, …] }` ([monitor-teams.ts](https://github.com/bradygaster/squad/blob/main/packages/squad-cli/src/cli/commands/watch/capabilities/monitor-teams.ts)). | Change to `copilot -p "…" --agent squad --yolo` (see §2.3). **Pre-existing twin at `03-advanced.md:218`.** |
-| 7b | (exposed) `squad triage --health` in Module 3 | 🔧 **Latent bug** | Source gates `--health` on `watch` **only**: `if (cmd === 'watch' && args.includes('--health'))` ([cli-entry.ts](https://github.com/bradygaster/squad/blob/v0.9.4/packages/squad-cli/src/cli-entry.ts)). So `squad triage --health` is **not handled**. Adopting `squad watch` **fixes** this for free. | Change `03-advanced.md:227` → `squad watch --health` (folded into §2.1). |
-
-**Scorecard:** of PR #1's six changes — **3 adopt** (1 per decision, 2, 5), **3 wrong and must be corrected after merge** (3+4 issue versions, 6 Teams, 7 script). Plus one latent bug (7b) that the `watch` adoption happens to fix.
-
----
-
-## 2. Repo-wide change inventory ("change it everywhere")
-
-Adopting `squad watch` and accepting the PR means several sweeps must be completed across the repo. File:line references are as of 2026-05-30 (pre-merge `main`); the PR will shift some line numbers when merged.
-
-### 2.1 `squad triage` (command) → `squad watch`
-
-Change **only the command invocation** `squad triage`. **Do not** change the english verb "triage" / "triage-only mode" / "triage notes" / "triage label" — those are correct prose.
-
-**Active files — PR #1 already converts these** (verify after merge): `README.md:38`, `modules/03-advanced.md:136,204,309`, `docs/troubleshooting.md:125,135,240,244`.
-
-**Active files — PR #1 does NOT touch; still need converting:**
-
-| File:line | Current | Change to | Note |
+| # | PR change | Verdict | Status |
 |---|---|---|---|
-| `modules/03-advanced.md:176` | `squad triage --interval 1` | `squad watch --interval 1` | |
-| `modules/03-advanced.md:227` | `squad triage --health` | `squad watch --health` | **functional fix** — `--health` only works on `watch` (item 7b) |
-| `modules/03-advanced.md:310` | `Use \`squad triage\` (no execute)` | `Use \`squad watch\` (no execute)` | PR left this row as `triage` while changing the row above → internal inconsistency |
-| `modules/03-advanced.md:295` | `Same as triage:` | `Same as watch:` | prose, minor |
-| `.github/copilot-instructions.md:32` | `\| \`squad triage\` \| Run Ralph in polling mode…` | `squad watch` | always-loaded Copilot context |
-| `.github/copilot-instructions.md:40` | `(\`squad triage\` / \`squad loop\`)` | `(\`squad watch\` / \`squad loop\`)` | |
-| `.github/agents/squad-coach.agent.md:32` | `\| \`squad triage\` \| Polls GitHub Issues…` | `squad watch` | coach must match the modules |
-| `docs/troubleshooting.md:272` | `…to triage/watch commands` | `…to \`squad watch\` commands` | already mentions both; simplify |
+| 1 | Adopt `squad watch` as primary (vs `squad triage`) | ✅ **Correct to adopt** — both names route to the same command; `watch` is the original/native name and the only one accepting `--health`. (`triage` remains the help-surfaced label — so frame it as an alias, not as "wrong".) | ✅ **Done** — sweep applied (§3.1) |
+| 2 | `.squad/loop.md` → `./loop.md` (repo root) | ✅ **Correct** — binary-confirmed `path.join(workTreeRoot, 'loop.md')` | ✅ **Done** — 2 spots PR missed now fixed (§3.2) |
+| 3 | #1017 / #1062 "fixed upstream — upgrade to **0.9.4+**" | ❌ **Inaccurate version** — both closed *completed*, but fixed **after** v0.9.4; only in `v0.9.6-insider.3`/dev. v0.9.4 still ships the broken `@github/copilot-sdk ^0.1.32`. | ⏳ Pending (§3.4) |
+| 4 | #1081 "closed **by design**" | ❌ **Inaccurate** — closed *completed* by a real code fix ([PR #1133](https://github.com/bradygaster/squad/pull/1133) adds `loadAgentCharter`), not "by design". Also only in dev/insider. | ⏳ Pending (§3.4) |
+| 5 | Human-member tip in `team.md` (Module 1) | ✅ **Correct — keep** — matches documented Squad behavior + doc 01 T-016 | ✅ Keep |
+| 6 | Teams via `~/.squad/teams-webhook.url`, "Ralph reads it at startup, auto-enabled" (Step 11g) | ❌ **Mis-attributed (not fabricated)** — the path is **real in Tamir's `ralph-watch.ps1` wrapper** (it reads the file and POSTs), but the **built-in `squad watch`/Ralph does NOT read it** (zero `webhook` references anywhere in the shipped `squad-cli` binary). So Step 11g only works if you *also* run the Step 11h wrapper. | ⏳ Pending — reframe (§3.5) |
+| 7 | "Ralph, Go!" script: `gh copilot -p … --agent squad --yolo` (Step 11h) | ❌ **Wrong binary** — `gh copilot` (extension) has no `-p`/`--agent`/`--yolo` (deprecated 2025-10-25). Squad spawns the standalone `copilot`. Correct: `copilot -p "…" --agent squad --yolo`. | ✅ **Done** — fixed at `:218` + the Step 11h script (§3.3) |
+| 7b | *(exposed)* `squad triage --health` in Module 3 | 🔧 **Latent bug** — `--health` is gated on `cmd === 'watch'` only, so `squad triage --health` is silently unhandled. Adopting `squad watch` **fixes it**. | ✅ **Done** — fixed via the rename |
 
-**Decision needed — how to frame the alias:** since the source shows `triage` is the *help-surfaced* primary, the cleanest honest phrasing is the PR's own Module 3 wording: **"`squad watch` (also available as `squad triage`)"**. Standardize that one phrasing wherever the alias is mentioned, instead of the current *"`squad triage` (formerly `squad watch`)"* (which is now backwards under the decision).
+**Scorecard:** 3 correct/keep (1, 2, 5) — items 1, 2 and 7b **applied**; 4 need correction (3, 4, 6, 7) — all verdicted, fixes pending (7 held pending Tamir's reply).
 
-**Historical / archived — do NOT rewrite (point-in-time records); add a forward note instead:**
-- `CHANGELOG.md:24,32,39` — records the *original* triage migration. Add a **new** changelog entry for the watch reversion rather than editing history.
-- `docs/done/00-Review-and-Improvement-Plan.md` (W-003 etc.), `docs/done/REVIEW-AND-IMPROVEMENT-PLAN.md`, `docs/done/UPSTREAM-SQUAD-INVESTIGATION.md` — archived audits; leave as historical record (optionally add a one-line "superseded by the watch decision — see this doc" banner).
-- `docs/01 EarlierWorkshopReviewAnd-Implementation-Plan.md` — updated separately (see that doc's new §0).
+---
 
-### 2.2 `.squad/loop.md` → `./loop.md` (repo root)
+## 2. The Teams finding in detail (the one to get right)
 
-PR #1 fixes `modules/03-advanced.md:246,248,256,260`. **Still wrong after merge:**
+PR #1 Step 11g says: *"Ralph reads this file at startup. No code changes needed — if the file exists and is non-empty, Teams alerts are enabled automatically."* Three findings, in order of certainty:
 
-| File:line | Current | Change to |
+1. **The built-in `squad watch`/`triage` does NOT read `~/.squad/teams-webhook.url`.** Grepping the **entire** shipped `@bradygaster/squad-cli` package (v0.9.4 **and** v0.9.6-insider.3) for `teams-webhook`, `webhook`, `TEAMS_WEBHOOK` returns **nothing** — and Ralph's `watch` command code lives in that very package (`dist/cli/commands/watch/`). So "Ralph auto-reads it" is **not** true of the CLI.
+2. **The path is real — in Tamir's own wrapper.** `tamirdresher/squad-skills/workshop/ralph-watch.ps1` defines `$teamsWebhookFile = Join-Path $squadDir "teams-webhook.url"` (line 68) and, each round, `if (Test-Path $teamsWebhookFile) { … Invoke-RestMethod -Uri $webhookUrl -Method Post … }` (lines 134–139). So Step 11g accurately describes **the Step 11h script's** behavior — it just attributes it to `squad watch`.
+3. **The real built-in Teams path** (verified in `@bradygaster/squad-sdk@0.9.4`): OAuth via the `teams-graph` adapter, tokens cached at `~/.squad/teams-tokens-{hash(tenantId:clientId)}.json` (`dist/platform/comms-teams.js`), plus the shipped **`notification-routing` skill** that maps notification types to channels via `.squad/teams-channels.json`.
+
+**Verdict wording for the doc:** *not* "fabricated." Say: *"`~/.squad/teams-webhook.url` is read by the `ralph-watch.ps1` script (Step 11h), not by `squad watch` itself. For built-in Teams, Squad uses the `teams-graph` OAuth adapter and the `notification-routing` skill."*
+
+---
+
+## 3. Repo-wide change inventory
+
+Change **only the command `squad triage`** → `squad watch`; never the english verb "triage" / "triage-only" / "triage notes".
+
+### 3.1 `squad triage` → `squad watch` — ✅ DONE
+
+PR #1 already converted `README.md`, `docs/troubleshooting.md` (4 spots), and `modules/03-advanced.md` (Step 11 intro, run command, walk-away `--execute` row). This pass fixed the **6 it left behind**:
+
+| File:line | Was | Now |
 |---|---|---|
-| `.github/copilot-instructions.md:33` | `…prompt file (\`.squad/loop.md\`)…` | `./loop.md` |
-| `.github/agents/squad-coach.agent.md:33` | `Reads \`.squad/loop.md\` and runs…` | `./loop.md` |
-| `docs/done/UPSTREAM-SQUAD-INVESTIGATION.md:111` | `…prompt file (\`.squad/loop.md\`)` | archived — optional |
-| `docs/01 …Plan.md:905` | `Run a recurring prompt from \`.squad/loop.md\`` | fixed in doc 01 §0 |
+| `modules/03-advanced.md:176` | `squad triage --interval 1` | `squad watch --interval 1` |
+| `modules/03-advanced.md:227` | `squad triage --health` | `squad watch --health` *(functional fix — see 7b)* |
+| `modules/03-advanced.md:361` | `Use \`squad triage\` (no execute)` | `Use \`squad watch\` (no execute)` *(was inconsistent with the row above)* |
+| `.github/copilot-instructions.md:32` | `\`squad triage\` \| Run Ralph…` | `\`squad watch\` … (alias: \`squad triage\`)` |
+| `.github/copilot-instructions.md:40` | `persona (\`squad triage\` / \`squad loop\`)` | `persona (\`squad watch\` / \`squad loop\`)` |
+| `.github/agents/squad-coach.agent.md:32` | `\`squad triage\` \| Polls GitHub Issues…` | `\`squad watch\` … (alias: \`squad triage\`)` |
 
-### 2.3 `gh copilot -p` → `copilot -p`
+Standardized alias phrasing: **"`squad watch` (alias: `squad triage`)"**. Historical files left as records: `CHANGELOG.md` (added a forward entry instead), `docs/done/*`.
 
-| File:line | Current | Change to | Note |
+### 3.2 `.squad/loop.md` → `./loop.md` — ✅ DONE
+
+PR #1 fixed the Module 3 occurrences. This pass fixed the 2 it missed:
+
+| File:line | Was | Now |
+|---|---|---|
+| `.github/copilot-instructions.md:33` | `prompt file (\`.squad/loop.md\`)` | `(\`./loop.md\`, repo root)` |
+| `.github/agents/squad-coach.agent.md:33` | `Reads \`.squad/loop.md\`` | `Reads \`./loop.md\` (repo root)` |
+
+### 3.3 `gh copilot -p` → `copilot -p` — ✅ DONE
+
+| File:line | Current | Should be | Note |
 |---|---|---|---|
-| `modules/03-advanced.md:218` | `Invokes \`gh copilot -p <context-file>\`…` | `copilot -p <context-file>` | **pre-existing bug**, not introduced by the PR |
-| `modules/03-advanced.md` Step 11h (PR-added) | `gh copilot -p $prompt --agent squad --yolo` | `copilot -p "$prompt" --agent squad --yolo` | the "Ralph, Go!" script |
-| `docs/01 …Plan.md:496,498,500,1429` | describe Tamir's `ralph-watch.ps1` wrapping `gh copilot` | leave (accurate description of *his* script); ensure any *adopted* invocation uses `copilot` | |
+| `modules/03-advanced.md:218` | `Invokes \`gh copilot -p <context-file>\`` | `copilot -p <context-file>` | pre-existing, not from PR #1 |
+| `modules/03-advanced.md:280` | `gh copilot -p $prompt --agent squad --yolo` | `copilot -p "$prompt" --agent squad --yolo` | inside PR #1's Step 11h script — raised in the email to Tamir |
 
-### 2.4 Issue-status corrections (#1017, #1062, #1081)
+### 3.4 Issue-status correction (#1017 / #1062 / #1081) — ⏳ DEFERRED to Tamir (trust vote)
 
-PR #1 rewrites `docs/troubleshooting.md:188 (#1062), 208 (#1017), 244 (#1081)` to "fixed in 0.9.4+" / "by design". After merge, correct each to:
+> **Left as-is intentionally** — Tamir may correct these upstream/in-repo himself shortly. Recommended wording when addressed:
 
-> **Status (verified 2026-05-30):** Closed as *completed* and fixed on `dev` (shipping in `v0.9.6-insider.3`, the npm `insider` tag) — **not yet in a stable release. v0.9.4 (current stable / workshop target) is still affected.** Keep the workaround until a stable build after v0.9.4 ships. (#1081 was a real code fix — `loadAgentCharter` now injects the charter — not "by design".)
+PR #1 rewrote `docs/troubleshooting.md` to "fixed in 0.9.4+" / "by design". Replace with:
 
-Proof: `gh api` states (all `completed`); fixing PRs [#1035](https://github.com/bradygaster/squad/pull/1035), [#1134](https://github.com/bradygaster/squad/pull/1134), [#1133](https://github.com/bradygaster/squad/pull/1133); `@github/copilot-sdk` pin at `v0.9.4` = `^0.1.32` (broken) vs `^0.3.0` on dev.
+> **Status (verified 2026-05-30):** closed as *completed* and fixed on `dev` (ships in `v0.9.6-insider.3`) — **not in v0.9.4 stable, which the workshop targets and which still ships the bug.** Keep the workaround until a stable release after v0.9.4. (#1081 was a real code fix, not "by design".)
 
-### 2.5 Teams notification correction (Step 11g + doc 01 §B3)
+### 3.5 Teams (Step 11g + doc 01 §B3) — ⏳ DEFERRED to Tamir (trust vote)
 
-Replace the `~/.squad/teams-webhook.url` "auto-enable" instructions (in **both** the PR's new Step 11g **and** `docs/01 …Plan.md:1293,1299`) with the real mechanism:
-
-- **Option A — built-in `teams-graph` adapter:** configure `communications` in `.squad/config.json`; authenticates via interactive OAuth (browser/device code); tokens cached at `~/.squad/teams-tokens-{hash}.json`. Not webhook-based.
-- **Option B — BYO MCP notification server:** add a server to `.vscode/mcp.json` with env `TEAMS_WEBHOOK_URL` set to a Power Automate Workflows webhook (e.g. the community `teams-webhook-mcp.js`).
-
-Per doc 01's own verdict, Teams belongs in **bonus** (`modules/04-bonus.md` §B3), not mainline Module 3 — so consider relocating Step 11g there during the doc-01 adoption pass.
+Either (a) move the `teams-webhook.url` instructions under Step 11h and say *the script* reads them, or (b) describe the built-in path (`teams-graph` OAuth + `notification-routing` skill / `.squad/teams-channels.json`). Per doc 01, Teams belongs in **bonus**, not mainline.
 
 ---
 
-## 3. Fix-later checklist
+## 4. Source & proof (reproducible — for review)
 
-- [ ] **§2.1** Sweep remaining `squad triage` → `squad watch` (8 active spots, incl. the `--interval 1`, `--health`, and the inconsistent table row PR #1 missed).
-- [ ] **§2.1** Standardize the alias phrasing to "`squad watch` (also available as `squad triage`)".
-- [ ] **§2.2** Fix `.squad/loop.md` → `./loop.md` in `copilot-instructions.md:33` and `squad-coach.agent.md:33` (PR misses both).
-- [ ] **§2.3** Fix `gh copilot -p` → `copilot -p` at `03-advanced.md:218` and in the PR's Step 11h script.
-- [ ] **§2.4** Correct the three issue-status entries: "fixed on dev/`v0.9.6-insider.3`, not in v0.9.4 stable"; #1081 was a real fix, not by-design.
-- [ ] **§2.5** Rewrite Teams (Step 11g + doc 01 §B3) to the real `teams-graph`/MCP mechanism; consider moving to bonus.
-- [ ] **§7b** Confirm `squad watch --health` works and `squad triage --health` does not, on the workshop's target version.
-- [ ] Add a new `CHANGELOG.md` entry recording the watch adoption + these corrections (don't rewrite historical entries).
-- [ ] Re-run the `check-links` workflow after edits (new GitHub source URLs added here).
+### 4.1 Reproduce the binary checks
+
+```bash
+# Download the actual published binaries
+npm pack @bradygaster/squad-cli@latest      # -> bradygaster-squad-cli-0.9.4.tgz
+npm pack @bradygaster/squad-cli@insider     # -> bradygaster-squad-cli-0.9.6-insider.3.tgz
+npm pack @bradygaster/squad-sdk@latest      # -> bradygaster-squad-sdk-0.9.4.tgz
+for f in *.tgz; do d="${f%.tgz}"; mkdir -p "$d"; tar -xzf "$f" -C "$d"; done
+
+grep -rin "teams-webhook\|webhook"  */package/dist     # CLI: (no matches)
+grep -rin "loop.md"                 */package/dist     # -> path.join(workTreeRoot, 'loop.md')
+grep -rin "once"     */package/dist/cli-entry.js       # no --once flag
+grep -rin "health"   */package/dist/cli-entry.js       # cmd === 'watch' && --health
+grep -rin "=== 'triage'\|=== 'watch'" */package/dist   # if (cmd === 'triage' || cmd === 'watch')
+```
+
+### 4.2 Evidence table (what the commands return)
+
+| Claim | Evidence (verbatim) | Source |
+|---|---|---|
+| Both names → one command; `watch` is real registration | `if (cmd === 'triage' \|\| cmd === 'watch')` — `dist/cli-entry.js:342` (0.9.4) / `:417` (insider) | npm binary; [cli-entry.ts](https://github.com/bradygaster/squad/blob/v0.9.4/packages/squad-cli/src/cli-entry.ts) |
+| `--health` only on `watch` (item 7b) | `if (cmd === 'watch' && args.includes('--health'))` — `dist/cli-entry.js:337` (0.9.4) / `:412` (insider) | npm binary; cli-entry.ts |
+| `triage` is the help-surfaced primary; `watch` an alias | `squad --help` lists only `triage`; *"`squad triage` … (primary name; `watch` is an alias)"* | [cli.md](https://github.com/bradygaster/squad/blob/main/docs/src/content/docs/reference/cli.md); [faq.md](https://github.com/bradygaster/squad/blob/main/docs/src/content/docs/guide/faq.md) ("as of v0.8.26") |
+| `watch` is the original name | release header *"`squad watch` — Ralph Local Watchdog"* (2026-02-20) | [release v0.5.1](https://github.com/bradygaster/squad/releases/tag/v0.5.1) |
+| `loop.md` is repo-root | `loop.js:199 … path.join(workTreeRoot, 'loop.md')`; `loop.d.ts:24 "default: loop.md in cwd"` | npm binary; [loop.ts](https://github.com/bradygaster/squad/blob/v0.9.4/packages/squad-cli/src/cli/commands/loop.ts) |
+| No `--once` flag | only hit is an unrelated comment (`insider cli-entry.js:495`) | npm binary (both versions) |
+| #1017 closed *completed* | `closed 2026-05-22`, `state_reason=completed` (via `gh api`) | [#1017](https://github.com/bradygaster/squad/issues/1017) · fix [PR #1035](https://github.com/bradygaster/squad/pull/1035) |
+| #1062 closed *completed*; v0.9.4 unfixed | `closed 2026-05-20`; `squad-sdk@0.9.4` still pins `@github/copilot-sdk ^0.1.32` | [#1062](https://github.com/bradygaster/squad/issues/1062) · fix [PR #1134](https://github.com/bradygaster/squad/pull/1134) |
+| #1081 real fix, not "by design" | `closed 2026-05-19`, `state_reason=completed`; fix adds `loadAgentCharter` | [#1081](https://github.com/bradygaster/squad/issues/1081) · fix [PR #1133](https://github.com/bradygaster/squad/pull/1133) |
+| `~/.squad/teams-webhook.url` NOT read by CLI | `grep webhook */package/dist` → **no matches** in `squad-cli` (both versions) | npm binary |
+| …but **is** read by Tamir's wrapper | `ralph-watch.ps1:68 $teamsWebhookFile = Join-Path $squadDir "teams-webhook.url"`; `:134 if (Test-Path …) { Invoke-RestMethod -Uri $webhookUrl -Method Post }` | [ralph-watch.ps1](https://github.com/tamirdresher/squad-skills/blob/main/workshop/ralph-watch.ps1) |
+| Real built-in Teams = OAuth tokens | `comms-teams.js:32 … teams-tokens-${hash}.json` (in `~/.squad/`) | npm binary `@bradygaster/squad-sdk@0.9.4`; [comms-teams.ts](https://github.com/bradygaster/squad/blob/v0.9.4/packages/squad-sdk/src/platform/comms-teams.ts) |
+| Real built-in Teams routing = skill | `.squad/teams-channels.json` per the shipped `notification-routing` skill | npm binary template; [notification-routing SKILL.md](https://github.com/bradygaster/squad/blob/v0.9.4/packages/squad-cli/templates/skills/notification-routing/SKILL.md) |
+| `gh copilot` lacks `-p`/`--agent`/`--yolo` | extension exposes only `suggest`/`explain`; deprecated 2025-10-25 | [github/gh-copilot](https://github.com/github/gh-copilot) |
+| Squad spawns standalone `copilot` | `{ cmd: 'copilot', args: ['-p', prompt, …] }` | [monitor-teams.ts](https://github.com/bradygaster/squad/blob/main/packages/squad-cli/src/cli/commands/watch/capabilities/monitor-teams.ts); [Copilot CLI docs](https://docs.github.com/en/copilot/concepts/agents/about-copilot-cli) |
 
 ---
 
-## 4. Notes on verification method
+## 5. Fix checklist
 
-All "❌ Wrong" verdicts were confirmed against source, not docs prose alone: issue states via `gh api repos/bradygaster/squad/issues/<n>`; version containment via `git compare` of fix-merge commits against `v0.9.4` vs `v0.9.6-insider.3`; the `@github/copilot-sdk` pin read directly from `package.json` at tag `v0.9.4`; command dispatch and `--health`/`loop.md` paths read from `cli-entry.ts` and `loop.ts`. The `gh copilot` vs `copilot` distinction was cross-checked against the `github/gh-copilot` README (deprecated, suggest/explain only) and the GitHub Copilot CLI docs (`-p`/`--agent`/`--allow-all`/`--yolo`).
+- [x] **§3.1** `squad triage` → `squad watch` sweep (6 remaining active spots) — **done**
+- [x] **§3.1** Standardize alias phrasing to "`squad watch` (alias: `squad triage`)" — **done**
+- [x] **§3.2** `.squad/loop.md` → `./loop.md` in `copilot-instructions.md` + `squad-coach.agent.md` — **done**
+- [x] **7b** `squad triage --health` → `squad watch --health` — **done** (fixes a latent bug)
+- [x] **§3.3** `gh copilot -p` → `copilot -p` at `03-advanced.md:218` and the Step 11h script — **done**
+- [ ] **§3.4** *(deferred to Tamir — trust vote)* Correct #1017/#1062/#1081 troubleshooting: "fixed on dev/`v0.9.6-insider.3`, not v0.9.4 stable"; #1081 = real fix
+- [ ] **§3.5** *(deferred to Tamir — trust vote)* Reframe Teams (Step 11g): it's the `ralph-watch.ps1` script that reads `~/.squad/teams-webhook.url`, not `squad watch`; or describe the built-in `teams-graph`/skill path
+- [ ] Add a stable-release watch: when a stable >v0.9.4 ships with the three fixes, flip the troubleshooting wording
 
-One claim from the automated review was **rejected during double-checking**: that the live workshop uses `agency copilot …` or `squad agent run …`. A repo-wide grep found **neither** in the active modules — those strings appear only in `docs/01 …Plan.md` where it *describes Tamir's* workshop. Do not "fix" something the workshop doesn't contain.
+---
+
+## 6. Notes
+
+- A claim from the first automated review was **rejected on double-check**: that the live workshop uses `agency copilot …` or `squad agent run …`. A repo-wide grep finds **neither** in the active modules — they appear only in `docs/01` *describing Tamir's* workshop.
+- My earlier draft of this doc called the Teams path "fabricated." That was **overstated** — corrected here: the path is real (Tamir's wrapper), just mis-attributed to `squad watch`. Verified by grepping the shipped binaries, not by the file's absence on this machine.
