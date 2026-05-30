@@ -91,14 +91,16 @@ if ($r.Ok) { $pass++ } else { $fail++ }
 
 # --- 5. GitHub CLI auth ---
 $ghAuthRaw = gh auth status 2>&1
-$ghAuthOk  = $null -ne ($ghAuthRaw | Select-String 'Logged in')
-$ghAuthMsg = if ($ghAuthOk) { ($ghAuthRaw | Select-String 'Logged in').ToString().Trim() } else { 'not authenticated' }
+$ghAuthOk  = $null -ne ($ghAuthRaw | Select-String 'Logged in to')
+$ghAuthMsg = if ($ghAuthOk) { ($ghAuthRaw | Select-String 'Logged in to').ToString().Trim() } else { 'not authenticated' }
 $r = Test-Result 'GH auth' $ghAuthOk $ghAuthMsg 'logged in' `
     'gh auth login'
 if ($r.Ok) { $pass++ } else { $fail++ }
 
 # --- 6. GitHub Copilot CLI ---
-$copilotRaw = copilot --version 2>&1
+# `copilot --version` can emit multiple lines (banner + "Run 'copilot update'…").
+# Join to a single string so `-match` populates $Matches (it does not on arrays).
+$copilotRaw = (copilot --version 2>&1) -join ' '
 $copilotOk  = $false
 if ($copilotRaw -match '(\d+)\.(\d+)\.(\d+)') {
     $major = [int]$Matches[1]; $minor = [int]$Matches[2]; $patch = [int]$Matches[3]
@@ -109,7 +111,8 @@ $r = Test-Result 'Copilot CLI' $copilotOk ($copilotRaw -join '') '1.0.24+' `
 if ($r.Ok) { $pass++ } else { $fail++ }
 
 # --- 7. Squad CLI ---
-$squadRaw = squad --version 2>&1
+# Join to a single string (same multi-line guard as the Copilot check above).
+$squadRaw = (squad --version 2>&1) -join ' '
 $squadOk  = $false
 if ($squadRaw -match '(\d+)\.(\d+)\.(\d+)') {
     $major = [int]$Matches[1]; $minor = [int]$Matches[2]; $patch = [int]$Matches[3]
