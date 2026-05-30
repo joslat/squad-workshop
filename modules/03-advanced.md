@@ -6,6 +6,18 @@
 
 ---
 
+## At a glance
+
+**⏱️ ~60 min** · two optional capabilities — observability, then autonomous mode.
+
+| Step | What you do |
+|---|---|
+| 10 | Observe Squad with .NET Aspire (optional) |
+| 11 | Try Ralph — watch mode (`squad watch`), safe in triage-only |
+| 12 | Prompt-driven loops (`squad loop`) — optional |
+
+---
+
 ## Prerequisites
 
 - You completed [Module 1](01-basic.md) (module 2 strongly recommended) and have a working `reading-list-squad-lab/` repo with a populated `.squad/` directory.
@@ -128,6 +140,10 @@ Exit the Copilot CLI:
 Then stop Aspire with `Ctrl+C` in its terminal. The Docker container will be cleaned up.
 
 > If you're going to trust multi-agent coding, at least let it be observed instead of accepted on faith like a prophecy.
+
+> **Try if interested** — pick one if curious:
+> - **Compare traces between agents.** During a multi-agent task, open the dashboard and find which agent burned the most tokens. Does the Lead's review pass cost more than the Backend's implementation?
+> - **Trace a tool call.** Find a shell or MCP tool call in the trace tree and read its arguments and result — what did the agent actually see?
 
 ---
 
@@ -289,6 +305,10 @@ Place it at the repo root and run with `pwsh ralph-watch.ps1`. Stop with `Ctrl+C
 > **Why not just `squad watch --execute`?** You can and should start there. The custom script pattern makes sense once you want: a structured multi-section prompt (`.squad/ralph-instructions.md`), Teams failure alerts, heartbeat files for a monitoring dashboard, or different intervals per repo. Copy the script and adapt it. Don't start here — graduate to it.
 
 > **Honest tradeoff:** Ralph is most useful when you have a backlog of small, well-scoped issues that you'd file anyway. He's least useful — and most expensive — when issues are vague, when the repo doesn't have a strong test suite to give him a "did it work?" signal, or when you sit and watch him work. If you find yourself watching, you should be running `copilot --agent squad` instead.
+
+> **Try if interested** — pick one if curious:
+> - **Read `ralph.log` line by line.** For one round, can you reconstruct which issue Ralph picked and how he routed it? (`ralph.log` captures Ralph's own polling and decisions, not the spawned agent's full reasoning.) Where would you have decided differently?
+> - **Mislabel an issue on purpose.** Apply `squad:frontend` to a backend task and watch how Ralph routes it. Does the label filter help, or get in the way?
 
 ---
 

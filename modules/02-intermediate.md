@@ -6,6 +6,18 @@
 
 ---
 
+## At a glance
+
+**⏱️ ~45 min** · add a second feature and test whether the repo's memory compounds.
+
+| Step | What you do |
+|---|---|
+| 7 | Add a second-wave feature |
+| 8 | Commit and push |
+| 9 | Look inside `.squad/` and judge the artifacts |
+
+---
+
 ## Prerequisites
 
 - You completed [Module 1](01-basic.md) and have a working Reading List app under `reading-list-squad-lab/`.
