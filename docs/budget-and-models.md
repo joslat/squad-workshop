@@ -46,16 +46,15 @@ Squad groups models into three tiers. As of v0.9.4 the catalog has 18+ models; r
 
 ## How a model gets chosen (resolution order)
 
-When an agent runs, Squad picks its model by the **first rule that matches**:
+Squad's source documents this as a **5-layer hierarchy** (`Layer 0` → `Layer 4`); the **first match wins**:
 
-1. **Per-agent override** — `agentModelOverrides.{agent}` in `.squad/config.json`
-2. **Global default** — `defaultModel` in `.squad/config.json`
-3. **Session directive** — what you set in the Copilot CLI session (`/model`)
-4. **Charter preference** — a `## Model` section in the agent's charter file
-5. **Task-aware auto** — Squad's heuristic for the task type
-6. **Fallback** — `claude-haiku-4.5`
+- **Layer 0 — `.squad/config.json`:** a **per-agent override** (`agentModelOverrides.{agent}`) if set, else the **global default** (`defaultModel`)
+- **Layer 1 — session directive:** what you set in the Copilot CLI session (`/model`)
+- **Layer 2 — charter preference:** a `## Model` section in the agent's charter file
+- **Layer 3 — task-aware auto:** Squad's heuristic (e.g. code → sonnet, docs → haiku)
+- **Layer 4 — fallback:** `claude-haiku-4.5`
 
-So a per-agent override beats everything; the session `/model` you picked in Module 1 sits in the middle.
+So a per-agent override (Layer 0) beats everything; the session `/model` you picked in Module 1 sits at Layer 1.
 
 > Squad ships a `model-selection` skill that documents this in more depth — `Get-Content .copilot\skills\model-selection\SKILL.md` if `squad init` installed it (see [Module 2, Step 9.5](../modules/02-intermediate.md)), or read it upstream under `templates/skills/`.
 
