@@ -45,7 +45,7 @@ The app is a vehicle. The point is to experience the team model, not to ship the
 
 ### Prerequisites
 
-> **Windows only:** This workshop uses `winget` for package installation. macOS and Linux users will need to use equivalent package managers (`brew`, `apt`, etc.) for the install commands in [docs/prerequisites.md](docs/prerequisites.md).
+> **Cross-platform (PowerShell 7).** The workshop runs in PowerShell 7 (`pwsh`) — Windows, macOS, and Linux. Install commands for all three are in [docs/prerequisites.md](docs/prerequisites.md) (`winget` on Windows, `brew` on macOS, `apt`/official feeds on Linux). Command examples use Windows-style `\` paths and `$env:USERPROFILE`; on macOS/Linux use `/` (PowerShell accepts it everywhere) and `$HOME`.
 
 | Tool | Minimum version | Check command |
 |---|---|---|
@@ -56,7 +56,7 @@ The app is a vehicle. The point is to experience the team model, not to ship the
 | GitHub CLI auth | logged in | `gh auth status` |
 | GitHub Copilot CLI | 1.0.24 | `copilot --version` |
 | Squad CLI | 0.9.4 | `squad --version` |
-| PowerShell exec policy | RemoteSigned | `Get-ExecutionPolicy -Scope CurrentUser` |
+| PowerShell 7 | 7.x | `pwsh --version` |
 
 See [docs/prerequisites.md](docs/prerequisites.md) for full install instructions and version-specific troubleshooting.
 

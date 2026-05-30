@@ -22,6 +22,18 @@ $ErrorActionPreference = 'SilentlyContinue'
 $pass = 0
 $fail = 0
 
+# Cross-platform: PowerShell 7 runs on Windows/macOS/Linux. $IsMacOS / $IsLinux are
+# defined in pwsh 7 (and $null in Windows PowerShell 5.1, which only runs on Windows),
+# so the negation below correctly resolves to Windows in both cases.
+$onWindows = -not ($IsMacOS -or $IsLinux)
+
+# Install hint for the current OS: Windows shows the inline winget command; macOS/Linux
+# point to the per-OS commands in docs/prerequisites.md (single source of truth).
+function Get-Fix {
+    param([string]$Tool, [string]$Winget)
+    if ($onWindows) { $Winget } else { "Install $Tool — see docs/prerequisites.md for the macOS/Linux command" }
+}
+
 function Test-Result {
     param(
         [string]$Tool,
@@ -58,7 +70,7 @@ if ($nodeRaw -match 'v(\d+)\.(\d+)\.(\d+)') {
     $nodeOk = ($major -gt 22) -or ($major -eq 22 -and $minor -gt 5) -or ($major -eq 22 -and $minor -eq 5 -and $patch -ge 0)
 }
 $r = Test-Result 'Node.js' $nodeOk ($nodeRaw -join '') '22.5.0+' `
-    'winget install OpenJS.NodeJS.22 --accept-source-agreements --accept-package-agreements'
+    (Get-Fix 'Node.js' 'winget install OpenJS.NodeJS.22 --accept-source-agreements --accept-package-agreements')
 if ($r.Ok) { $pass++ } else { $fail++ }
 
 # --- 2. .NET SDK ---
@@ -68,14 +80,14 @@ if ($dotnetRaw -match '^(\d+)\.') {
     $dotnetOk = [int]$Matches[1] -ge 10
 }
 $r = Test-Result '.NET SDK' $dotnetOk ($dotnetRaw -join '') '10.0.0+' `
-    'winget install Microsoft.DotNet.SDK.10 --accept-source-agreements --accept-package-agreements'
+    (Get-Fix '.NET SDK' 'winget install Microsoft.DotNet.SDK.10 --accept-source-agreements --accept-package-agreements')
 if ($r.Ok) { $pass++ } else { $fail++ }
 
 # --- 3. Git ---
 $gitRaw = git --version 2>&1
 $gitOk  = $gitRaw -match 'git version'
 $r = Test-Result 'Git' $gitOk ($gitRaw -join '') 'any recent' `
-    'winget install Git.Git --accept-source-agreements --accept-package-agreements'
+    (Get-Fix 'Git' 'winget install Git.Git --accept-source-agreements --accept-package-agreements')
 if ($r.Ok) { $pass++ } else { $fail++ }
 
 # --- 4. GitHub CLI ---
@@ -86,7 +98,7 @@ if ($ghRaw -match 'gh version (\d+)\.(\d+)\.(\d+)') {
     $ghOk = ($major -gt 2) -or ($major -eq 2 -and $minor -ge 89)
 }
 $r = Test-Result 'GitHub CLI' $ghOk ($ghRaw -join '') '2.89.0+' `
-    'winget install GitHub.cli --accept-source-agreements --accept-package-agreements'
+    (Get-Fix 'GitHub CLI' 'winget install GitHub.cli --accept-source-agreements --accept-package-agreements')
 if ($r.Ok) { $pass++ } else { $fail++ }
 
 # --- 5. GitHub CLI auth ---
@@ -107,7 +119,7 @@ if ($copilotRaw -match '(\d+)\.(\d+)\.(\d+)') {
     $copilotOk = ($major -gt 1) -or ($major -eq 1 -and $minor -gt 0) -or ($major -eq 1 -and $minor -eq 0 -and $patch -ge 24)
 }
 $r = Test-Result 'Copilot CLI' $copilotOk ($copilotRaw -join '') '1.0.24+' `
-    'winget install GitHub.Copilot --accept-source-agreements --accept-package-agreements'
+    (Get-Fix 'Copilot CLI' 'winget install GitHub.Copilot --accept-source-agreements --accept-package-agreements')
 if ($r.Ok) { $pass++ } else { $fail++ }
 
 # --- 7. Squad CLI ---
@@ -122,12 +134,14 @@ $r = Test-Result 'Squad CLI' $squadOk ($squadRaw -join '') '0.9.4+' `
     'npm install -g @bradygaster/squad-cli@latest'
 if ($r.Ok) { $pass++ } else { $fail++ }
 
-# --- 8. PowerShell execution policy ---
-$policy   = Get-ExecutionPolicy -Scope CurrentUser
-$policyOk = $policy -in @('RemoteSigned', 'Unrestricted', 'Bypass')
-$r = Test-Result 'PS ExecPolicy' $policyOk $policy.ToString() 'RemoteSigned' `
-    'Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force'
-if ($r.Ok) { $pass++ } else { $fail++ }
+# --- 8. PowerShell execution policy (Windows only) ---
+if ($onWindows) {
+    $policy   = Get-ExecutionPolicy -Scope CurrentUser
+    $policyOk = $policy -in @('RemoteSigned', 'Unrestricted', 'Bypass')
+    $r = Test-Result 'PS ExecPolicy' $policyOk $policy.ToString() 'RemoteSigned' `
+        'Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force'
+    if ($r.Ok) { $pass++ } else { $fail++ }
+}
 
 # --- Summary ---
 Write-Host ("-" * 60) -ForegroundColor DarkGray

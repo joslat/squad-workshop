@@ -36,7 +36,7 @@
 
 [CmdletBinding()]
 param(
-    [string]$LabPath = "..\reading-list-squad-lab",
+    [string]$LabPath = "../reading-list-squad-lab",
     [switch]$Force
 )
 
@@ -48,20 +48,20 @@ if (-not (Test-Path $LabPath)) {
     exit 1
 }
 
-$agentSrc   = Join-Path $PSScriptRoot "..\.github\agents\squad-coach.agent.md"
-$promptsSrc = @(Get-ChildItem (Join-Path $PSScriptRoot "..\.github\prompts\*.prompt.md"))
+$agentSrc   = Join-Path $PSScriptRoot "../.github/agents/squad-coach.agent.md"
+$promptsSrc = @(Get-ChildItem (Join-Path $PSScriptRoot "../.github/prompts/*.prompt.md"))
 
 if (-not (Test-Path $agentSrc)) {
     Write-Error "Coach agent source not found at: $agentSrc"
     exit 1
 }
 if ($promptsSrc.Count -eq 0) {
-    Write-Error "No prompt files found in $(Join-Path $PSScriptRoot '..\.github\prompts')"
+    Write-Error "No prompt files found in $(Join-Path $PSScriptRoot '../.github/prompts')"
     exit 1
 }
 
-$agentDst   = Join-Path $LabPath ".github\agents"
-$promptsDst = Join-Path $LabPath ".github\prompts"
+$agentDst   = Join-Path $LabPath ".github/agents"
+$promptsDst = Join-Path $LabPath ".github/prompts"
 
 New-Item -ItemType Directory -Path $agentDst   -Force | Out-Null
 New-Item -ItemType Directory -Path $promptsDst -Force | Out-Null
@@ -87,10 +87,10 @@ Copy-Item $agentSrc   $agentDst   -Force
 Copy-Item $promptsSrc $promptsDst -Force
 
 Write-Host ""
-Write-Host "Installed into $LabPath\.github\:" -ForegroundColor Green
-Write-Host "  agents\$(Split-Path $agentSrc -Leaf)"
+Write-Host "Installed into $LabPath/.github/:" -ForegroundColor Green
+Write-Host "  agents/$(Split-Path $agentSrc -Leaf)"
 foreach ($p in $promptsSrc) {
-    Write-Host "  prompts\$($p.Name)"
+    Write-Host "  prompts/$($p.Name)"
 }
 Write-Host ""
 Write-Host "Now from inside the lab repo you can run:" -ForegroundColor Cyan
