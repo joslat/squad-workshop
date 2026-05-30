@@ -15,6 +15,24 @@
 
 ---
 
+## 📋 Tracking
+
+> Status of every PR #1 follow-up. **Items we own are done;** the two Tamir-deferred items remain. (Updated 2026-05-30.)
+
+| Status | Name | Description | % done | Done | Fix / change |
+|---|---|---|---|---|---|
+| Done | **§2.1 command name** | `squad triage` → `squad watch` (primary), repo-wide | 100% | ✅ | All command invocations renamed; alias phrasing standardized; fixed the latent `squad triage --health` no-op |
+| Done | **§2.2 loop.md path** | `.squad/loop.md` → `./loop.md` (repo root) | 100% | ✅ | Fixed repo-wide incl. the 2 spots PR #1 missed (binary-verified `path.join(workTreeRoot,'loop.md')`) |
+| Done | **§2.3 copilot binary** | `gh copilot -p` → `copilot -p` | 100% | ✅ | Module 3 round-description + the "Ralph, Go!" script |
+| Deferred → Tamir | **§2.4 issue-version wording** | #1017/#1062/#1081 "fixed in 0.9.4+ / by design" is inaccurate | 0% | ⏳ | Correct text known: fixed in `v0.9.6-insider.3`/dev (not v0.9.4 stable); #1081 was a real code fix, not "by design". *Can apply now if we stop waiting on Tamir.* |
+| Deferred → Tamir | **§2.5 Teams reframe** | Step 11g `~/.squad/teams-webhook.url` mis-attributed to `squad watch` | 0% | ⏳ | It's read by Tamir's `ralph-watch.ps1` wrapper, not the CLI; or describe the built-in `teams-graph` OAuth + `notification-routing` skill |
+| Decision | **§3.6 ralph-stop** | `.squad/ralph-stop` stop-file | — | ➖ | **KEEP** as a workshop convention (verified absent in the v0.9.4 binary; retained by project decision) |
+| Done | **§3.7 review-pass fixes** | cheat-sheet `hire`/`heartbeat` aliases, `aspire` Docker note, Step 11d/11e | 100% | ✅ | Applied during the review pass |
+
+**Net:** §2.1/2.2/2.3 + §3.7 ✅ done; §2.4/§2.5 deferred to Tamir (facts verified, ready to apply); ralph-stop kept by decision.
+
+---
+
 ## Status legend
 
 | Mark | Meaning |

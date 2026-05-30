@@ -8,6 +8,44 @@
 
 ---
 
+## 📋 Tracking
+
+> Status of every finding R-01…R-27. **23 done, 1 high pending (Tamir-overlap), 3 accepted as-is.** (Updated 2026-05-30.)
+
+| Status | ID | Finding | % done | Done | Fix / change |
+|---|---|---|---|---|---|
+| Done | R-01 | Verify-Prerequisites: Copilot check false-FAILs valid installs | 100% | ✅ | Join multi-line output to a scalar before `-match` |
+| Done | R-02 | Verify-Prerequisites: `gh auth` false-PASSes when logged out | 100% | ✅ | Match `'Logged in to'` (not the substring "logged in") |
+| Pending | R-03 | #1062 troubleshooting prescribes a wrong/harmful SDK override | 0% | ⏳ | Remove the `@github/copilot-sdk 0.3.0` override (v0.9.4 ships a runtime patcher). **Overlaps Tamir-deferred §2.4** |
+| Done | R-04 | "skills" used in M1 Step 6 before defined | 100% | ✅ | One-line gloss at first use |
+| Done | R-05 | `model-selection` skill not installed by `squad init` | 100% | ✅ | Reworded budget doc (ships upstream only) |
+| Done | R-06 | `squad loop` example missing `configured: true` | 100% | ✅ | Added to Step 12b + softened onboarding-mode note (template body is placeholder text, not "ignores your instruction") |
+| Done | R-07 | coach step map missing Steps 9.5 / 11.6 | 100% | ✅ | Added both rows |
+| Done | R-08 | coach mislabels `.copilot/skills/` as "captured" | 100% | ✅ | → "scaffolded by `squad init`" |
+| Done | R-09 | Module 1 ~90 min badge optimistic | 100% | ✅ | → ~90–120 min + first-run caveat (README + copilot-instructions aligned) |
+| Done | R-10 | headline "routing" never observed | 100% | ✅ | Added a Step 4 routing-observable bullet |
+| Done | R-11 | "Ralph" used in M1 budget aside before defined | 100% | ✅ | Reworded Step 1 aside to use already-cast roles (Tester/Scribe/Lead) |
+| Done | R-12 | "charter" used but never defined | 100% | ✅ | Added a one-line gloss at first use (Step 2 human-member tip) |
+| Done | R-13 | Step 2 verify blurs init-provided vs cast agents (`ralph/`/`scribe/`) | 100% | ✅ | Clarified `ralph/`+`scribe/` come from `squad init`; themed dirs are cast |
+| Accepted | R-14 | Module 3 numbering 10 → 11 → 11.6 → 12 reads inserted | — | ➖ | Decimal sub-step `11.6` is fine; renumbering would churn cross-refs + At-a-glance maps for no real gain |
+| Done | R-15 | Step 12d lists `--max-concurrent` as a `squad loop` flag | 100% | ✅ | Reworded: loop rounds are serial (`maxConcurrent` fixed at 1, `loop.js:237`); `--max-concurrent` is a `squad watch` flag |
+| Done | R-16 | coach/instructions don't mention `squad copilot` | 100% | ✅ | Added the `squad copilot --auto-assign` row to **both** command tables |
+| Done | R-17 | coach Step 11 row uses old "triage-only" framing | 100% | ✅ | Reworded → "Ralph Watch Mode (`squad watch`) — triage-only first, then `--execute`" |
+| Done | R-18 | cheat-sheet `squad init` "Cast / initialize" wording | 100% | ✅ | → "Initialize the team" (dropped the misleading `cast` synonym) |
+| Done | R-19 | stale `SQUAD-WORKSHOP-STANDALONE-PLAN.md` (.NET 9 / Apache) | 100% | ✅ | Deleted in the docs reorg |
+| Done | R-20 | `.prompt.md` files never referenced by any module | 100% | ✅ | Added a Module 2 Step 9 pointer to `/inspect-squad-artifacts` (also `\`→`/` swept the prompt files) |
+| Done | R-21 | `.gitignore` omits `loop.md` | 100% | ✅ | Added `loop.md` to the runtime-artifacts block |
+| Done | R-22 | check-links scanned every markdown file | 100% | ✅ | Scoped to the learner-facing surface |
+| Done | R-23 | doctor underline reproduced as ASCII `=` vs `═` | 100% | ✅ | Swapped to box-drawing `═` (U+2550) to match the binary |
+| Done | R-24 | cheat-sheet `--max-concurrent`/`--timeout` note slightly confusing | 100% | ✅ | Added a half-clause: `--max-concurrent 1` is the default; `--timeout 20` tightens the 30-min default |
+| Done | R-25 | coach hard-codes `9 passed / 2 info` doctor count | 100% | ✅ | Softened coach + copilot-instructions to lead with "`0 failed, 0 warnings` is the signal" (9/2 kept as illustrative) |
+| Optional | R-26 | Node check is a version-proxy, not a `node:sqlite` probe | — | ➖ | Acceptable as-is (`squad doctor` does the real probe) |
+| Optional | R-27 | Squad version gate is structurally loose | — | ➖ | Works for the 0.9.4 floor; optional `[version]` tidy |
+
+**Net:** every doc-level finding is closed. P0 (R-01/R-02), the P1 batch (R-04…R-10), and the full P2 + nit batch (R-11…R-25) are ✅. **R-14/R-26/R-27** accepted as-is (correct already). The only open item is **R-03** — and it overlaps the Tamir-deferred §2.4, so it's held with §2.4/§2.5 pending Tamir's confirmation (facts verified; can apply on your word).
+
+---
+
 ## 1. Executive summary
 
 The workshop is **pedagogically strong and technically accurate**. Its narrative arc (build → compound memory → observe → autonomous) is coherent, and its defining asset is an **evaluative, honest voice** that teaches learners to judge whether Squad earns its keep rather than to click through commands. Across three modules + supporting docs, nearly every command, flag, path, and expected-output block matches the v0.9.4 binary exactly.
@@ -104,10 +142,10 @@ Verified against v0.9.4 binaries. **Accuracy is high.** The defects are: the two
 
 ## 6. Suggested action plan
 
-1. **P0 now:** R-01 + R-02 (verify-script bugs) — *applied with this review*. Then R-03 (`#1062` override) — coordinate with Tamir since it overlaps the deferred entry.
-2. **P1 next (one small docs PR):** R-04 (skills gloss), R-05 (model-selection ref), R-06 (`configured: true`), R-07 + R-08 (coach sync), R-09 (Module 1 timing), R-10 (routing observable).
-3. **P2 (a polish pass):** R-11…R-22 batched; R-23…R-27 optional.
-4. **Process:** after P1/P2, archive `docs/01` + `docs/02` + this doc into `docs/done/` and cut a release.
+1. **P0 now:** R-01 + R-02 (verify-script bugs) — ✅ *applied with this review*. Then R-03 (`#1062` override) — coordinate with Tamir since it overlaps the deferred entry (**still open** — only remaining item).
+2. **P1 next (one small docs PR):** R-04 (skills gloss), R-05 (model-selection ref), R-06 (`configured: true`), R-07 + R-08 (coach sync), R-09 (Module 1 timing), R-10 (routing observable) — ✅ **done**.
+3. **P2 (a polish pass):** R-11…R-22 batched; R-23…R-25 nits; R-26/R-27 optional — ✅ **done 2026-05-30** (R-14/R-26/R-27 accepted as-is). See the Tracking table above.
+4. **Process:** after P1/P2, archive `docs/01` + `docs/02` + this doc into `docs/done/` and cut a release. *(Doc-level work is now complete; R-03 + §2.4/§2.5 await Tamir before the archive.)*
 
 ---
 

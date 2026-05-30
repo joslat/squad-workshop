@@ -33,6 +33,8 @@
 
 Squad emits OpenTelemetry traces for agent spawns, model calls, token usage, and durations. `squad aspire` runs the .NET Aspire dashboard — *via Docker* — to render those traces in real time.
 
+> **Note:** Strictly, `squad aspire` uses the .NET Aspire *workload* if you have it installed (`dotnet workload list` shows `aspire`) and only falls back to Docker otherwise. A standard .NET 10 setup doesn't include that workload, so this workshop uses the Docker path throughout — hence the Docker prerequisite above.
+
 > **Important #1:** the Aspire dashboard is a **live telemetry collector** — it shows traces from active Squad sessions, not historical data. An empty dashboard means nothing is sending telemetry to it yet.
 >
 > **Important #2:** `squad aspire` runs the dashboard in a Docker container. If Docker is not running, the command will print a Docker error and *then* misleadingly say `✓ Aspire dashboard launching` before failing. This is a known gotcha — start Docker first.
@@ -388,7 +390,7 @@ Every cycle:
 4. Do nothing else. Do not refactor. Do not touch unrelated files.
 ```
 
-> **Set `configured: true` in the frontmatter.** The shipped `loop.md` template defaults to `configured: false`. While it stays `false`, `squad loop` runs **onboarding mode** — it walks you through setup and **ignores the loop instruction you wrote**. Flip the frontmatter to `configured: true` (as shown above) so the CLI actually runs your instruction each cycle.
+> **Set `configured: true` in the frontmatter.** The shipped `loop.md` template defaults to `configured: false`. While it stays `false`, the shipped template runs in **onboarding mode** — its body is generic placeholder onboarding text, not your real instruction, so that's what gets run. Flip the frontmatter to `configured: true` (as shown above) so the CLI actually runs your instruction each cycle.
 
 Two rules of thumb the hard way:
 
@@ -407,7 +409,7 @@ Hourly tick, each round capped at 15 minutes. If the round needs more than 15 mi
 
 - `--interval N` — minimum gap between round *starts*, not a hard kill. If a round overruns, the next tick is skipped and Ralph waits.
 - `--timeout N` — hard ceiling per spawned agent execution (default 30 min). When this elapses the agent process is killed; partial work that was already committed stays committed; nothing else is rolled back.
-- `--max-concurrent N` (default 1) — how many rounds can overlap. With the default, rounds are strictly serial.
+- **Loop rounds are always serial** — `squad loop` runs one round at a time (maxConcurrent is fixed at 1). It does **not** parse a `--max-concurrent` option; that flag applies to `squad watch`, not `squad loop`.
 - **No checkpoint/resume across timeouts.** If a round dies mid-task, the next round starts fresh from `loop.md`. That's why idempotent prompts matter.
 
 ### 12e. Stop a loop

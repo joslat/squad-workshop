@@ -12,7 +12,7 @@ I'm working through the **Squad Workshop** and I'm stuck on a step. Please help 
 - Which module and step I'm on
 - The exact command I ran
 - The full output or error I got
-- My tool versions (from `.\scripts\Verify-Prerequisites.ps1`)
+- My tool versions (from `./scripts/Verify-Prerequisites.ps1`)
 
 ---
 
@@ -30,7 +30,7 @@ Here is my situation:
 [paste full output]
 ```
 
-**Tool versions** (from `.\scripts\Verify-Prerequisites.ps1`):
+**Tool versions** (from `./scripts/Verify-Prerequisites.ps1`):
 ```
 [paste output]
 ```

@@ -15,5 +15,6 @@ reading-list-squad-lab/
 # Squad runtime artifacts (Ralph) — these typically live in the lab repo
 # (already excluded above) but are listed here as a pattern for downstream users
 .squad/ralph-stop
+loop.md
 ralph.log
 *.ralph.log

@@ -12,6 +12,24 @@
 
 ---
 
+## 📋 Adoption tracking
+
+> Live status of every adoption in this plan. **Mainline (Tier 1 + Tier 2) is fully shipped and merged.** Tier 3 is blocked/pending. (Updated 2026-05-30.)
+
+| Status | Name | Description | % done | Done | Fix / change |
+|---|---|---|---|---|---|
+| Done | **Tier 1 — formats + cheat-sheet** (T-004/005/026/027) | "Try if interested" side-quests (M3), `docs/cheat-sheet.md`, per-module "At a glance" maps + ⏱️ badges, light tone | 100% | ✅ | Shipped in **PR #3** (merged) |
+| Done | **Tier 2a — team extensions** (T-001 Skills, T-006 @copilot) | Module 2 Step 9.5 "Skills", Module 3 Step 11.6 "@copilot" — no dependency on the unmaintained `squad-skills` repo | 100% | ✅ | Shipped in **PR #4** (merged) |
+| Done | **Tier 2b — models & budget** (T-003) | `docs/budget-and-models.md` (per-agent `squad config model`, tiers, budget) + README & Module 1 links | 100% | ✅ | Shipped in **PR #5** (merged); documents the W-012 budget gap (measured numbers still estimates) |
+| Blocked | **Tier 3 — Actions Ralph** (T-002) | Ralph as a GitHub Actions cron (the no-laptop tier) | 0% | ❌ | **Blocked:** `squad watch --once` does not exist in v0.9.4/dev. Needs a verified single-pass mechanism before authoring |
+| Pending | **Tier 3 — bonus appendix** (T-012/013/014/015/016/025) | `modules/04-bonus.md`: MCP, Teams, DevBox, cross-machine, human members, multi-person Squad | 0% | ⬜ | Not created. Each topic needs binary verification + authoring; Teams overlaps the Tamir-deferred reframe ([02 §2.5](02%20Post-PR1-Verification-and-Fixes.md)) |
+| Optional | **Partial-adoption** (T-007/008/009/010/011) | ceremonies, directive capture, `squad.config.ts`, resources table, themed casting ("we have it; theirs is sharper") | 0% | ⬜ | Light-touch polish; not started (low priority) |
+| N/A | **Already-have / Reject** (T-019–024 / T-017,018) | doctor, decisions flow, failure-mode honesty, verifier, coach, build target / `ralph-watch.ps1`, webhook diagram | — | ➖ | No action by design |
+
+**Net:** mainline adoptions ✅ done; remaining = Tier 3 (Actions-Ralph blocked, bonus appendix unwritten) + optional partials.
+
+---
+
 ## Index
 
 0. [Reassessment (2026-05-30) — post-PR #1, watch-authoritative](#0-reassessment-2026-05-30)

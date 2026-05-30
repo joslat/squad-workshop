@@ -23,14 +23,14 @@
 
 | Command | What it does |
 |---|---|
-| `squad init` | Cast / initialize the team in the current repo |
+| `squad init` | Initialize the team in the current repo |
 | `squad doctor` | Health-check `.squad/` structure, Node.js, `node:sqlite` |
 | `copilot --agent squad` | Start an interactive Copilot CLI session with the Squad agent — the primary interface |
 | `copilot --agent squad --yolo` | Same, auto-approving tool calls (`--yolo` = `--allow-all`) — for autopilot / scripted runs |
 | `copilot --agent squad-coach` | Launch the workshop coach (install first with `Install-WorkshopAgents.ps1`) |
 | `squad watch` | Run Ralph in polling mode — reads GitHub Issues, labels / triages (alias: `squad triage`) |
 | `squad watch --interval N` | Poll every N minutes (default 10) |
-| `squad watch --execute` | Let Ralph autonomously work issues — pair with `--max-concurrent 1 --timeout 20` |
+| `squad watch --execute` | Let Ralph autonomously work issues — pair with `--max-concurrent 1 --timeout 20` (`--max-concurrent 1` is already the default; `--timeout 20` intentionally tightens the 30-min default) |
 | `squad watch --health` | Show the watch instance status and exit |
 | `squad loop --init` | Create a starter `./loop.md` at the repo root |
 | `squad loop` | Run the `./loop.md` prompt on a schedule (fire-and-forget — no chat) |

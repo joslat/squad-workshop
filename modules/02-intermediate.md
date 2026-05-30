@@ -82,6 +82,8 @@ git push
 
 Before celebrating, inspect the team's artifacts. Open each file and evaluate whether it looks like real work or pleasant-sounding filler:
 
+> The [`/inspect-squad-artifacts`](../.github/prompts/inspect-squad-artifacts.prompt.md) reusable prompt (VS Code Copilot Chat) automates this same evaluation.
+
 ```powershell
 # Decisions — were they useful?
 Get-Content .squad/decisions.md

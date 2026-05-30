@@ -12,7 +12,7 @@ I've completed work with my Squad team and I want to evaluate the quality of the
 
 **`.squad/decisions.md`:**
 ```powershell
-Get-Content .squad\decisions.md
+Get-Content .squad/decisions.md
 ```
 ```
 [paste output]
@@ -20,7 +20,7 @@ Get-Content .squad\decisions.md
 
 **`.squad/identity/wisdom.md`:**
 ```powershell
-Get-Content .squad\identity\wisdom.md
+Get-Content .squad/identity/wisdom.md
 ```
 ```
 [paste output]
@@ -28,7 +28,7 @@ Get-Content .squad\identity\wisdom.md
 
 **One agent history (pick any member):**
 ```powershell
-Get-ChildItem .squad\agents\ -Recurse -Include history.md | Select-Object -First 1 | Get-Content
+Get-ChildItem .squad/agents/ -Recurse -Include history.md | Select-Object -First 1 | Get-Content
 ```
 ```
 [paste output]

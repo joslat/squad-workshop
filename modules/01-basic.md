@@ -138,7 +138,7 @@ squad doctor
 
 ```
 🩺 Squad Doctor
-===============
+═══════════════
 
 Mode: local
 
@@ -205,7 +205,7 @@ copilot --agent squad --yolo
 
 By default, Copilot CLI may start with a mid-tier model (e.g. `GPT-5.4 (medium)`). For a workshop that involves multi-agent coordination, code generation across .NET and React, architectural decisions, and code review — **use the strongest model available.**
 
-> **Want different models per agent?** The `/model` choice here applies to the whole session. To run Ralph and the Scribe on a cheap model while the Lead reviews on a premium one, see [docs/budget-and-models.md](../docs/budget-and-models.md) (`squad config model --agent …`).
+> **Want different models per agent?** The `/model` choice here applies to the whole session. To run the Tester and Scribe on a cheap model while the Lead reviews on a premium one, see [docs/budget-and-models.md](../docs/budget-and-models.md) (`squad config model --agent …`).
 
 Check the current model and available options:
 
@@ -265,9 +265,9 @@ Do you have a PRD or spec document? (file path, paste it, or skip)
 dir .squad/agents/
 ```
 
-You should see directories for each team member (e.g. `ralph/`, `scribe/`, and your newly cast agents).
+You should see directories for each team member. `ralph/` and `scribe/` are scaffolded by `squad init`; the themed directories alongside them are the agents you just cast.
 
-> **Tip — add yourself as a human member.** Open `.squad/team.md` and add yourself to the `## Members` table with role `👤 Human — Project Owner` and no charter path. This tells every agent that you are the decision-maker and that notifications/escalations should reach you:
+> **Tip — add yourself as a human member.** Open `.squad/team.md` and add yourself to the `## Members` table with role `👤 Human — Project Owner` and no charter path (a charter is the per-agent instruction file under `.squad/agents/<name>/` that defines that member's role and behavior — you don't have one). This tells every agent that you are the decision-maker and that notifications/escalations should reach you:
 >
 > ```markdown
 > | Your Name | 👤 Human — Project Owner | — | 👤 Human |

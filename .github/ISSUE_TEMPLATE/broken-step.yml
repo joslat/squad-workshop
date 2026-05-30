@@ -6,7 +6,7 @@ body:
     attributes:
       value: |
         Thanks for reporting. The more detail you provide, the faster this gets fixed.
-        Run `.\scripts\Verify-Prerequisites.ps1` and paste its output in the Tool versions field below.
+        Run `./scripts/Verify-Prerequisites.ps1` and paste its output in the Tool versions field below.
 
   - type: dropdown
     id: module
@@ -45,7 +45,7 @@ body:
     id: tool-versions
     attributes:
       label: Tool versions
-      description: Paste the full output of `.\scripts\Verify-Prerequisites.ps1`
+      description: Paste the full output of `./scripts/Verify-Prerequisites.ps1`
       render: text
     validations:
       required: true

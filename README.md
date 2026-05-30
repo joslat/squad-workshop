@@ -33,7 +33,7 @@ The app is a vehicle. The point is to experience the team model, not to ship the
 
 | # | Module | What you build | Time | Extra prerequisites |
 |---|---|---|---|---|
-| 1 | [Basic](modules/01-basic.md) | A working .NET 10 + React reading list app, built by the team end-to-end with one architectural decision and a real review pass. | ~90 min | None beyond the prereqs below. |
+| 1 | [Basic](modules/01-basic.md) | A working .NET 10 + React reading list app, built by the team end-to-end with one architectural decision and a real review pass. | ~90–120 min | None beyond the prereqs below. |
 | 2 | [Intermediate](modules/02-intermediate.md) | A second-wave feature on the same app — filtering, validation, regression-aware tests — to see whether persistent memory actually compounds. Inspect the team's artifacts. | ~45 min | Completed module 1. |
 | 3 | [Advanced](modules/03-advanced.md) | Observe Squad with .NET Aspire, then graduate to autonomous mode with **Ralph** — `squad watch` (polling and `--execute`), plus prompt-driven `squad loop`. | ~60 min | Completed module 1 (module 2 recommended). **Docker Desktop running** for Aspire. |
 

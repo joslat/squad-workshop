@@ -10,7 +10,7 @@ When answering questions in this repo, use this context to be accurate and immed
 
 A workshop in three self-contained modules (~3 hours total). Learners build a **Personal Reading List** app — a .NET 10 minimal API + React + TypeScript + SQLite full-stack app — entirely through Squad's team model.
 
-- **Module 1 — Basic** (`modules/01-basic.md`): Build the app from scratch end-to-end. ~90 min.
+- **Module 1 — Basic** (`modules/01-basic.md`): Build the app from scratch end-to-end. ~90–120 min.
 - **Module 2 — Intermediate** (`modules/02-intermediate.md`): Add a second-wave feature, inspect whether Squad's memory compounded. ~45 min.
 - **Module 3 — Advanced** (`modules/03-advanced.md`): .NET Aspire observability + Ralph autonomous mode. ~60 min.
 
@@ -40,7 +40,8 @@ Agents write draft decisions to `.squad/decisions/inbox/<agent>-<topic>.md`. The
 ### Ralph
 Ralph is the name for Squad's polling persona (`squad watch` / `squad loop`). He reads GitHub Issues as his queue. He does **not** read chat history, scan TODO comments, or invent work. To stop Ralph cleanly: `New-Item -Path .squad/ralph-stop -ItemType File`. Delete that file before the next run.
 
-### `squad doctor` healthy output (v0.9.4)
+### `squad doctor` healthy output
+The signal that matters is **`0 failed, 0 warnings`** — the `passed` / `info` counts vary by Squad CLI version and aren't something to match exactly. For example, on v0.9.4 a healthy run looks like:
 ```
 Summary: 9 passed, 0 failed, 0 warnings, 2 info
 ```
@@ -74,7 +75,7 @@ The 2 `ℹ️` info lines about `vscode-jsonrpc` and `copilot-sdk session.js` ar
 
 ## How to answer learner questions
 
-- **"How do I install X?"** → Point to `docs/prerequisites.md` and the relevant section. All install commands use `winget` (Windows).
+- **"How do I install X?"** → Point to `docs/prerequisites.md` and the relevant section. Install commands are per-OS (`winget` on Windows, `brew` on macOS, `apt`/official feeds on Linux).
 - **"I'm stuck on step N of module M"** → Help them diagnose by asking for the exact error output and their tool versions from `./scripts/Verify-Prerequisites.ps1`. Check `docs/troubleshooting.md` for known patterns.
 - **"Why is the Aspire dashboard empty?"** → Three causes: Docker not running (most common — `✓ lies when Docker is down`), Squad version too old, or firewall blocking `localhost:4317`.
 - **"The inbox under `.squad/decisions/inbox/` is empty"** → This is correct. The Scribe merged the decision into `.squad/decisions.md`.

@@ -31,6 +31,7 @@ The team roles: **Lead** (architecture, review, coordination), **Backend**, **Fr
 | `squad aspire` | Launches the .NET Aspire OTLP dashboard via Docker (requires Docker Desktop running first) |
 | `squad watch` | Polls GitHub Issues; with `--execute` spawns Copilot sessions to work on them (alias: `squad triage`) |
 | `squad loop` | Reads `./loop.md` (repo root) and runs that instruction on a schedule |
+| `squad copilot --auto-assign` | Adds GitHub's @copilot coding agent to `.squad/team.md` + enables auto-assignment of `squad:copilot` issues (`--off` removes it) |
 | `copilot --agent squad` | The primary workshop interface — use this for all interactive work |
 
 ### Decisions flow — the most common confusion point
@@ -46,7 +47,7 @@ The team roles: **Lead** (architecture, review, coordination), **Backend**, **Fr
 Summary: 9 passed, 0 failed, 0 warnings, 2 info
 ```
 
-The two `ℹ️` info lines about `vscode-jsonrpc` and `copilot-sdk session.js` are expected for global CLI installs. They are **not** warnings. If the summary shows actual warnings, the user is probably on v0.9.1 and needs to upgrade.
+**`0 failed, 0 warnings` is the signal** — that's what tells you the install is healthy. The exact passed/info counts (illustratively 9 passed, 2 info on v0.9.4) can shift between versions and don't matter. The two `ℹ️` info lines about `vscode-jsonrpc` and `copilot-sdk session.js` are expected for global CLI installs. They are **not** warnings. If the summary shows actual warnings, the user is probably on v0.9.1 and needs to upgrade.
 
 ### Key `.squad/` files and what they mean
 
@@ -91,7 +92,7 @@ If on v0.9.1: `casting/registry.json` wasn't scaffolded and doctor reports false
 ```powershell
 npm install -g @bradygaster/squad-cli@latest
 ```
-Re-run `squad doctor` — should show `9 passed, 0 failed, 0 warnings, 2 info`.
+Re-run `squad doctor` — the signal is `0 failed, 0 warnings` (illustratively `9 passed, 0 failed, 0 warnings, 2 info`).
 
 ### `copilot` command not found after install
 
@@ -159,6 +160,6 @@ If it's thin or generic, the memory is decorative. This is data, not a bug — i
 | Step | What happens |
 |---|---|
 | 10 | .NET Aspire observability (Docker required) |
-| 11 | Ralph triage-only mode (safe), then with `--execute` |
+| 11 | Ralph Watch Mode (`squad watch`) — triage-only first, then `--execute` |
 | 11.6 | Add @copilot to your team via `squad copilot --auto-assign` — the bounded-autonomy alternative to Ralph `--execute` |
 | 12 | `squad loop` — prompt-driven scheduled housekeeping |
