@@ -307,7 +307,7 @@ Place it at the repo root and run with `pwsh ralph-watch.ps1`. Stop with `Ctrl+C
 > **Honest tradeoff:** Ralph is most useful when you have a backlog of small, well-scoped issues that you'd file anyway. He's least useful — and most expensive — when issues are vague, when the repo doesn't have a strong test suite to give him a "did it work?" signal, or when you sit and watch him work. If you find yourself watching, you should be running `copilot --agent squad` instead.
 
 > **Try if interested** — pick one if curious:
-> - **Read `ralph.log` line by line.** For one round, can you reconstruct exactly which issue Ralph picked, why, and what he did? Where would you have decided differently?
+> - **Read `ralph.log` line by line.** For one round, can you reconstruct which issue Ralph picked and how he routed it? (`ralph.log` captures Ralph's own polling and decisions, not the spawned agent's full reasoning.) Where would you have decided differently?
 > - **Mislabel an issue on purpose.** Apply `squad:frontend` to a backend task and watch how Ralph routes it. Does the label filter help, or get in the way?
 
 ---

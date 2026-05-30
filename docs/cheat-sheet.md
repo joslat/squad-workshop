@@ -23,8 +23,8 @@
 
 | Command | What it does |
 |---|---|
-| `squad init` | Cast / initialize the team in the current repo (alias: `squad hire`) |
-| `squad doctor` | Health-check `.squad/` structure, Node.js, `node:sqlite` (alias: `squad heartbeat`) |
+| `squad init` | Cast / initialize the team in the current repo |
+| `squad doctor` | Health-check `.squad/` structure, Node.js, `node:sqlite` |
 | `copilot --agent squad` | Start an interactive Copilot CLI session with the Squad agent — the primary interface |
 | `copilot --agent squad --yolo` | Same, auto-approving tool calls (`--yolo` = `--allow-all`) — for autopilot / scripted runs |
 | `copilot --agent squad-coach` | Launch the workshop coach (install first with `Install-WorkshopAgents.ps1`) |
@@ -34,10 +34,10 @@
 | `squad watch --health` | Show the watch instance status and exit |
 | `squad loop --init` | Create a starter `./loop.md` at the repo root |
 | `squad loop` | Run the `./loop.md` prompt on a schedule (fire-and-forget — no chat) |
-| `squad aspire` | Launch the .NET Aspire OTLP dashboard (Docker must be running) |
+| `squad aspire` | Launch the .NET Aspire OTLP dashboard (requires Docker running, or the .NET Aspire workload) |
 | `squad copilot` | Add GitHub's `@copilot` coding agent to the team |
 
-> Stop Ralph cleanly: `New-Item -Path .squad\ralph-stop -ItemType File` — delete that file before the next run.
+> Stop Ralph with **Ctrl+C** in the watch terminal. In Squad CLI v0.9.4 there is no stop-file — `squad watch` / `squad loop` shut down only on Ctrl+C (`SIGINT`/`SIGTERM`).
 
 ## Files you should know
 
@@ -48,7 +48,6 @@
 | `.squad/decisions/inbox/` | Draft decisions before the Scribe merges them (empty = expected) |
 | `.squad/agents/{name}/history.md` | Per-agent working memory |
 | `./loop.md` | The prompt `squad loop` runs each cycle — repo root, **not** `.squad/` |
-| `.squad/ralph-stop` | Sentinel file that stops Ralph after the current round |
 | `ralph.log` | Ralph's run log (when you pass `--log-file .\ralph.log`) |
 
 ---
