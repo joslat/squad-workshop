@@ -14,6 +14,7 @@
 |---|---|
 | 10 | Observe Squad with .NET Aspire (optional) |
 | 11 | Try Ralph — watch mode (`squad watch`), safe in triage-only |
+| 11.6 | Add @copilot to your team (optional) |
 | 12 | Prompt-driven loops (`squad loop`) — optional |
 
 ---
@@ -309,6 +310,49 @@ Place it at the repo root and run with `pwsh ralph-watch.ps1`. Stop with `Ctrl+C
 > **Try if interested** — pick one if curious:
 > - **Read `ralph.log` line by line.** For one round, can you reconstruct which issue Ralph picked and how he routed it? (`ralph.log` captures Ralph's own polling and decisions, not the spawned agent's full reasoning.) Where would you have decided differently?
 > - **Mislabel an issue on purpose.** Apply `squad:frontend` to a backend task and watch how Ralph routes it. Does the label filter help, or get in the way?
+
+---
+
+## Step 11.6: Add @copilot to your team (optional)
+
+Ralph's `--execute` mode spawns a *local* Copilot session per issue (with the [#1081 specialist-charter caveat](https://github.com/bradygaster/squad/issues/1081) noted above). GitHub's **@copilot coding agent** is the other autonomous path: it runs in GitHub's own infrastructure, claims a labeled issue, and opens a pull request you review — bounded autonomy, no local process to babysit.
+
+### 11.6a. Add @copilot to the roster
+
+```powershell
+squad copilot --auto-assign
+```
+
+This adds an `@copilot` (🤖 Coding Agent) entry to `.squad/team.md`, writes `.github/copilot-instructions.md`, and marks the team for auto-assignment. Remove it any time with `squad copilot --off`.
+
+> **Prerequisite for auto-assign:** GitHub needs a token to assign issues to the agent. Add a classic PAT (repo scope) as a repo secret named `COPILOT_ASSIGN_TOKEN`:
+> ```powershell
+> gh secret set COPILOT_ASSIGN_TOKEN
+> ```
+
+### 11.6b. Hand it a well-scoped issue
+
+Label a small, clearly-specified issue `squad:copilot` (or let `squad watch` apply it when auto-assign is on). GitHub assigns the `copilot-swe-agent` actor, it works the issue in the cloud, and opens a PR — typically a few minutes later.
+
+```powershell
+gh issue create --title "Add a created-at timestamp to books" `
+  --body "Add a server-generated createdAt field to the book model, expose it in the API response, and show it in the UI. Add a test." `
+  --label "squad:copilot"
+```
+
+### 11.6c. Review the PR
+
+Watch the **Pull requests** tab. When @copilot opens a PR, review it exactly like a teammate's — the whole point of bounded autonomy is that nothing merges without your eyes on it.
+
+### @copilot vs Ralph `--execute` — when to use which
+
+| Reach for @copilot when… | Reach for Ralph `--execute` when… |
+|---|---|
+| You want a reviewable PR from a well-scoped issue, with no local process running | You want fast, local iteration over a batch of small issues |
+| You're fine waiting a few minutes for a cloud run | You want to watch it happen in your terminal |
+| The task doesn't need a specific specialist's charter | (accepting the #1081 caveat — spawned agents get a generic prompt) |
+
+> **Honest note:** @copilot is genuinely useful on small, well-bounded issues with clear acceptance criteria and a test suite that can check its work. It is *not* a senior engineer — scope tightly and review every PR.
 
 ---
 
