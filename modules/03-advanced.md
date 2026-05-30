@@ -133,7 +133,7 @@ Then stop Aspire with `Ctrl+C` in its terminal. The Docker container will be cle
 
 ## Step 11: Try Ralph — Watch Mode (optional, safe in triage-only)
 
-Ralph is Squad's polling agent. He's the named persona for `squad triage` (formerly `squad watch`) — a daemon that polls **GitHub Issues**, builds a context snapshot, and either triages them (labels + comments) or dispatches a Copilot session to actually do the work.
+Ralph is Squad's polling agent. He's the named persona for `squad watch` (also available as `squad triage`) — a daemon that polls **GitHub Issues**, builds a context snapshot, and either triages them (labels + comments) or dispatches a Copilot session to actually do the work.
 
 ### What Ralph reads — and what he doesn't
 
@@ -201,14 +201,14 @@ Now the real thing — Ralph will spawn a Copilot session to actually work on is
 **Run it:**
 
 ```powershell
-squad triage --execute --interval 5 `
+squad watch --execute --interval 5 `
   --copilot-flags "--yolo --agent squad" `
   --max-concurrent 1 `
   --timeout 20 `
   --log-file .\ralph.log
 ```
 
-> **Known limitation — specialists don't act like specialists in `--execute` mode** (upstream [issue #1081](https://github.com/bradygaster/squad/issues/1081)): When Ralph spawns a session for a `squad:bishop`-labeled issue, the spawned agent receives a **generic Ralph prompt**, not Bishop's actual charter. The `squad:{member}` label is used only as a routing filter — it is never injected into the spawn prompt as a role assignment. The spawned agent has no specialist knowledge of who it's supposed to be. For quality specialist work, use interactive `copilot --agent squad` sessions instead. `--execute` is most useful for small, well-defined tasks where specialist nuance doesn't matter much.
+> **Known limitation — specialists don't act like specialists in `--execute` mode** (upstream [issue #1081](https://github.com/bradygaster/squad/issues/1081), closed — routing behaviour is by design): When Ralph spawns a session for a `squad:bishop`-labeled issue, the spawned agent receives a **generic Ralph prompt**, not Bishop's actual charter. The `squad:{member}` label is used only as a routing filter — it is never injected into the spawn prompt as a role assignment. The spawned agent has no specialist knowledge of who it's supposed to be. For quality specialist work, use interactive `copilot --agent squad` sessions instead. `--execute` is most useful for small, well-defined tasks where specialist nuance doesn't matter much.
 
 What happens each round:
 
@@ -237,15 +237,66 @@ New-Item -Path .squad\ralph-stop -ItemType File
 
 He finishes the current round and exits. `Ctrl+C` also works but may leave scratch directories around.
 
+### 11g. Teams notifications (optional)
+
+If your team uses Microsoft Teams, you can wire Ralph to send alerts when he hits consecutive failures (>3 rounds) or when a round completes. Create a file at `~/.squad/teams-webhook.url` containing an incoming webhook URL for your Teams channel:
+
+```powershell
+# Create the .squad directory if it doesn't exist:
+$squadDir = Join-Path $env:USERPROFILE ".squad"
+New-Item -ItemType Directory -Path $squadDir -Force | Out-Null
+
+# Write your Teams incoming webhook URL:
+"https://your-tenant.webhook.office.com/webhookb2/..." | Set-Content "$squadDir\teams-webhook.url"
+```
+
+To get a webhook URL: in Teams, go to your channel → **Manage channel** → **Connectors** → **Incoming Webhook** → **Configure**. Copy the URL and paste it above.
+
+Ralph reads this file at startup. No code changes needed — if the file exists and is non-empty, Teams alerts are enabled automatically.
+
+### 11h. "Ralph, Go!" — running Ralph with a custom prompt script
+
+The built-in `squad watch --execute` is a solid starting point, but for real-project use you may want more control: structured prompts, Teams heartbeats, PowerShell 7+ enforcement, and lockfile-based deduplication. The community pattern for this is a PowerShell script that wraps the Copilot CLI directly — sometimes called the **"Ralph, Go!"** pattern after the prompt it sends.
+
+A minimal version looks like this:
+
+```powershell
+# ralph-watch.ps1 — minimal example
+# Require PowerShell 7+
+if ($PSVersionTable.PSVersion.Major -lt 7) {
+    Write-Host "ERROR: Requires pwsh (PowerShell 7+). Launch with: pwsh ralph-watch.ps1"
+    exit 1
+}
+
+$prompt = @'
+Ralph, Go! Read .squad/ralph-instructions.md for your full instructions.
+Follow ALL sections there. MAXIMIZE PARALLELISM — spawn agents for ALL
+actionable issues simultaneously.
+'@
+
+while ($true) {
+    $start = Get-Date
+    Write-Host "[$(Get-Date -Format 'HH:mm:ss')] Ralph round starting..."
+    gh copilot -p $prompt --agent squad --yolo
+    $elapsed = ((Get-Date) - $start).TotalSeconds
+    Write-Host "[$(Get-Date -Format 'HH:mm:ss')] Round complete in $([math]::Round($elapsed))s. Waiting 5 min..."
+    Start-Sleep -Seconds 300
+}
+```
+
+Place it at the repo root and run with `pwsh ralph-watch.ps1`. Stop with `Ctrl+C` or create `.squad/ralph-stop`.
+
+> **Why not just `squad watch --execute`?** You can and should start there. The custom script pattern makes sense once you want: a structured multi-section prompt (`.squad/ralph-instructions.md`), Teams failure alerts, heartbeat files for a monitoring dashboard, or different intervals per repo. Copy the script and adapt it. Don't start here — graduate to it.
+
 > **Honest tradeoff:** Ralph is most useful when you have a backlog of small, well-scoped issues that you'd file anyway. He's least useful — and most expensive — when issues are vague, when the repo doesn't have a strong test suite to give him a "did it work?" signal, or when you sit and watch him work. If you find yourself watching, you should be running `copilot --agent squad` instead.
 
 ---
 
 ## Step 12: Prompt-driven loops (`squad loop`) — optional
 
-`squad loop` is a different beast: instead of polling issues, it reads a single prompt file (`.squad/loop.md`) and runs that instruction every N minutes. Useful for **standing housekeeping jobs** — docs hygiene, dependency updates, lint sweeps — that you want done on a schedule, no issue tracker required.
+`squad loop` is a different beast: instead of polling issues, it reads a single prompt file (`./loop.md`) and runs that instruction every N minutes. Useful for **standing housekeeping jobs** — docs hygiene, dependency updates, lint sweeps — that you want done on a schedule, no issue tracker required.
 
-> **Important:** `squad loop` is fire-and-forget — there is no chat. The terminal shows status logs only; you cannot type at it. To change Ralph's instructions, edit `.squad/loop.md`. He re-reads it at the start of every cycle, so edits take effect on the next round automatically.
+> **Important:** `squad loop` is fire-and-forget — there is no chat. The terminal shows status logs only; you cannot type at it. To change Ralph's instructions, edit `./loop.md`. He re-reads it at the start of every cycle, so edits take effect on the next round automatically.
 
 ### 12a. Generate the boilerplate
 
@@ -253,11 +304,11 @@ He finishes the current round and exits. `Ctrl+C` also works but may leave scrat
 squad loop --init
 ```
 
-This creates `.squad/loop.md` with placeholders.
+This creates `./loop.md` with placeholders.
 
 ### 12b. Write a narrow, idempotent loop instruction
 
-Open `.squad/loop.md` and replace the placeholder with something specific:
+Open `./loop.md` and replace the placeholder with something specific:
 
 ```markdown
 # Loop: Test coverage hygiene
@@ -306,7 +357,7 @@ A short, opinionated checklist before you commit Ralph to anything that matters:
 
 | You should... | If... |
 |---|---|
-| Use `squad triage --execute` | You have a real issue backlog of small, well-scoped tickets, branch protection on `main`, and a CI pipeline that catches the obvious mistakes. |
+| Use `squad watch --execute` | You have a real issue backlog of small, well-scoped tickets, branch protection on `main`, and a CI pipeline that catches the obvious mistakes. |
 | Use `squad triage` (no execute) | You want to see how Ralph routes work before letting him write code. Always start here. |
 | Use `squad loop` | You have a recurring hygiene task that's idempotent and narrow. |
 | Walk away | Issues are vague, tests are thin, you're sitting and watching, or you can't articulate what "done" looks like for a round. |
