@@ -106,6 +106,7 @@ Then ask anything: "I'm on Module 1 Step 4 and the team isn't generating tests" 
 - [Prompt: inspect Squad artifacts](.github/prompts/inspect-squad-artifacts.prompt.md) — honest evaluation of your `.squad/` files after Module 2
 - [docs/troubleshooting.md](docs/troubleshooting.md) — known failure patterns with exact fixes
 - [Cheat sheet](docs/cheat-sheet.md) — the workshop's prompt patterns and CLI commands, on one page
+- [Budget & model tiers](docs/budget-and-models.md) — per-agent model config and a rough premium-request budget
 
 ---
 
