@@ -28,6 +28,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - `docs/01 EarlierWorkshopReviewAnd-Implementation-Plan.md`: §0 Reassessment (2026-05-30) — challenges the doc's status, reverses its command-name premise to `squad watch`, and corrects the `--once` / `loop.md` / Teams-path / `gh copilot` assumptions against live Squad source
 - `docs/02 Post-PR1-Verification-and-Fixes.md`: per-item verification of PR #1 (each claim cited to `bradygaster/squad` source) plus a repo-wide fix inventory
 - **Tier 1 adoption from `squad-skills`** (per `docs/01` §0.8): new `docs/cheat-sheet.md` (prompt patterns + verified current CLI commands), per-module **"At a glance"** maps with ⏱️ time estimates on all three modules, and two optional **"Try if interested"** side-quests in Module 3. Cheat sheet linked from the README "Structured help" list.
+- **Tier 2a adoption (team extensions):** Module 2 **Step 9.5 — "Skills"** (inspects the skills `squad init` already installs in `.copilot/skills/`, then tests whether one changes behavior; no dependency on external repos) and Module 3 **Step 11.6 — "Add @copilot to your team"** (`squad copilot --auto-assign`, the bounded-autonomy alternative to Ralph `--execute`). Commands verified against Squad CLI v0.9.4 + dev source.
 
 ### Changed
 - **Upgraded from .NET 9 (STS, EOL May 2026) to .NET 10 LTS** (supported through November 2028) — all module prompts, prerequisite tables, and `scripts/Verify-Prerequisites.ps1` updated

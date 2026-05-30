@@ -15,6 +15,7 @@
 | 7 | Add a second-wave feature |
 | 8 | Commit and push |
 | 9 | Look inside `.squad/` and judge the artifacts |
+| 9.5 | Install a skill and watch the team use it (optional) |
 
 ---
 
@@ -122,6 +123,50 @@ Get-Content .squad\identity\wisdom.md
 - Skills folders contain auto-generated boilerplate nobody referenced during the work.
 
 Either outcome is data. The point of inspecting is to know which one you're getting *before* you decide whether to use Squad on real work.
+
+---
+
+## Step 9.5: Skills — extend what the team knows (optional)
+
+Squad agents draw on **skills** — small, portable markdown modules (sometimes with scripts) that encode reusable knowledge: review protocols, test discipline, error recovery, git conventions. You already have some: `squad init` installs a curated set into `.copilot/skills/`. This step makes them visible and asks the only question that matters — do they actually change behavior?
+
+### 9.5a. See what's installed
+
+```powershell
+Get-ChildItem .copilot\skills\
+```
+
+You should see directories such as `squad-conventions`, `reviewer-protocol`, `test-discipline`, `error-recovery`, `git-workflow`, `secret-handling`, `session-recovery`, and `agent-collaboration`. Each is a skill any agent can read and apply.
+
+> **Naming quirk to know:** the bundled skills use `SKILL.md` (uppercase) — that's what the agent runtime reads. The `squad skill` CLI subcommands (`list` / `install` / `publish`) currently read and write `skill.md` (lowercase), so `squad skill list` may not show the bundled ones. Inspect the folder directly (above) to see what's really there.
+
+### 9.5b. Read one — is it real guidance or boilerplate?
+
+```powershell
+Get-Content .copilot\skills\reviewer-protocol\SKILL.md
+```
+
+Read it as if you were the Lead agent about to do a review. Would you actually want this applied — or is it generic filler?
+
+### 9.5c. Put it to the test
+
+Ask the team to do something the skill governs, and watch whether its guidance surfaces:
+
+```
+Lead, do a focused review of the filter + validation changes from Step 7, following our reviewer protocol. Call out the specific checks you applied.
+```
+
+**The honest test:** did the review visibly apply the protocol's checks (or get noticeably more rigorous), or did it review exactly as it would have anyway? If the skill changed nothing observable, it's decoration — note that. If it sharpened the output, you've found a real lever for real work.
+
+### 9.5d. (Optional) Pull in an external skill
+
+The community publishes skills in the APM (`owner/repo`) format. You can add one with:
+
+```powershell
+squad skill install <owner>/<repo>/<skill-name>
+```
+
+Tamir Dresher's [`squad-skills`](https://github.com/tamirdresher/squad-skills) marketplace is one source — note it's a community snapshot, not officially maintained, so pin to a known-good commit if you come to depend on it. Installed skills land under `.copilot\skills\<name>\`.
 
 ---
 
