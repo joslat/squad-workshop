@@ -166,7 +166,7 @@ The community publishes skills in the APM (`owner/repo`) format. You can add one
 squad skill install <owner>/<repo>/<skill-name>
 ```
 
-Tamir Dresher's [`squad-skills`](https://github.com/tamirdresher/squad-skills) marketplace is one source — note it's a community snapshot, not officially maintained, so pin to a known-good commit if you come to depend on it. Installed skills land under `.copilot\skills\<name>\`.
+Tamir Dresher's [`squad-skills`](https://github.com/tamirdresher/squad-skills) marketplace is one source — note it's a community snapshot, not officially maintained, so vendor or fork it if you come to depend on it. Installed skills land under `.copilot\skills\<name>\`.
 
 ---
 
