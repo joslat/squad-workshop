@@ -24,12 +24,18 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - `modules/03-advanced.md`: explicit warning about `squad triage --execute` specialist charter limitation (upstream issue #1081)
 - `.gitignore`: Squad runtime artifacts (`.squad/ralph-stop`, `ralph.log`, `*.ralph.log`) — documents the pattern for downstream Squad users
 - Navigation footers on all three modules
+- `README.md`: **Acknowledgements** section crediting Brady Gaster (creator of the Squad CLI) and Tamir Dresher (Squad co-creator; author of `tamirdresher/squad-skills`)
+- `docs/01 EarlierWorkshopReviewAnd-Implementation-Plan.md`: §0 Reassessment (2026-05-30) — challenges the doc's status, reverses its command-name premise to `squad watch`, and corrects the `--once` / `loop.md` / Teams-path / `gh copilot` assumptions against live Squad source
+- `docs/02 Post-PR1-Verification-and-Fixes.md`: per-item verification of PR #1 (each claim cited to `bradygaster/squad` source) plus a repo-wide fix inventory
 
 ### Changed
 - **Upgraded from .NET 9 (STS, EOL May 2026) to .NET 10 LTS** (supported through November 2028) — all module prompts, prerequisite tables, and `scripts/Verify-Prerequisites.ps1` updated
 - `docs/prerequisites.md`: added Windows-only note (workshop uses `winget` throughout)
 - `README.md`: added Windows-only note near prerequisites section; removed redundant "Module summaries" prose section (the table + scope-note already cover the same information)
 - `docs/troubleshooting.md`: renamed `squad watch --execute` heading to `squad triage --execute` (formerly `squad watch`) — body now uses the modern name, with a single parenthetical alias for search discoverability
+- **Relicensed Apache-2.0 → MIT** (`LICENSE`, `README.md` badge + License section, `CONTRIBUTING.md`) — aligns with the MIT-licensed `tamirdresher/squad-skills` and simplifies external contribution ahead of accepting PR #1
+- **Command-name direction reversed → adopting `squad watch` as the primary name** (per the authoritative PR [#1](https://github.com/joslat/squad-workshop/pull/1) from Squad co-creator Tamir Dresher). This supersedes the `squad watch → squad triage` change two bullets above — both names route to the same command, but `watch` is the original/native one and the only one that accepts `--health`. Repo-wide sweep tracked in `docs/02 Post-PR1-Verification-and-Fixes.md`.
+- `CONTRIBUTING.md`: fixed broken `../LICENSE` link → `LICENSE`
 
 ### Fixed
 - `.github/ISSUE_TEMPLATE/config.yml`, `CONTRIBUTING.md`: replaced 404 URL `https://github.com/bradygaster/squad-cli` with the real source repo `https://github.com/bradygaster/squad` (the npm package is `@bradygaster/squad-cli`; the GitHub repo is `bradygaster/squad`)
@@ -43,6 +49,12 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - `docs/prerequisites.md`: fixed `../scripts/Verify-Prerequisites.ps1` path in opening callout (same issue — now `.\scripts\...`)
 - `docs/prerequisites.md`: fixed mixed .NET version numbers — summary table showed `9.0.0` while body example showed `10.0.102`, now consistently `10.x.x`
 - `modules/02-intermediate.md`: fixed `squad status` → `squad doctor` (`squad status` is undocumented in workshop context; `squad doctor` covers both active-squad confirmation and health checks)
+
+### Pending verification (PR #1 follow-ups — see `docs/02 Post-PR1-Verification-and-Fixes.md`)
+- Correct troubleshooting for upstream #1017 / #1062 / #1081 — verified fixed on `dev` / `v0.9.6-insider.3`, **not** in v0.9.4 stable (PR #1's "fixed in 0.9.4+" and "#1081 by design" are both inaccurate; v0.9.4 still pins the broken `@github/copilot-sdk ^0.1.32`)
+- Replace the fabricated Teams `~/.squad/teams-webhook.url` auto-enable path with the real `teams-graph` (`.squad/config.json`) or BYO-MCP (`TEAMS_WEBHOOK_URL`) mechanism — affects PR #1 Step 11g and `docs/01` §B3
+- Fix `gh copilot -p` → `copilot -p` at `modules/03-advanced.md:218` and in PR #1's "Ralph, Go!" script (`gh copilot` has no `-p` / `--agent` / `--yolo`)
+- Finish the `squad triage` → `squad watch` sweep (8 active spots PR #1 leaves, incl. `--health` and the inconsistent walk-away table row) and `.squad/loop.md` → `./loop.md` (2 spots PR #1 misses: `.github/copilot-instructions.md`, `.github/agents/squad-coach.agent.md`)
 
 ### Deferred
 - Premium-request budget guidance (W-012) — requires a measured end-to-end workshop run

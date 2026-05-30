@@ -94,4 +94,4 @@ Please don't open issues or PRs for:
 
 ## License
 
-By contributing to this workshop, you agree that your contributions will be licensed under the same [Apache License 2.0](../LICENSE) as the rest of the repository. You confirm that you have the right to submit the work under this license.
+By contributing to this workshop, you agree that your contributions will be licensed under the same [MIT License](LICENSE) as the rest of the repository. You confirm that you have the right to submit the work under this license.

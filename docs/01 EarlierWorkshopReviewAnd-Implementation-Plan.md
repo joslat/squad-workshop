@@ -8,12 +8,13 @@
 >   - `workshop/ralph-watch.ps1` (204 lines — persistent Ralph monitor v8)
 >   - `workshop/squad.config.ts` (64 lines — Squad TypeScript config example)
 > **Scope of this doc:** identify the techniques/practices in Tamir's earlier workshop, assess each against the current Squad CLI (v0.9.4) and against our workshop, and propose specific blends for what is genuinely worth adopting.
-> **Status:** ⏳ Open — adoption proposals pending review.
+> **Status:** 🔁 **Reassessed 2026-05-30 (read [§0](#0-reassessment-2026-05-30) first).** The original "pending review" status is superseded. PR [#1](https://github.com/joslat/squad-workshop/pull/1) is now authoritative, which (a) **reverses this doc's command-name premise — `squad watch` is adopted, not `squad triage`** — and (b) source re-verification has invalidated several assumptions used below (`--once`, `.squad/loop.md`, the Teams `teams-webhook.url` path). The technique catalog (§4) and proposals (§5) remain the plan of record but must be applied through §0's corrections. Companion: [`02 Post-PR1-Verification-and-Fixes.md`](02%20Post-PR1-Verification-and-Fixes.md).
 
 ---
 
 ## Index
 
+0. [Reassessment (2026-05-30) — post-PR #1, watch-authoritative](#0-reassessment-2026-05-30)
 1. [Executive Summary](#1-executive-summary)
 2. [The Upstream Workshop at a Glance](#2-the-upstream-workshop-at-a-glance)
 3. [Methodology](#3-methodology)
@@ -35,11 +36,67 @@
 
 ---
 
+## 0. Reassessment (2026-05-30)
+
+> **Why this section exists.** This document was written 2026-05-28 assuming `squad triage` was canonical and inferring several upstream behaviours from prose. Since then: (1) PR [#1](https://github.com/joslat/squad-workshop/pull/1) — from Tamir Dresher, a Squad co-creator — has been **accepted as authoritative**, making **`squad watch` the primary command name** for this workshop; and (2) every load-bearing claim has been re-verified against `bradygaster/squad` source (`v0.9.4` / `dev`) and the npm package (`latest = 0.9.4`, `insider = 0.9.6-insider.3`, confirmed 2026-05-30). The catalog (§4) and proposals (§5) are still the plan of record — **apply them through the corrections here.** Full per-item proof + a repo-wide fix inventory live in the companion doc [`02 Post-PR1-Verification-and-Fixes.md`](02%20Post-PR1-Verification-and-Fixes.md).
+
+### 0.1 Command-name premise is reversed → adopt `squad watch`
+
+Throughout this doc (§1, §2, §4 T-002, §5) the assumption is "`squad watch` is stale, `squad triage` is canonical." **For this workshop that is now reversed.** Verified facts:
+
+- Both names work — `cli-entry.ts` dispatches `if (cmd === 'triage' || cmd === 'watch')` to the same `runWatch`.
+- `squad watch` is the **original/native** name ([release v0.5.1](https://github.com/bradygaster/squad/releases/tag/v0.5.1), 2026-02-20); the implementation still lives in `commands/watch/`.
+- The official docs *surface* `triage` (`squad --help` lists only `triage`; [cli.md](https://github.com/bradygaster/squad/blob/main/docs/src/content/docs/reference/cli.md) calls it "primary name; `watch` is an alias"; [FAQ](https://github.com/bradygaster/squad/blob/main/docs/src/content/docs/guide/faq.md): triage became primary "as of v0.8.26"). So both are defensible — we choose `watch` per the co-creator's PR.
+- **`--health` only works with `watch`** (`if (cmd === 'watch' && args.includes('--health'))`), so `squad watch` is functionally *more* complete — adopting it fixes the latent `squad triage --health` bug in Module 3.
+
+**Action:** sweep `squad triage` (the command) → `squad watch` everywhere (full inventory in companion §2.1). Keep the english verb "triage". All "watch→triage rename / triage canonical / watch stale" statements in this doc are superseded.
+
+### 0.2 `--once` does not exist → §5.2 (T-002 GitHub Actions Ralph) needs rework
+
+The §5.2 proposal (Step 11.5) and the §4 T-002 note schedule a cron running `squad triage --once`. **There is no `--once` flag** on `watch`/`triage` in v0.9.4 or dev — `runWatch` always enters a `setInterval` loop after the first round (verified in `cli-entry.ts` flag-parsing and `watch/index.ts`). The "single safe pass" the proposal relies on doesn't exist as written.
+
+**Corrected approach:** bound a single round at the *job* level (e.g. `timeout`-wrap `squad watch`, or let the Actions cron schedule be the interval and kill the process after one round) and **verify the real one-shot mechanism on the target build before drafting the YAML.** Until then, T-002 Step 11.5 is **ADOPT-pending-verification**, not ready-to-ship.
+
+### 0.3 `loop.md` is repo-root, not `.squad/loop.md`
+
+`squad loop` reads `./loop.md` from the repo root (`loop.ts`: `path.join(workTreeRoot, 'loop.md')`); `squad loop --init` writes there. The `.squad/loop.md` references in this doc (e.g. line ~905) and any §5.1/§5.9 mentions are wrong — use `./loop.md`.
+
+### 0.4 Teams `~/.squad/teams-webhook.url` (§B3) is fabricated
+
+§B3 tells the reader to save a webhook "where Ralph will look" at `~/.squad/teams-webhook.url`. **Ralph does not read that file.** Real Teams paths: the built-in `teams-graph` OAuth adapter in `.squad/config.json`, or a BYO MCP server in `.vscode/mcp.json` with `TEAMS_WEBHOOK_URL` ([notifications.md](https://github.com/bradygaster/squad/blob/main/docs/src/content/docs/features/notifications.md)). A manual `Invoke-RestMethod` POST is a valid *DIY* trick, but Ralph won't trigger it. **PR #1's Step 11g repeats the same fabricated path** — see companion §2.5.
+
+### 0.5 Invocation: `copilot`, never `gh copilot`; `agency copilot` is non-canonical
+
+Any *adopted* invocation must use the standalone `copilot` binary: `copilot --agent squad --yolo` (one-shot: `copilot -p "…" --agent squad --yolo`). `gh copilot` (extension) has only `suggest`/`explain` and is deprecated; `agency copilot` (in Tamir's source workshop) is non-canonical. The repo's `plugins/spawn-squad/SKILL.md` models the correct pattern.
+
+### 0.6 Squad-skills repo: unchanged → analysis still current (with three upgrades)
+
+Re-checked `tamirdresher/squad-skills` on 2026-05-30: **last push 2026-05-04** (HEAD "add cross-squad-communication"; the 2026-05-27 touch was metadata only), MIT-licensed, skills live under **`plugins/`** (25 of them), not `skills/`. So this doc's 27-technique analysis is **still accurate — no re-survey needed.** Three upgrades to fold into §5.1 / the catalog:
+
+1. **Modernize the Skills install (T-001):** the repo README now documents `copilot plugin marketplace add tamirdresher/squad-skills` + `copilot plugin install <name>@squad-skills` — newer/cleaner than the `git clone … && cp -r plugins/reflect .squad/skills/reflect` flow in §5.1. Teach the marketplace flow; keep copy-into-`.squad/skills/` as the offline fallback. (`reflect` remains the best demo skill — 🟢 Easy / no deps; `fact-checking` and `blog-writing` are equal backups.)
+2. **Source canonical invocations from `plugins/spawn-squad/SKILL.md`** — it uses `copilot --agent squad --yolo` correctly; the cleanest reference to scrub any `gh copilot`/`agency copilot` drift.
+3. **`plugins/github-project-board`** has concrete `gh project item-*` recipes the board content only gestures at — high value, but **parameterize** the hardcoded `tamirdresher_microsoft` project IDs before adopting.
+
+### 0.7 Where I agree with this doc, and where I'd now diverge
+
+**Agree (unchanged):** the four-layer structure (§3.5); ADOPT-mainline T-001 (Skills), T-003 (model tiers), T-004 (🎯 side-quests), T-005 (cheat-sheet), T-006 (@copilot); ADOPT-style T-026/T-027; and the **REJECT of Tamir's `ralph-watch.ps1`** (T-017) as fragile vs the built-in loop. Note: **PR #1's Step 11h "Ralph, Go!" script is essentially T-017 re-entering through the back door** — and it carries the `gh copilot` bug — so the reject verdict stands; if kept, it belongs in bonus as an *illustration*, not mainline.
+
+**Diverge / adjust:**
+- **T-002 (Actions Ralph): downgrade from ready-ADOPT to ADOPT-pending-verification** until the no-`--once` reality (§0.2) is resolved.
+- **Teams + human-members placement:** PR #1 inlines both into mainline (Module 3 Step 11g / Module 1 Step 2); this doc routes them to **bonus** (§B3, T-016). Keep bonus as the target — but since the PR ships them inline and is authoritative, the post-merge task is to **relocate/dedupe**, not re-add.
+- **T-003 model names:** refresh to the current era (Opus 4.8 / Sonnet 4.6 / Haiku 4.5) when writing the tier table; the IDs in Tamir's `squad.config.ts` are illustrative only.
+
+### 0.8 New status
+
+🟡 **Active — corrected, partially superseded by PR #1.** Mainline T-001/T-003/T-004/T-005/T-006 + style T-026/T-027 are ready (apply §0 corrections). T-002 is blocked on CLI verification (§0.2). Teams/human-members are now owned by PR #1 (relocate to bonus, don't re-add). Command-name, `loop.md`, Teams-path, and invocation corrections are tracked for the fix-later pass in the companion doc.
+
+---
+
 ## 1. Executive summary
 
 Tamir Dresher's workshop (`tamirdresher/squad-skills/workshop/`) is a **breadth-first playground tour** of Squad — 12 sections + 4 appendices, ~2 hours, "pick what interests you" pacing, no specific build target. Ours is a **depth-first build exercise** — 3 modules, ~3 hours, specific Reading List app, evaluation-oriented. They are complementary rather than competing.
 
-Tamir's workshop was last updated 2026-03-13 — about 2 months before the current state of Squad CLI (v0.9.4). Several command names have changed since (`squad watch` → `squad triage`), and the `agency copilot --yolo --agent squad` invocation pattern they use is non-canonical relative to the current `copilot --agent squad`. So some of their material has aged out.
+Tamir's workshop was last updated 2026-03-13 — about 2 months before the current state of Squad CLI (v0.9.4). Several command names have changed since (`squad watch` → `squad triage`), and the `agency copilot --yolo --agent squad` invocation pattern they use is non-canonical relative to the current `copilot --agent squad`. So some of their material has aged out. **[Superseded — see [§0.1](#0-reassessment-2026-05-30): for this workshop `squad watch` is now adopted as primary, reversing the `watch → triage` direction stated here. The `agency copilot → copilot --agent squad` correction still holds.]**
 
 **Structural insight (§3.5):** the right blend isn't "his style vs. ours." It's a **four-layer learning structure**:
 
@@ -1287,10 +1344,12 @@ The full Adaptive Card / multi-channel routing setup is enterprise-grade and liv
 
 ### Teams webhook — minimum viable
 
+> ⚠️ **Correction (see [§0.4](#0-reassessment-2026-05-30)):** Ralph does **not** auto-read `~/.squad/teams-webhook.url` — that path is not real. The built-in Teams path is the `teams-graph` OAuth adapter in `.squad/config.json`, or a BYO MCP server in `.vscode/mcp.json` with `TEAMS_WEBHOOK_URL`. The POST below works only as a DIY script *you* invoke (prefer a Power Automate **Workflows** URL — classic O365 Incoming Webhook connectors are being retired).
+
 ```powershell
-# In Teams: ⋯ → Connectors → Incoming Webhook → Configure → copy URL
-# Save it where Ralph will look:
-Set-Content -Path $env:USERPROFILE\.squad\teams-webhook.url -Value "https://outlook.webhook.office.com/..."
+# In Teams: create a Power Automate "Workflows" incoming webhook → copy URL
+# Save it somewhere YOUR script reads (Ralph does NOT read this automatically):
+Set-Content -Path $env:USERPROFILE\.squad\teams-webhook.url -Value "https://....webhook.office.com/..."
 ```
 
 A simple Ralph round can then post a status message:

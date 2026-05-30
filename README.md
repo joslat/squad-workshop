@@ -1,6 +1,6 @@
 # Squad Workshop
 
-[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Check links](https://github.com/joslat/squad-workshop/actions/workflows/check-links.yml/badge.svg)](https://github.com/joslat/squad-workshop/actions/workflows/check-links.yml)
 [![Verify script](https://github.com/joslat/squad-workshop/actions/workflows/verify-script.yml/badge.svg)](https://github.com/joslat/squad-workshop/actions/workflows/verify-script.yml)
 
@@ -116,7 +116,18 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) or [open an issue](https://github.com/jos
 
 ---
 
+## Acknowledgements
+
+This workshop stands on the work of others:
+
+- **[Brady Gaster](https://github.com/bradygaster)** — creator of the [Squad CLI](https://github.com/bradygaster/squad), the multi-agent Copilot tool this entire workshop is built around.
+- **[Tamir Dresher](https://github.com/tamirdresher)** — co-creator of Squad and author of the [`squad-skills`](https://github.com/tamirdresher/squad-skills) marketplace and companion workshop, whose techniques and feedback directly shaped several parts of this workshop.
+
+Thank you both.
+
+---
+
 ## License
 
-This workshop is licensed under the [Apache License 2.0](LICENSE).  
-Copyright © 2026 joslat
+This workshop is licensed under the [MIT License](LICENSE).  
+Copyright © 2026 Jose Luis Latorre Millas and contributors
