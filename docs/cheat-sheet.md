@@ -37,7 +37,7 @@
 | `squad aspire` | Launch the .NET Aspire OTLP dashboard (requires Docker running, or the .NET Aspire workload) |
 | `squad copilot` | Add GitHub's `@copilot` coding agent to the team |
 
-> Stop Ralph with **Ctrl+C** in the watch terminal. In Squad CLI v0.9.4 there is no stop-file — `squad watch` / `squad loop` shut down only on Ctrl+C (`SIGINT`/`SIGTERM`).
+> Stop Ralph cleanly: `New-Item -Path .squad\ralph-stop -ItemType File` (he exits after the current round); delete that file before the next run. `Ctrl+C` also stops the watch loop.
 
 ## Files you should know
 
@@ -48,6 +48,7 @@
 | `.squad/decisions/inbox/` | Draft decisions before the Scribe merges them (empty = expected) |
 | `.squad/agents/{name}/history.md` | Per-agent working memory |
 | `./loop.md` | The prompt `squad loop` runs each cycle — repo root, **not** `.squad/` |
+| `.squad/ralph-stop` | Sentinel file that stops Ralph after the current round |
 | `ralph.log` | Ralph's run log (when you pass `--log-file .\ralph.log`) |
 
 ---
