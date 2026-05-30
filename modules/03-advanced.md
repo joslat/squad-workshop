@@ -199,7 +199,7 @@ When you've seen what you needed:
 
 ```powershell
 # In another terminal — clean shutdown:
-New-Item -Path .squad\ralph-stop -ItemType File
+New-Item -Path .squad/ralph-stop -ItemType File
 ```
 
 Ralph finishes the current round and exits. Delete `ralph-stop` afterward so the next run isn't immediately blocked.
@@ -222,7 +222,7 @@ squad watch --execute --interval 5 `
   --copilot-flags "--yolo --agent squad" `
   --max-concurrent 1 `
   --timeout 20 `
-  --log-file .\ralph.log
+  --log-file ./ralph.log
 ```
 
 > **Known limitation — specialists don't act like specialists in `--execute` mode** (upstream [issue #1081](https://github.com/bradygaster/squad/issues/1081), closed — routing behaviour is by design): When Ralph spawns a session for a `squad:bishop`-labeled issue, the spawned agent receives a **generic Ralph prompt**, not Bishop's actual charter. The `squad:{member}` label is used only as a routing filter — it is never injected into the spawn prompt as a role assignment. The spawned agent has no specialist knowledge of who it's supposed to be. For quality specialist work, use interactive `copilot --agent squad` sessions instead. `--execute` is most useful for small, well-defined tasks where specialist nuance doesn't matter much.
@@ -249,7 +249,7 @@ Shows PID, uptime, the `gh` auth account (with drift detection), poll interval, 
 ### 11f. Stop Ralph cleanly
 
 ```powershell
-New-Item -Path .squad\ralph-stop -ItemType File
+New-Item -Path .squad/ralph-stop -ItemType File
 ```
 
 He finishes the current round and exits. `Ctrl+C` also works but may leave scratch directories around.
@@ -260,11 +260,11 @@ If your team uses Microsoft Teams, you can wire Ralph to send alerts when he hit
 
 ```powershell
 # Create the .squad directory if it doesn't exist:
-$squadDir = Join-Path $env:USERPROFILE ".squad"
+$squadDir = Join-Path $HOME ".squad"
 New-Item -ItemType Directory -Path $squadDir -Force | Out-Null
 
 # Write your Teams incoming webhook URL:
-"https://your-tenant.webhook.office.com/webhookb2/..." | Set-Content "$squadDir\teams-webhook.url"
+"https://your-tenant.webhook.office.com/webhookb2/..." | Set-Content "$squadDir/teams-webhook.url"
 ```
 
 To get a webhook URL: in Teams, go to your channel → **Manage channel** → **Connectors** → **Incoming Webhook** → **Configure**. Copy the URL and paste it above.
@@ -375,6 +375,9 @@ This creates `./loop.md` with placeholders.
 Open `./loop.md` and replace the placeholder with something specific:
 
 ```markdown
+---
+configured: true
+---
 # Loop: Test coverage hygiene
 
 Every cycle:
@@ -384,6 +387,8 @@ Every cycle:
 3. If all tests pass and any source file under `backend/` lacks a corresponding test file, draft tests and open a PR titled "test: cover <file>".
 4. Do nothing else. Do not refactor. Do not touch unrelated files.
 ```
+
+> **Set `configured: true` in the frontmatter.** The shipped `loop.md` template defaults to `configured: false`. While it stays `false`, `squad loop` runs **onboarding mode** — it walks you through setup and **ignores the loop instruction you wrote**. Flip the frontmatter to `configured: true` (as shown above) so the CLI actually runs your instruction each cycle.
 
 Two rules of thumb the hard way:
 
@@ -410,7 +415,7 @@ Hourly tick, each round capped at 15 minutes. If the round needs more than 15 mi
 Same as triage:
 
 ```powershell
-New-Item -Path .squad\ralph-stop -ItemType File
+New-Item -Path .squad/ralph-stop -ItemType File
 ```
 
 ---

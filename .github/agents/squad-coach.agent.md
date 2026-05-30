@@ -3,7 +3,7 @@ name: squad-coach
 description: >
   Squad Workshop coaching agent. Answers questions about Squad CLI, explains
   concepts, troubleshoots stuck steps, and helps learners interpret their
-  .squad/ artifacts. Install with .\scripts\Install-WorkshopAgents.ps1 from
+  .squad/ artifacts. Install with ./scripts/Install-WorkshopAgents.ps1 from
   the workshop repo root, then invoke from inside reading-list-squad-lab with:
   copilot --agent squad-coach
 ---
@@ -58,13 +58,13 @@ The two `ℹ️` info lines about `vscode-jsonrpc` and `copilot-sdk session.js` 
 | `.squad/identity/now.md` | Current project focus and active context |
 | `.squad/identity/wisdom.md` | Captured patterns and lessons that should survive to a different project |
 | `.squad/agents/<name>/history.md` | Agent-specific project facts — should be specific, not "I completed the task" |
-| `.copilot/skills/` | Captured reusable skills from the session |
+| `.copilot/skills/` | Curated skills scaffolded by `squad init` (e.g. reviewer-protocol, test-discipline, error-recovery) that any agent can read and apply — see Module 2 Step 9.5 |
 
 ### Ralph — what he reads and what he doesn't
 
 Ralph's queue is **GitHub Issues only**. He does not read chat history, scan TODOs, or invent work. He *reads* team state (decisions, routing, histories) as LLM context, but his *work queue* is the issue tracker.
 
-The `ralph-stop` file at `.squad/ralph-stop` signals Ralph to finish the current round and exit cleanly. If Ralph exits immediately on the next run, this file is still present — delete it with `Remove-Item .squad\ralph-stop`.
+The `ralph-stop` file at `.squad/ralph-stop` signals Ralph to finish the current round and exit cleanly. If Ralph exits immediately on the next run, this file is still present — delete it with `Remove-Item .squad/ralph-stop`.
 
 ---
 
@@ -109,7 +109,7 @@ gh auth status  # confirm logged in
 
 This means the Scribe didn't capture decisions usefully, or agents aren't reading `.squad/decisions.md`. Check the file directly:
 ```powershell
-Get-Content .squad\decisions.md
+Get-Content .squad/decisions.md
 ```
 If it's thin or generic, the memory is decorative. This is data, not a bug — it tells you whether Squad is earning its keep for this use case.
 
@@ -152,6 +152,7 @@ If it's thin or generic, the memory is decorative. This is data, not a bug — i
 | 7 | Add filtering + validation — tests whether memory compounds |
 | 8 | Commit and push |
 | 9 | Inspect `.squad/` artifacts — the honest evaluation |
+| 9.5 | Skills — inspect the skills `squad init` installs in `.copilot/skills/`, test whether one changes behavior |
 
 ### Module 3 — Advanced (optional)
 
@@ -159,4 +160,5 @@ If it's thin or generic, the memory is decorative. This is data, not a bug — i
 |---|---|
 | 10 | .NET Aspire observability (Docker required) |
 | 11 | Ralph triage-only mode (safe), then with `--execute` |
+| 11.6 | Add @copilot to your team via `squad copilot --auto-assign` — the bounded-autonomy alternative to Ralph `--execute` |
 | 12 | `squad loop` — prompt-driven scheduled housekeeping |

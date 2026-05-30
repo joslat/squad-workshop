@@ -45,7 +45,7 @@ The app is a vehicle. The point is to experience the team model, not to ship the
 
 ### Prerequisites
 
-> **Cross-platform (PowerShell 7).** The workshop runs in PowerShell 7 (`pwsh`) — Windows, macOS, and Linux. Install commands for all three are in [docs/prerequisites.md](docs/prerequisites.md) (`winget` on Windows, `brew` on macOS, `apt`/official feeds on Linux). Command examples use Windows-style `\` paths and `$env:USERPROFILE`; on macOS/Linux use `/` (PowerShell accepts it everywhere) and `$HOME`.
+> **Cross-platform (PowerShell 7).** The workshop runs in PowerShell 7 (`pwsh`), which works on Windows, macOS, and Linux. Install commands for all three are in [docs/prerequisites.md](docs/prerequisites.md) (`winget` on Windows, `brew` on macOS, `apt`/official feeds on Linux).
 
 | Tool | Minimum version | Check command |
 |---|---|---|
@@ -63,7 +63,7 @@ See [docs/prerequisites.md](docs/prerequisites.md) for full install instructions
 ### Verify everything in one pass
 
 ```powershell
-.\scripts\Verify-Prerequisites.ps1
+./scripts/Verify-Prerequisites.ps1
 ```
 
 All lines should show `PASS`. Fix any that don't before opening Module 1.
@@ -73,7 +73,7 @@ All lines should show `PASS`. Fix any that don't before opening Module 1.
 ```powershell
 git clone https://github.com/joslat/squad-workshop.git
 cd squad-workshop
-.\scripts\Verify-Prerequisites.ps1
+./scripts/Verify-Prerequisites.ps1
 ```
 
 Then open [modules/01-basic.md](modules/01-basic.md) and follow from Step 0.
@@ -87,10 +87,10 @@ Then open [modules/01-basic.md](modules/01-basic.md) and follow from Step 0.
 One-time setup (from the workshop repo root):
 
 ```powershell
-.\scripts\Install-WorkshopAgents.ps1
+./scripts/Install-WorkshopAgents.ps1
 ```
 
-This copies the coach agent and the two helper prompts into `reading-list-squad-lab\.github\` so Copilot CLI can discover them. Then from inside the lab repo:
+This copies the coach agent and the two helper prompts into `reading-list-squad-lab/.github/` so Copilot CLI can discover them. Then from inside the lab repo:
 
 ```powershell
 copilot --agent squad-coach

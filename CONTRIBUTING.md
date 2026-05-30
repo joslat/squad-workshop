@@ -11,7 +11,7 @@ If a step in a module doesn't work — wrong command, changed tool API, version 
 The template asks for:
 - Which module and step failed
 - What happened (exact command + output)
-- Your tool versions (paste `.\scripts\Verify-Prerequisites.ps1` output)
+- Your tool versions (paste `./scripts/Verify-Prerequisites.ps1` output)
 - OS and terminal
 
 A broken-step issue with tool versions is almost always fixable within a day. A vague "step 4 doesn't work" report is not.
@@ -23,7 +23,7 @@ A broken-step issue with tool versions is almost always fixable within a day. A 
 Small fixes — typos, broken links, wrong expected output — are welcome as direct PRs. No issue needed.
 
 Before opening a PR:
-- Run `.\scripts\Verify-Prerequisites.ps1` on the step you're fixing (even if it's prose) to confirm the surrounding context is still accurate.
+- Run `./scripts/Verify-Prerequisites.ps1` on the step you're fixing (even if it's prose) to confirm the surrounding context is still accurate.
 - Confirm all markdown links in the file you edited still resolve.
 
 ---

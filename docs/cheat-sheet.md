@@ -17,7 +17,7 @@
 | Run a code review | "Lead, review all changes as if this were a real PR. Be specific about what's good and what needs improvement." |
 | Add edge-case tests | "Tester, look for edge cases we skipped. Add tests for them." |
 | Capture a standing rule | "Always use X" / "Never do Y" — Squad promotes it to a decision automatically. |
-| Get unstuck | Ask the coach: `copilot --agent squad-coach` (after `.\scripts\Install-WorkshopAgents.ps1`). |
+| Get unstuck | Ask the coach: `copilot --agent squad-coach` (after `./scripts/Install-WorkshopAgents.ps1`). |
 
 ## CLI commands
 
@@ -37,7 +37,7 @@
 | `squad aspire` | Launch the .NET Aspire OTLP dashboard (requires Docker running, or the .NET Aspire workload) |
 | `squad copilot` | Add GitHub's `@copilot` coding agent to the team |
 
-> Stop Ralph cleanly: `New-Item -Path .squad\ralph-stop -ItemType File` (he exits after the current round); delete that file before the next run. `Ctrl+C` also stops the watch loop.
+> Stop Ralph cleanly: `New-Item -Path .squad/ralph-stop -ItemType File` (he exits after the current round); delete that file before the next run. `Ctrl+C` also stops the watch loop.
 
 ## Files you should know
 
@@ -49,7 +49,7 @@
 | `.squad/agents/{name}/history.md` | Per-agent working memory |
 | `./loop.md` | The prompt `squad loop` runs each cycle — repo root, **not** `.squad/` |
 | `.squad/ralph-stop` | Sentinel file that stops Ralph after the current round |
-| `ralph.log` | Ralph's run log (when you pass `--log-file .\ralph.log`) |
+| `ralph.log` | Ralph's run log (when you pass `--log-file ./ralph.log`) |
 
 ---
 

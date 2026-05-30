@@ -129,7 +129,7 @@ Should show `✓ Logged in to github.com account <your-username>`.
 **Fix:**
 
 ```powershell
-Remove-Item .squad\ralph-stop -ErrorAction SilentlyContinue
+Remove-Item .squad/ralph-stop -ErrorAction SilentlyContinue
 ```
 
 Then re-run your `squad watch` or `squad loop` command.
@@ -160,8 +160,8 @@ Then wait for Ralph's next round (or restart with a fresh triage run).
 **This is a data point, not a bug.** It means the Scribe didn't capture the decisions usefully, or the agents aren't reading the memory files. Check:
 
 ```powershell
-Get-Content .squad\decisions.md
-Get-Content .squad\identity\wisdom.md
+Get-Content .squad/decisions.md
+Get-Content .squad/identity/wisdom.md
 ```
 
 If these are thin or generic, the team's memory is decorative. That's valuable information about whether Squad is earning its keep for your use case. See Module 2, Step 9 for the full artifact inspection.
@@ -284,7 +284,7 @@ Lane completed with a model rate-limit failure
 **Workaround:** Before running `squad upgrade`, save your customizations:
 
 ```powershell
-Copy-Item .github\agents\squad.agent.md .github\agents\squad.agent.md.backup
+Copy-Item .github/agents/squad.agent.md .github/agents/squad.agent.md.backup
 squad upgrade
 # Then re-apply your changes manually by diffing against the backup
 ```

@@ -2,9 +2,7 @@
 
 > **Runs on PowerShell 7 (cross-platform).** The workshop's commands are PowerShell, and PowerShell 7 (`pwsh`) runs on **Windows, macOS, and Linux**. Install commands below are given for all three. On Windows we use `winget`; on macOS `brew`; on Linux `apt`/official feeds.
 >
-> **Path note for macOS/Linux:** command examples in the modules use Windows-style `\` separators (e.g. `.squad\decisions.md`) and `$env:USERPROFILE`. PowerShell accepts `/` on every OS, so on macOS/Linux use `/` (e.g. `.squad/decisions.md`) and `$HOME` instead.
->
-> Run `pwsh ./scripts/Verify-Prerequisites.ps1` from the repo root to check all tools in one pass (on Windows, `.\scripts\Verify-Prerequisites.ps1`).
+> Run `pwsh ./scripts/Verify-Prerequisites.ps1` from the repo root to check all tools in one pass.
 
 This page is the authoritative prerequisites reference for the Squad Workshop. All modules link here. If you're starting fresh, read this before opening any module.
 
@@ -159,7 +157,7 @@ Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force
 From the repo root:
 
 ```powershell
-pwsh ./scripts/Verify-Prerequisites.ps1     # Windows: .\scripts\Verify-Prerequisites.ps1
+pwsh ./scripts/Verify-Prerequisites.ps1
 ```
 
 The checker runs under `pwsh` on all three OSes and prints an install hint matching your platform. All lines should show `PASS` and the summary should show `0 failed`. Fix any that don't before opening any module.

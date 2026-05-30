@@ -84,26 +84,26 @@ Before celebrating, inspect the team's artifacts. Open each file and evaluate wh
 
 ```powershell
 # Decisions — were they useful?
-Get-Content .squad\decisions.md
+Get-Content .squad/decisions.md
 
 # Routing — does it reflect the actual team?
-Get-Content .squad\routing.md
+Get-Content .squad/routing.md
 
 # Team — who's on it?
-Get-Content .squad\team.md
+Get-Content .squad/team.md
 
 # Skills — did anything get captured?
-Get-ChildItem -Recurse .copilot\skills\
+Get-ChildItem -Recurse .copilot/skills/
 
 # Agent histories — did they learn?
-Get-ChildItem .squad\agents\ -Recurse -Include history.md | ForEach-Object {
+Get-ChildItem .squad/agents/ -Recurse -Include history.md | ForEach-Object {
     Write-Host "`n=== $($_.FullName) ===" -ForegroundColor Yellow
     Get-Content $_
 }
 
 # Identity — current focus and wisdom
-Get-Content .squad\identity\now.md
-Get-Content .squad\identity\wisdom.md
+Get-Content .squad/identity/now.md
+Get-Content .squad/identity/wisdom.md
 ```
 
 **The honest test:** for each file, ask "would I write this if I were taking notes for myself?" If yes, the team is doing real work. If the files read like AI-generated meeting minutes nobody will ever consult again, you learned something equally valuable.
@@ -133,7 +133,7 @@ Squad agents draw on **skills** — small, portable markdown modules (sometimes 
 ### 9.5a. See what's installed
 
 ```powershell
-Get-ChildItem .copilot\skills\
+Get-ChildItem .copilot/skills/
 ```
 
 You should see directories such as `squad-conventions`, `reviewer-protocol`, `test-discipline`, `error-recovery`, `git-workflow`, `secret-handling`, `session-recovery`, and `agent-collaboration`. Each is a skill any agent can read and apply.
@@ -143,7 +143,7 @@ You should see directories such as `squad-conventions`, `reviewer-protocol`, `te
 ### 9.5b. Read one — is it real guidance or boilerplate?
 
 ```powershell
-Get-Content .copilot\skills\reviewer-protocol\SKILL.md
+Get-Content .copilot/skills/reviewer-protocol/SKILL.md
 ```
 
 Read it as if you were the Lead agent about to do a review. Would you actually want this applied — or is it generic filler?
@@ -166,7 +166,7 @@ The community publishes skills in the APM (`owner/repo`) format. You can add one
 squad skill install <owner>/<repo>/<skill-name>
 ```
 
-Tamir Dresher's [`squad-skills`](https://github.com/tamirdresher/squad-skills) marketplace is one source — note it's a community snapshot, not officially maintained, so vendor or fork it if you come to depend on it. Installed skills land under `.copilot\skills\<name>\`.
+Tamir Dresher's [`squad-skills`](https://github.com/tamirdresher/squad-skills) marketplace is one source — note it's a community snapshot, not officially maintained, so vendor or fork it if you come to depend on it. Installed skills land under `.copilot/skills/<name>/`.
 
 ---
 

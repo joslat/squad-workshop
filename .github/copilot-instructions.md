@@ -32,12 +32,13 @@ The lab repo created *during* the workshop is called **`reading-list-squad-lab`*
 | `squad watch` | Run Ralph in polling mode — reads GitHub Issues, labels/triages, optionally executes (alias: `squad triage`) |
 | `squad loop` | Run Ralph on a schedule using a prompt file (`./loop.md`, repo root) for recurring housekeeping |
 | `copilot --agent squad` | Start the Copilot CLI session with the Squad agent attached |
+| `squad copilot --auto-assign` | Distinct from `copilot --agent squad` above: adds GitHub's `@copilot` coding agent to `.squad/team.md` and enables auto-assignment of `squad:copilot`-labeled issues to it (`--off` removes it). Used in Module 3 Step 11.6 |
 
 ### Decisions flow
 Agents write draft decisions to `.squad/decisions/inbox/<agent>-<topic>.md`. The Scribe merges them into `.squad/decisions.md` and clears the inbox. The inbox being empty after a step is **expected and correct** — decisions live in `.squad/decisions.md`.
 
 ### Ralph
-Ralph is the name for Squad's polling persona (`squad watch` / `squad loop`). He reads GitHub Issues as his queue. He does **not** read chat history, scan TODO comments, or invent work. To stop Ralph cleanly: `New-Item -Path .squad\ralph-stop -ItemType File`. Delete that file before the next run.
+Ralph is the name for Squad's polling persona (`squad watch` / `squad loop`). He reads GitHub Issues as his queue. He does **not** read chat history, scan TODO comments, or invent work. To stop Ralph cleanly: `New-Item -Path .squad/ralph-stop -ItemType File`. Delete that file before the next run.
 
 ### `squad doctor` healthy output (v0.9.4)
 ```
@@ -52,7 +53,7 @@ The 2 `ℹ️` info lines about `vscode-jsonrpc` and `copilot-sdk session.js` ar
 | File | Purpose |
 |---|---|
 | `docs/prerequisites.md` | Authoritative tool requirements and install commands |
-| `scripts/Verify-Prerequisites.ps1` | Standalone prereq checker — run from the repo root with `.\scripts\Verify-Prerequisites.ps1` |
+| `scripts/Verify-Prerequisites.ps1` | Standalone prereq checker — run from the repo root with `./scripts/Verify-Prerequisites.ps1` |
 | `docs/troubleshooting.md` | Common failure patterns with exact error text and fixes |
 | `modules/01-basic.md` | Workshop Module 1 — start here |
 | `CONTRIBUTING.md` | How to file broken-step issues, fix content, propose modules |
@@ -74,11 +75,11 @@ The 2 `ℹ️` info lines about `vscode-jsonrpc` and `copilot-sdk session.js` ar
 ## How to answer learner questions
 
 - **"How do I install X?"** → Point to `docs/prerequisites.md` and the relevant section. All install commands use `winget` (Windows).
-- **"I'm stuck on step N of module M"** → Help them diagnose by asking for the exact error output and their tool versions from `.\scripts\Verify-Prerequisites.ps1`. Check `docs/troubleshooting.md` for known patterns.
+- **"I'm stuck on step N of module M"** → Help them diagnose by asking for the exact error output and their tool versions from `./scripts/Verify-Prerequisites.ps1`. Check `docs/troubleshooting.md` for known patterns.
 - **"Why is the Aspire dashboard empty?"** → Three causes: Docker not running (most common — `✓ lies when Docker is down`), Squad version too old, or firewall blocking `localhost:4317`.
 - **"The inbox under `.squad/decisions/inbox/` is empty"** → This is correct. The Scribe merged the decision into `.squad/decisions.md`.
 - **"squad doctor shows warnings"** → If on v0.9.1, upgrade with `npm install -g @bradygaster/squad-cli@latest`. If on v0.9.4+ and still seeing warnings (not info), paste the full output.
-- **"Should I use the coach agent?"** → Yes. Run `.\scripts\Install-WorkshopAgents.ps1` once from the workshop repo root to install the coach into the lab repo's `.github/agents/`, then `copilot --agent squad-coach` from inside `reading-list-squad-lab` gives step-by-step help and Squad expertise on demand.
+- **"Should I use the coach agent?"** → Yes. Run `./scripts/Install-WorkshopAgents.ps1` once from the workshop repo root to install the coach into the lab repo's `.github/agents/`, then `copilot --agent squad-coach` from inside `reading-list-squad-lab` gives step-by-step help and Squad expertise on demand.
 
 ---
 

@@ -187,7 +187,7 @@ This shape lets us keep the walkthrough discipline that makes our workshop work 
 - No verifier script — uses manual `git --version` checks.
 - No coach agent.
 - No structured prompt files (`debug-step.prompt.md`, `inspect-squad-artifacts.prompt.md`).
-- No discussion of Squad's failure modes (Aspire `✓` lies, coordinator drop, `--execute` specialist limitation, premium-request budget) — these are documented in our [docs/troubleshooting.md](troubleshooting.md) with upstream issue links, absent from Tamir's.
+- No discussion of Squad's failure modes (Aspire `✓` lies, coordinator drop, `--execute` specialist limitation, premium-request budget) — these are documented in our [docs/troubleshooting.md](../troubleshooting.md) with upstream issue links, absent from Tamir's.
 - No artifact-quality evaluation framework — their version of "Module 2 Step 9 inspect `.squad/`" is "poke around, see what was created."
 - Uses stale command names (`squad watch` instead of `squad triage`) and a non-canonical CLI invocation (`agency copilot --yolo --agent squad`).
 
@@ -201,7 +201,7 @@ The upstream workshop is a **good map of the territory** — it surveys Skills, 
 
 1. Listed the `tamirdresher/squad-skills/workshop/` directory contents via `gh api`. Three files in scope: `README.md`, `ralph-watch.ps1`, `squad.config.ts`.
 2. Read all three files end-to-end.
-3. Cross-referenced each section against our current workshop ([README.md](../README.md), [modules/01-basic.md](../modules/01-basic.md), [modules/02-intermediate.md](../modules/02-intermediate.md), [modules/03-advanced.md](../modules/03-advanced.md), [docs/troubleshooting.md](troubleshooting.md), [.github/agents/squad-coach.agent.md](../.github/agents/squad-coach.agent.md)).
+3. Cross-referenced each section against our current workshop ([README.md](../../README.md), [modules/01-basic.md](../../modules/01-basic.md), [modules/02-intermediate.md](../../modules/02-intermediate.md), [modules/03-advanced.md](../../modules/03-advanced.md), [docs/troubleshooting.md](../troubleshooting.md), [.github/agents/squad-coach.agent.md](../../.github/agents/squad-coach.agent.md)).
 4. For each technique, applied a four-question filter:
    - **(a) Applicable today?** — does the technique still work given Squad has evolved since 2026-03-13? (Check `squad watch` → `squad triage`, `agency copilot` → `copilot`, etc.)
    - **(b) Already covered?** — does our workshop already do this?
@@ -317,7 +317,7 @@ Each row is a self-contained verdict. File:line references in the "We have it?" 
 
 **What it is:** Squad's `skills/` system — portable knowledge modules (markdown + scripts) that agents can install to gain new capabilities (Teams automation, fact-checking, news briefings, GitHub project board management, etc.). Tamir's §8 explains the format (`SKILL.md` with front-matter), the confidence-lifecycle (LOW → MEDIUM → HIGH), and the marketplace (his own repo).
 
-**Applicable today?** Yes. `squad doctor` checks the skills directory; `.squad/skills/{name}/` is real; `.copilot/skills/` is referenced in our own [modules/01-basic.md:374-377](../modules/01-basic.md) Step 6 verification block.
+**Applicable today?** Yes. `squad doctor` checks the skills directory; `.squad/skills/{name}/` is real; `.copilot/skills/` is referenced in our own [modules/01-basic.md:374-377](../../modules/01-basic.md) Step 6 verification block.
 
 **We have it?** **No.** Our workshop mentions `.copilot/skills/` once in passing (Module 1 Step 6 verification) and `.squad/skills/` is mentioned only by Squad Coach's knowledge base. Learners finish our workshop without understanding that Skills exist or how to install them. This is a significant gap.
 
@@ -333,7 +333,7 @@ Each row is a self-contained verdict. File:line references in the "We have it?" 
 
 **Applicable today?** Partially. The YAML uses `squad watch --once` (stale name), but the *pattern* — schedule a runner that invokes Squad CLI to poll issues — is sound. Translating to `squad triage --once` (or whatever the current `--once` equivalent is) is mechanical.
 
-**We have it?** Partial. [modules/03-advanced.md:172-188](../modules/03-advanced.md) covers in-session and local-watchdog Ralph (`squad triage --interval 5`). The third tier — running Ralph as a GitHub Actions scheduled job so it survives without a local machine — is not covered.
+**We have it?** Partial. [modules/03-advanced.md:172-188](../../modules/03-advanced.md) covers in-session and local-watchdog Ralph (`squad triage --interval 5`). The third tier — running Ralph as a GitHub Actions scheduled job so it survives without a local machine — is not covered.
 
 **Teaching value?** Medium-high. The cloud-cron tier is the one a real team would actually adopt for an issue-tracker auto-triage workflow. Without it, learners may conclude Ralph "needs a laptop running."
 
@@ -347,11 +347,11 @@ Each row is a self-contained verdict. File:line references in the "We have it?" 
 
 **Applicable today?** Yes — Squad's per-agent model configuration is real and documented in the upstream `squad.config.ts` example file. (Note: the *specific* model IDs Tamir lists are stale — `claude-haiku-3`, `claude-sonnet-3.5`, `claude-opus-4` — current LTS-equivalents at the time of this review are Haiku 4.5, Sonnet 4.6, Opus 4.7. The pattern is correct; the names need updating.)
 
-**We have it?** No. Our [modules/01-basic.md:170-191](../modules/01-basic.md) Step 1 model-selection block says "use the strongest model available" — true for *one* session model, but doesn't expose per-agent tiering. This connects directly to our existing budget gap [W-012 in done/00-Review-and-Improvement-Plan.md](done/00-Review-and-Improvement-Plan.md).
+**We have it?** No. Our [modules/01-basic.md:170-191](../../modules/01-basic.md) Step 1 model-selection block says "use the strongest model available" — true for *one* session model, but doesn't expose per-agent tiering. This connects directly to our existing budget gap W-012 (baseline review, removed in cleanup).
 
 **Teaching value?** High. Premium-request budget is the single most-asked workshop-runner question after "does Squad earn its keep?" Tiering is the answer — and teaching it gives our existing budget gap a concrete fix.
 
-**Verdict:** **ADOPT** — see [§5.3](#53-t-003--model-tiers-for-cost-optimization) for the proposal (new Module 2 sub-section on tier configuration + a reference table in the Quick start). Closes [W-012](done/00-Review-and-Improvement-Plan.md).
+**Verdict:** **ADOPT** — see [§5.3](#53-t-003--model-tiers-for-cost-optimization) for the proposal (new Module 2 sub-section on tier configuration + a reference table in the Quick start). Closes W-012.
 
 ---
 
@@ -361,7 +361,7 @@ Each row is a self-contained verdict. File:line references in the "We have it?" 
 
 **Applicable today?** Yes, format-only.
 
-**We have it?** Partially. We have **mandatory** "What to watch for" / "Verify" blocks (e.g. [modules/01-basic.md:298-306](../modules/01-basic.md)). They're effective but heavier. We don't have low-commitment "if you want, also try X" branches.
+**We have it?** Partially. We have **mandatory** "What to watch for" / "Verify" blocks (e.g. [modules/01-basic.md:298-306](../../modules/01-basic.md)). They're effective but heavier. We don't have low-commitment "if you want, also try X" branches.
 
 **Teaching value?** Medium. The pattern is most useful in Module 3 (Advanced), which is already framed as "guided tour, treat as optional" — adding "🎯 Try If Interested" blocks gives that framing teeth and reduces the all-or-nothing feeling. Less useful in Modules 1 and 2, which are linear builds.
 
@@ -388,7 +388,7 @@ Each row is a self-contained verdict. File:line references in the "We have it?" 
 
 **Teaching value?** High. This is the artifact a learner would print out and tape next to their monitor. It's also the most reusable piece of the workshop — usable on any future Squad project, not just the Reading List app.
 
-**Verdict:** **ADOPT** — see [§5.5](#55-t-005--quick-reference-cheat-sheet) (new appendix at the end of [README.md](../README.md) or a new [docs/cheat-sheet.md](cheat-sheet.md)).
+**Verdict:** **ADOPT** — see [§5.5](#55-t-005--quick-reference-cheat-sheet) (new appendix at the end of [README.md](../../README.md) or a new [docs/cheat-sheet.md](../cheat-sheet.md)).
 
 ---
 
@@ -398,7 +398,7 @@ Each row is a self-contained verdict. File:line references in the "We have it?" 
 
 **Applicable today?** Yes — `@copilot` (the GitHub-managed coding agent) is real and orthogonal to the Copilot CLI's Squad agent. Adding it to the team is a documented Squad feature.
 
-**We have it?** No. Our [modules/03-advanced.md](../modules/03-advanced.md) covers Ralph as the "autonomous" tier but never mentions `@copilot`. The two are complementary: Ralph is the *router*; `@copilot` is one of the *workers* he can route to.
+**We have it?** No. Our [modules/03-advanced.md](../../modules/03-advanced.md) covers Ralph as the "autonomous" tier but never mentions `@copilot`. The two are complementary: Ralph is the *router*; `@copilot` is one of the *workers* he can route to.
 
 **Teaching value?** Medium-high. Without this, learners think the only autonomous option is Ralph spawning a fresh Copilot session — which is `--execute` with the known specialist limitation ([issue #1081](https://github.com/bradygaster/squad/issues/1081)). `@copilot` is the alternative path: properly bounded autonomous work on small, labeled issues.
 
@@ -418,7 +418,7 @@ Each row is a self-contained verdict. File:line references in the "We have it?" 
 
 **Teaching value?** Low. Adding the ceremony vocabulary is mostly cosmetic — but it does give learners a name to search for in upstream docs.
 
-**Verdict:** **PARTIAL** — add one sentence in [modules/01-basic.md](../modules/01-basic.md) Step 3 ("This is a *Design Review* in Squad terminology — see `.squad/ceremonies.md`") and Step 6 ("This is a *Retrospective* — same file"). No new section.
+**Verdict:** **PARTIAL** — add one sentence in [modules/01-basic.md](../../modules/01-basic.md) Step 3 ("This is a *Design Review* in Squad terminology — see `.squad/ceremonies.md`") and Step 6 ("This is a *Retrospective* — same file"). No new section.
 
 ---
 
@@ -428,11 +428,11 @@ Each row is a self-contained verdict. File:line references in the "We have it?" 
 
 **Applicable today?** Yes — this is documented Squad behavior.
 
-**We have it?** Partially. [modules/01-basic.md](../modules/01-basic.md) Step 5 explicitly asks the Lead to record a decision, and Module 2 inspects `decisions.md`. We don't teach the *verbal directive shortcut* — only the explicit "Lead, decide X" framing.
+**We have it?** Partially. [modules/01-basic.md](../../modules/01-basic.md) Step 5 explicitly asks the Lead to record a decision, and Module 2 inspects `decisions.md`. We don't teach the *verbal directive shortcut* — only the explicit "Lead, decide X" framing.
 
 **Teaching value?** Medium. The directive shortcut is what a real working learner would use; the explicit "Lead, decide X" is workshop-formal.
 
-**Verdict:** **PARTIAL** — add a small "Side note: directive shortcut" callout in [modules/01-basic.md](../modules/01-basic.md) Step 5 showing the three patterns (`Always`, `Never`, `From now on`).
+**Verdict:** **PARTIAL** — add a small "Side note: directive shortcut" callout in [modules/01-basic.md](../../modules/01-basic.md) Step 5 showing the three patterns (`Always`, `Never`, `From now on`).
 
 ---
 
@@ -470,11 +470,11 @@ Each row is a self-contained verdict. File:line references in the "We have it?" 
 
 **Applicable today?** Yes — this is core Squad behavior.
 
-**We have it?** Barely. Our [modules/01-basic.md:206-209](../modules/01-basic.md) Step 2 mentions "each member gets a name from a thematic cast" in one bullet and moves on. We never lean into it.
+**We have it?** Barely. Our [modules/01-basic.md:206-209](../../modules/01-basic.md) Step 2 mentions "each member gets a name from a thematic cast" in one bullet and moves on. We never lean into it.
 
 **Teaching value?** Low — but a real tone improvement. Naming creates the social fiction that makes the team-model click for learners.
 
-**Verdict:** **PARTIAL** — in [modules/01-basic.md](../modules/01-basic.md) Step 2, add a single sentence noting the universe (e.g., "Squad's default is Star Trek TNG — you'll likely meet Picard, Crusher, Geordi, etc. The names are persistent and stored in `.squad/casting/registry.json` so they survive across sessions."). One sentence, no more.
+**Verdict:** **PARTIAL** — in [modules/01-basic.md](../../modules/01-basic.md) Step 2, add a single sentence noting the universe (e.g., "Squad's default is Star Trek TNG — you'll likely meet Picard, Crusher, Geordi, etc. The names are persistent and stored in `.squad/casting/registry.json` so they survive across sessions."). One sentence, no more.
 
 ---
 
@@ -583,7 +583,7 @@ These were previously listed as "REJECT" but the right framing is **bonus** — 
 
 **Verdict:** **REJECT** for the workshop body. The features that matter (heartbeat, lockfile, Teams alerts) would be a better-fit upstream feature request to `bradygaster/squad`. The script's pattern of "raw `gh copilot` + prompt" is also fragile — every Squad CLI change to the Ralph prompt requires editing this script.
 
-We could **link** to it in [docs/troubleshooting.md](troubleshooting.md) as "if `squad triage` doesn't give you the observability you need, see Tamir's alternative wrapper" — but not adopt it.
+We could **link** to it in [docs/troubleshooting.md](../troubleshooting.md) as "if `squad triage` doesn't give you the observability you need, see Tamir's alternative wrapper" — but not adopt it.
 
 ---
 
@@ -599,23 +599,23 @@ We could **link** to it in [docs/troubleshooting.md](troubleshooting.md) as "if 
 
 #### T-019 — `squad doctor`
 
-We cover this in [modules/01-basic.md:106-138](../modules/01-basic.md) Step 0f with full expected output and v0.9.1 backward-compat callout. Tamir's coverage is one sentence in §2 + one sentence in troubleshooting.
+We cover this in [modules/01-basic.md:106-138](../../modules/01-basic.md) Step 0f with full expected output and v0.9.1 backward-compat callout. Tamir's coverage is one sentence in §2 + one sentence in troubleshooting.
 
 #### T-020 — Decisions / memory flow
 
-Our [modules/01-basic.md:251-275](../modules/01-basic.md) Step 3 explains the inbox → merged-file flow explicitly, including why the inbox is empty after a step. Tamir's coverage glosses over the inbox mechanism.
+Our [modules/01-basic.md:251-275](../../modules/01-basic.md) Step 3 explains the inbox → merged-file flow explicitly, including why the inbox is empty after a step. Tamir's coverage glosses over the inbox mechanism.
 
 #### T-021 — Failure-mode honesty
 
-Our [docs/troubleshooting.md](troubleshooting.md) documents six upstream Squad bugs with issue links (#992, #1017, #1026, #1052, #1062, #1081). Tamir's troubleshooting is four paragraphs, none of which acknowledge known upstream bugs.
+Our [docs/troubleshooting.md](../troubleshooting.md) documents six upstream Squad bugs with issue links (#992, #1017, #1026, #1052, #1062, #1081). Tamir's troubleshooting is four paragraphs, none of which acknowledge known upstream bugs.
 
 #### T-022 — Prerequisite verifier script
 
-Our [scripts/Verify-Prerequisites.ps1](../scripts/Verify-Prerequisites.ps1) is a robust PASS/FAIL checker with non-zero exit code. Tamir's workshop has manual `git --version` checks.
+Our [scripts/Verify-Prerequisites.ps1](../../scripts/Verify-Prerequisites.ps1) is a robust PASS/FAIL checker with non-zero exit code. Tamir's workshop has manual `git --version` checks.
 
 #### T-023 — Coach agent
 
-Our [.github/agents/squad-coach.agent.md](../.github/agents/squad-coach.agent.md) — a workshop-specific coaching agent with module step references. No upstream equivalent.
+Our [.github/agents/squad-coach.agent.md](../../.github/agents/squad-coach.agent.md) — a workshop-specific coaching agent with module step references. No upstream equivalent.
 
 #### T-024 — Specific build target (Reading List app)
 
@@ -637,7 +637,7 @@ Each adoption below is independently shippable. File:line targets are concrete; 
 
 **Why Module 2 and not Module 3:** Module 3 is "optional guided tour"; Skills are core enough to belong in the build phase. Adding it before Step 9 would distract from artifact inspection (the workshop's centerpiece); after Step 9 it functions as a "here's how the team gets *better* over time" capstone.
 
-**Proposed copy (new section in [modules/02-intermediate.md](../modules/02-intermediate.md)):**
+**Proposed copy (new section in [modules/02-intermediate.md](../../modules/02-intermediate.md)):**
 
 ```markdown
 ---
@@ -711,16 +711,16 @@ Skills are how a Squad gets *better* over time — not just remembers, but acqui
 
 **Other edits:**
 
-- [README.md:99-114](../README.md) "Getting help" section — add a third bullet to the structured-help list:
+- [README.md:99-114](../../README.md) "Getting help" section — add a third bullet to the structured-help list:
   ```markdown
   - [Skills marketplace](https://github.com/tamirdresher/squad-skills) — community-maintained skill modules; Module 2 Step 9.5 shows how to install one
   ```
-- [docs/troubleshooting.md](troubleshooting.md) — add a small entry under "General" for skill-related issues:
+- [docs/troubleshooting.md](../troubleshooting.md) — add a small entry under "General" for skill-related issues:
   ```markdown
   ### A skill doesn't fire when expected
   Skills earn confidence through use. New skills (LOW confidence) require the agent to explicitly invoke them. If a skill never fires, check `.squad/skills/{name}/confidence.json` and ask the agent directly: `Please use the {name} skill for this task.`
   ```
-- [.github/agents/squad-coach.agent.md](../.github/agents/squad-coach.agent.md) — add a short section "Skills questions" so the coach can answer "how do I install a skill?".
+- [.github/agents/squad-coach.agent.md](../../.github/agents/squad-coach.agent.md) — add a short section "Skills questions" so the coach can answer "how do I install a skill?".
 
 ---
 
@@ -730,7 +730,7 @@ Skills are how a Squad gets *better* over time — not just remembers, but acqui
 
 **Target placement:** New step in Module 3 between Step 11 (Ralph local watch) and Step 12 (`squad loop`). Numbering it **Step 11.5** keeps existing steps stable.
 
-**Proposed copy (new section in [modules/03-advanced.md](../modules/03-advanced.md)):**
+**Proposed copy (new section in [modules/03-advanced.md](../../modules/03-advanced.md)):**
 
 ```markdown
 ---
@@ -818,8 +818,8 @@ GitHub-hosted runners are free for public repos and have a 2,000-minutes/month a
 
 **Other edits:**
 
-- [README.md:32-37](../README.md) Modules table — Module 3 "What you build" cell — append `Three tiers of Ralph (in-session / local / cloud cron)` to make the new content discoverable.
-- [docs/troubleshooting.md](troubleshooting.md) — add a section under "Module 3 — Aspire and Ralph":
+- [README.md:32-37](../../README.md) Modules table — Module 3 "What you build" cell — append `Three tiers of Ralph (in-session / local / cloud cron)` to make the new content discoverable.
+- [docs/troubleshooting.md](../troubleshooting.md) — add a section under "Module 3 — Aspire and Ralph":
   ```markdown
   ### Scheduled Ralph workflow fails with "permission denied" on labels
   The `GITHUB_TOKEN` provided by GitHub Actions has limited default permissions. The workflow above explicitly requests `issues: write`. If you customized the workflow and removed that line, Ralph cannot apply `squad:{member}` labels — restore the `permissions:` block.
@@ -834,7 +834,7 @@ GitHub-hosted runners are free for public repos and have a 2,000-minutes/month a
 **Target placement:** Two touchpoints.
 
 1. A new **brief** subsection in Module 1 Step 1, right after the existing model-selection block — explaining that the model picked there is the *session* model, and that per-agent tiers exist.
-2. A new "Cost and model tiers" reference section in [docs/prerequisites.md](prerequisites.md) (or a new [docs/budget-and-models.md](budget-and-models.md)) with the full tier table.
+2. A new "Cost and model tiers" reference section in [docs/prerequisites.md](../prerequisites.md) (or a new [docs/budget-and-models.md](../budget-and-models.md)) with the full tier table.
 
 **Proposed copy — Module 1 Step 1 addition (after line 191):**
 
@@ -846,19 +846,19 @@ The `/model` choice above sets the **session model** — what the coordinator us
 - The Lead, Backend, Frontend, and Tester benefit from a strong model (Sonnet or Opus class).
 - The Scribe (logging memory) and Ralph (issue polling) don't need premium reasoning — Haiku-class is fine and 5× cheaper.
 
-If you run out of budget mid-workshop or notice Ralph burning premium requests on routine polls, see [docs/budget-and-models.md](../docs/budget-and-models.md) for the per-agent tier configuration.
+If you run out of budget mid-workshop or notice Ralph burning premium requests on routine polls, see [docs/budget-and-models.md](../../docs/budget-and-models.md) for the per-agent tier configuration.
 
 > **Workshop default:** for Modules 1 and 2, the single-session-model choice above is enough. Tier optimization matters more once you point Ralph at a real backlog (Module 3).
 ```
 
-**Proposed new file [docs/budget-and-models.md](budget-and-models.md):**
+**Proposed new file [docs/budget-and-models.md](../budget-and-models.md):**
 
 ```markdown
 # Budget and model tiers
 
 Squad supports per-agent model selection. This matters for cost: routing every request — including Ralph's idle polling — through the premium tier burns the monthly budget fast.
 
-> **Premium request budget (Copilot Pro+):** 1,500 premium requests per month. Heavy multi-agent sessions can consume 50–200 of those in a single workshop module. See [docs/troubleshooting.md](troubleshooting.md#agents-fail-mid-task-with-model-rate-limit-errors) for the rate-limit error pattern.
+> **Premium request budget (Copilot Pro+):** 1,500 premium requests per month. Heavy multi-agent sessions can consume 50–200 of those in a single workshop module. See [docs/troubleshooting.md](../troubleshooting.md#agents-fail-mid-task-with-model-rate-limit-errors) for the rate-limit error pattern.
 
 ## Recommended tiering
 
@@ -907,13 +907,13 @@ Modules 1 + 2 with the tier mix above leave plenty of monthly headroom (~1,300+ 
 
 **Other edits:**
 
-- [README.md](../README.md) Prerequisites section — add a line under the prereq table:
+- [README.md](../../README.md) Prerequisites section — add a line under the prereq table:
   ```markdown
   > **Budget note:** the workshop assumes a Copilot Pro+ plan (1,500 premium requests/month). See [docs/budget-and-models.md](docs/budget-and-models.md) for per-agent model tier configuration if you want to stretch the budget.
   ```
-- [docs/troubleshooting.md](troubleshooting.md) — add a cross-reference inside the existing rate-limit section ([line 274](troubleshooting.md)) pointing to `budget-and-models.md`.
+- [docs/troubleshooting.md](../troubleshooting.md) — add a cross-reference inside the existing rate-limit section ([line 274](../troubleshooting.md)) pointing to `budget-and-models.md`.
 
-This adoption also closes [W-012](done/00-Review-and-Improvement-Plan.md) (premium-request budget guidance).
+This adoption also closes W-012 (premium-request budget guidance).
 
 ---
 
@@ -923,7 +923,7 @@ This adoption also closes [W-012](done/00-Review-and-Improvement-Plan.md) (premi
 
 **Target placement:** Module 3 only. Module 1 and 2 stay linear.
 
-**Proposed additions to [modules/03-advanced.md](../modules/03-advanced.md):**
+**Proposed additions to [modules/03-advanced.md](../../modules/03-advanced.md):**
 
 Five small "Try if interested" footers, one per existing step. Each is 2-3 lines, asks one question, and points to one thing to look at. Example, to append at the end of Step 10 (Aspire):
 
@@ -946,7 +946,7 @@ Apply the same pattern to Steps 11, 11.5 (new from T-002), 12. Two-line "Try if 
 
 **Goal:** Give learners a portable, post-workshop cheat sheet of the prompt patterns they've learned.
 
-**Target placement:** New file [docs/cheat-sheet.md](cheat-sheet.md), linked from the README's "Getting help" section.
+**Target placement:** New file [docs/cheat-sheet.md](../cheat-sheet.md), linked from the README's "Getting help" section.
 
 **Proposed new file content:**
 
@@ -1007,7 +1007,7 @@ Apply the same pattern to Steps 11, 11.5 (new from T-002), 12. Two-line "Try if 
 
 **Other edits:**
 
-- [README.md:99-114](../README.md) "Getting help" section — add to the structured-help list:
+- [README.md:99-114](../../README.md) "Getting help" section — add to the structured-help list:
   ```markdown
   - [docs/cheat-sheet.md](docs/cheat-sheet.md) — quick reference of all prompts, commands, and files
   ```
@@ -1020,7 +1020,7 @@ Apply the same pattern to Steps 11, 11.5 (new from T-002), 12. Two-line "Try if 
 
 **Target placement:** New small Module 3 step. Either replace Step 12 (`squad loop`) or insert as Step 11.6. Recommended: **Step 11.6**, sized to ~80 lines.
 
-**Proposed copy (new section in [modules/03-advanced.md](../modules/03-advanced.md)):**
+**Proposed copy (new section in [modules/03-advanced.md](../../modules/03-advanced.md)):**
 
 ```markdown
 ---
@@ -1106,9 +1106,9 @@ For workshop purposes, **try one bounded `@copilot` task before pointing Ralph `
 
 **Other edits:**
 
-- [docs/troubleshooting.md](troubleshooting.md) — extend the existing `--execute`/#1081 entry with a "Alternative" section:
+- [docs/troubleshooting.md](../troubleshooting.md) — extend the existing `--execute`/#1081 entry with a "Alternative" section:
   ```markdown
-  **Alternative — `@copilot` (GitHub's managed coding agent):** for bounded, single-issue autonomous work, add `@copilot` to the team and label issues `squad:copilot`. `@copilot` runs in GitHub infrastructure with a documented capability profile and doesn't hit the specialist-charter limitation. See [Module 3 Step 11.6](../modules/03-advanced.md).
+  **Alternative — `@copilot` (GitHub's managed coding agent):** for bounded, single-issue autonomous work, add `@copilot` to the team and label issues `squad:copilot`. `@copilot` runs in GitHub infrastructure with a documented capability profile and doesn't hit the specialist-charter limitation. See [Module 3 Step 11.6](../../modules/03-advanced.md).
   ```
 
 ---
@@ -1121,7 +1121,7 @@ For workshop purposes, **try one bounded `@copilot` task before pointing Ralph `
 
 **Proposed copy — same structure for each module, varied content:**
 
-**Module 1** ([modules/01-basic.md](../modules/01-basic.md)):
+**Module 1** ([modules/01-basic.md](../../modules/01-basic.md)):
 
 ```markdown
 ## At a glance
@@ -1137,7 +1137,7 @@ For workshop purposes, **try one bounded `@copilot` task before pointing Ralph `
 | 6 | Use the reviewer on purpose | ~20 min |
 ```
 
-**Module 2** ([modules/02-intermediate.md](../modules/02-intermediate.md)):
+**Module 2** ([modules/02-intermediate.md](../../modules/02-intermediate.md)):
 
 ```markdown
 ## At a glance
@@ -1150,7 +1150,7 @@ For workshop purposes, **try one bounded `@copilot` task before pointing Ralph `
 | 9.5 | Install a skill and watch the team use it *(new — T-001)* | ~10 min |
 ```
 
-**Module 3** ([modules/03-advanced.md](../modules/03-advanced.md)):
+**Module 3** ([modules/03-advanced.md](../../modules/03-advanced.md)):
 
 ```markdown
 ## At a glance
@@ -1227,8 +1227,8 @@ Proposed:
 
 **Other edits:**
 
-- [README.md](../README.md) "Modules" table — add a leading emoji column matching the section emoji scheme for visual continuity.
-- [.github/copilot-instructions.md](../.github/copilot-instructions.md) Tone section (line 87) — add a sentence: *"Use emoji as section icons (one per heading) and ⏱️ for time badges. Keep body copy emoji-free."*
+- [README.md](../../README.md) "Modules" table — add a leading emoji column matching the section emoji scheme for visual continuity.
+- [.github/copilot-instructions.md](../../.github/copilot-instructions.md) Tone section (line 87) — add a sentence: *"Use emoji as section icons (one per heading) and ⏱️ for time badges. Keep body copy emoji-free."*
 
 ---
 
@@ -1238,7 +1238,7 @@ Proposed:
 
 **Why one file, not a folder:** the six topics are small individually (~80-200 lines each). One file is easier to skim, easier to link to specific sections via anchors, and easier to maintain (one open-issue queue, not six). A learner opening this on a flight reads top-to-bottom; one with a specific need uses Ctrl-F or the TOC.
 
-**Target placement:** [modules/04-bonus.md](../modules/04-bonus.md) — sits next to `01-basic.md`, `02-intermediate.md`, `03-advanced.md` in the modules folder. Discoverable from the README modules table as a fourth row with `Optional / Bonus` in the time column.
+**Target placement:** [modules/04-bonus.md](../../modules/04-bonus.md) — sits next to `01-basic.md`, `02-intermediate.md`, `03-advanced.md` in the modules folder. Discoverable from the README modules table as a fourth row with `Optional / Bonus` in the time column.
 
 **Proposed file structure:**
 
@@ -1249,7 +1249,7 @@ Proposed:
 > applies — none of this builds on anything else. Closer to a reference guide
 > than a tutorial.
 
-← Back to [Workshop Index](../README.md) · [← Module 3](03-advanced.md)
+← Back to [Workshop Index](../../README.md) · [← Module 3](03-advanced.md)
 
 ---
 
@@ -1490,16 +1490,16 @@ You've finished the workshop. Now you have to decide whether to introduce Squad 
 
 ---
 
-← Back to [Workshop Index](../README.md) · [← Module 3](03-advanced.md)
+← Back to [Workshop Index](../../README.md) · [← Module 3](03-advanced.md)
 ```
 
 **Other edits to support `modules/04-bonus.md`:**
 
-- [README.md](../README.md) Modules table — add a 4th row:
+- [README.md](../../README.md) Modules table — add a 4th row:
   ```markdown
   | 4 | [Bonus](modules/04-bonus.md) | Six modular topics: team Squad, MCP, Teams notifications, DevBox, cross-machine, reflection framework | Pick-and-choose | Completed module 3 helpful but not required. |
   ```
-- [modules/03-advanced.md](../modules/03-advanced.md) "You're done" closing section — add a final line pointing to Module 4:
+- [modules/03-advanced.md](../../modules/03-advanced.md) "You're done" closing section — add a final line pointing to Module 4:
   ```markdown
   > If you want to go further: [Module 4 — Bonus](04-bonus.md) covers team Squad, MCP, scale, and the decision framework for adopting Squad on a real project.
   ```
@@ -1515,7 +1515,7 @@ For the record — these are explicitly **not** being adopted, with brief reason
 | **T-017 — Tamir's `ralph-watch.ps1` script** | Wraps `gh copilot` directly with a baked-in prompt — fragile to upstream changes; reimplements features Squad CLI provides natively. Better as a future upstream feature request to `bradygaster/squad` than as workshop content. |
 | **T-018 — Webhook architecture diagram** | Enterprise ops topic. Doesn't fit even as bonus content — the bonus section B3 covers the *intent* at a useful level; the full webhook plumbing is too implementation-specific to teach. |
 
-T-012 through T-016 were previously listed here as REJECT. They are now BONUS — folded into [modules/04-bonus.md](../modules/04-bonus.md) (sections B1-B5 in [§5.9](#59-bonus-content--modules04-bonusmd)).
+T-012 through T-016 were previously listed here as REJECT. They are now BONUS — folded into [modules/04-bonus.md](../../modules/04-bonus.md) (sections B1-B5 in [§5.9](#59-bonus-content--modules04-bonusmd)).
 
 ---
 
@@ -1541,7 +1541,7 @@ This is the canonical list of changes triggered by this analysis. Flip `⏳` →
 
 | ID | Title | Severity | Verdict | Touches | Resolved? |
 |---|---|---|---|---|---|
-| **T-003** | Model tiers for cost optimization | MEDIUM | ADOPT — reference | New `docs/reference/budget-and-models.md`; Module 1 Step 1 addition; README prereqs note; troubleshooting cross-ref. Closes [W-012](done/00-Review-and-Improvement-Plan.md). | ⏳ |
+| **T-003** | Model tiers for cost optimization | MEDIUM | ADOPT — reference | New `docs/reference/budget-and-models.md`; Module 1 Step 1 addition; README prereqs note; troubleshooting cross-ref. Closes W-012. | ⏳ |
 | **T-005** | Quick-reference cheat sheet | LOW | ADOPT — reference | New `docs/reference/cheat-sheet.md`; README "Getting help" link | ⏳ |
 
 ### Style adoptions (cross-cutting readability)
@@ -1596,7 +1596,7 @@ This is the canonical list of changes triggered by this analysis. Flip `⏳` →
 
 | Other doc | Item closed/touched | How |
 |---|---|---|
-| [done/00-Review-and-Improvement-Plan.md](done/00-Review-and-Improvement-Plan.md) | **W-012** — Premium-request budget guidance | T-003 ships `docs/reference/budget-and-models.md` with a workshop budget estimate table — closes W-012. |
+| the baseline review (removed in cleanup) | **W-012** — Premium-request budget guidance | T-003 ships `docs/reference/budget-and-models.md` with a workshop budget estimate table — closes W-012. |
 
 ---
 
@@ -1614,13 +1614,13 @@ Total surface area if everything lands:
 - `.github/workflows/squad-heartbeat.yml` (Module 3 Step 11.5 ships this as part of the lab repo, not as a workshop-repo file — included here for completeness)
 
 **Modified existing files (~12 small edits):**
-- [README.md](../README.md) — modules table updates, prereqs note, "Getting help" links, section emoji
-- [modules/01-basic.md](../modules/01-basic.md) — `## At a glance` table, ⏱️ time badges, section emoji, directive-capture callout, ceremonies inline notes, themed-casting sentence
-- [modules/02-intermediate.md](../modules/02-intermediate.md) — `## At a glance` table, ⏱️ time badges, section emoji, new Step 9.5 (Skills)
-- [modules/03-advanced.md](../modules/03-advanced.md) — `## At a glance` table, ⏱️ time badges, section emoji, new Steps 11.5 + 11.6, 🎯 side-quest footers, closing line to Module 4
-- [docs/troubleshooting.md](troubleshooting.md) — skill troubleshooting entry, scheduled-Ralph permissions entry, `--execute` `@copilot` cross-ref, budget-and-models cross-ref
-- [.github/agents/squad-coach.agent.md](../.github/agents/squad-coach.agent.md) — Skills knowledge section
-- [.github/copilot-instructions.md](../.github/copilot-instructions.md) — tone-rules sentence
+- [README.md](../../README.md) — modules table updates, prereqs note, "Getting help" links, section emoji
+- [modules/01-basic.md](../../modules/01-basic.md) — `## At a glance` table, ⏱️ time badges, section emoji, directive-capture callout, ceremonies inline notes, themed-casting sentence
+- [modules/02-intermediate.md](../../modules/02-intermediate.md) — `## At a glance` table, ⏱️ time badges, section emoji, new Step 9.5 (Skills)
+- [modules/03-advanced.md](../../modules/03-advanced.md) — `## At a glance` table, ⏱️ time badges, section emoji, new Steps 11.5 + 11.6, 🎯 side-quest footers, closing line to Module 4
+- [docs/troubleshooting.md](../troubleshooting.md) — skill troubleshooting entry, scheduled-Ralph permissions entry, `--execute` `@copilot` cross-ref, budget-and-models cross-ref
+- [.github/agents/squad-coach.agent.md](../../.github/agents/squad-coach.agent.md) — Skills knowledge section
+- [.github/copilot-instructions.md](../../.github/copilot-instructions.md) — tone-rules sentence
 
 **Net additions:** Module 2 grows from 3 → 4 steps; Module 3 grows from 3 → 5 steps; new `modules/04-bonus.md` (~600 lines); new `docs/reference/` folder (~5 files, ~80-200 lines each). The mainline workshop time is essentially unchanged because new steps in Modules 2 and 3 are explicitly opt-in.
 
@@ -1636,7 +1636,7 @@ Lands first because it's pure readability with zero behavior change.
 
 **🏗️ Wave 1 — Foundation + reference folder (1 PR)**
 Establishes `docs/reference/` and closes the prior-audit budget gap.
-- **T-003** — Model tiers → `docs/reference/budget-and-models.md`. Closes [W-012](done/00-Review-and-Improvement-Plan.md).
+- **T-003** — Model tiers → `docs/reference/budget-and-models.md`. Closes W-012.
 - **T-005** — Cheat sheet → `docs/reference/cheat-sheet.md`.
 - Fill the stubs from Wave 0 (ceremonies-glossary, resources).
 
@@ -1656,7 +1656,7 @@ The centerpiece of this analysis.
 
 ### Release cadence
 
-- After Wave 0: tag **1.1.1** (style polish — incremental on the 1.1.0 release planned in [done/00-Review-and-Improvement-Plan.md §5 D-3](done/00-Review-and-Improvement-Plan.md)).
+- After Wave 0: tag **1.1.1** (style polish — incremental on the 1.1.0 release planned in the baseline review §5 D-3 (removed in cleanup)).
 - After Wave 3: tag **1.2.0** (Module 2 capability story + Module 3 autonomous tier — meaningful expansion).
 - After Wave 4: tag **1.3.0** (bonus module — first "Module 4" of the workshop).
 

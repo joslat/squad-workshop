@@ -29,7 +29,7 @@ squad config model --clear --agent reviewer
 These persist to `.squad/config.json` as `defaultModel` (global) and `agentModelOverrides` (a per-agent map). Open it to confirm what you set:
 
 ```powershell
-Get-Content .squad\config.json
+Get-Content .squad/config.json
 ```
 
 > Run `squad config model` with no model-id **first** — it prints the catalog your installed version supports. Model IDs change between releases, so prefer the list it shows over any hard-coded name. (Hard-coding `claude-opus-4`-style IDs in docs is exactly how older guides go stale.)
@@ -56,7 +56,7 @@ Squad's source documents this as a **5-layer hierarchy** (`Layer 0` → `Layer 4
 
 So a per-agent override (Layer 0) beats everything; the session `/model` you picked in Module 1 sits at Layer 1.
 
-> Squad ships a `model-selection` skill that documents this in more depth — `Get-Content .copilot\skills\model-selection\SKILL.md` if `squad init` installed it (see [Module 2, Step 9.5](../modules/02-intermediate.md)), or read it upstream under `templates/skills/`.
+> Squad ships a `model-selection` skill that documents this in more depth. It is **not** installed by default — `squad init` (v0.9.4) installs only 8 skills, and `model-selection` is not one of them. It ships only upstream in the Squad CLI's `templates/skills/` directory, so read it there (`templates/skills/model-selection/SKILL.md`).
 
 ## A sensible tier mix
 

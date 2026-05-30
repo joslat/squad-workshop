@@ -8,7 +8,9 @@
 
 ## At a glance
 
-**⏱️ ~90 min** · build a working .NET 10 + React reading-list app with the team.
+**⏱️ ~90–120 min** · build a working .NET 10 + React reading-list app with the team.
+
+*Budget extra on your first run — it can take up to ~2 hours, because agent generation plus the first cold .NET/npm build dominate the time.*
 
 | Step | What you do |
 |---|---|
@@ -44,7 +46,7 @@ See [docs/prerequisites.md](../docs/prerequisites.md) for full install instructi
 **Quick check — run this before continuing:**
 
 ```powershell
-.\scripts\Verify-Prerequisites.ps1
+./scripts/Verify-Prerequisites.ps1
 ```
 
 All lines should show `PASS`. Fix any that don't before proceeding.
@@ -57,7 +59,7 @@ All lines should show `PASS`. Fix any that don't before proceeding.
 | GitHub CLI | 2.89.0 |
 | GitHub Copilot CLI | 1.0.24 |
 | Squad CLI | 0.9.4 |
-| PowerShell exec policy | RemoteSigned |
+| PowerShell 7 | 7.x |
 
 ---
 
@@ -165,7 +167,7 @@ The two `ℹ️` info lines are not warnings — Squad explicitly tells you they
 
 > **Optional — install the workshop coach now.** From a separate terminal in the workshop repo root:
 > ```powershell
-> .\scripts\Install-WorkshopAgents.ps1
+> ./scripts/Install-WorkshopAgents.ps1
 > ```
 > Then in your lab terminal, `copilot --agent squad-coach` is available any time you get stuck.
 
@@ -260,7 +262,7 @@ Do you have a PRD or spec document? (file path, paste it, or skip)
 
 ```powershell
 # In a separate terminal (not the copilot session):
-dir .squad\agents\
+dir .squad/agents/
 ```
 
 You should see directories for each team member (e.g. `ralph/`, `scribe/`, and your newly cast agents).
@@ -302,14 +304,14 @@ So after this step, the inbox will be empty:
 
 ```powershell
 # This will be empty — that's expected:
-Get-ChildItem .squad\decisions\inbox\
+Get-ChildItem .squad/decisions/inbox/
 ```
 
 The merged decision lives in `.squad/decisions.md`:
 
 ```powershell
 # This is where decisions end up:
-Get-Content .squad\decisions.md
+Get-Content .squad/decisions.md
 ```
 
 You should see a structured decision entry with rationale and alternatives considered — not just chat fluff.
@@ -334,6 +336,7 @@ Keep it minimal but production-clean. Use the folder structure from the plan.
 
 **What to watch for:**
 - Role separation: Backend agent writes API code, Frontend agent writes React code, Tester writes tests
+- Your single prompt gets split across Backend / Frontend / Tester without you assigning tasks — that's the **routing layer** the README promised, in action
 - The Lead should coordinate and review
 - The Scribe should log what happened
 
@@ -383,7 +386,7 @@ but realistic patterns.
 **Verify:**
 
 ```powershell
-Get-Content .squad\decisions.md
+Get-Content .squad/decisions.md
 ```
 
 Look for a new entry with a clear rationale section.
@@ -404,6 +407,8 @@ invalid status values. Add tests for them.
 Scribe, capture any new skills or patterns we should preserve for future work.
 ```
 
+> **Skills** are small reusable markdown modules under `.copilot/skills/` that capture team conventions — `squad init` ships a starter set; Module 2 Step 9.5 inspects them in depth.
+
 **What to watch for:**
 - The Lead should give concrete review feedback (not just "looks good")
 - The Tester should find and write tests for edge cases you didn't think of
@@ -416,10 +421,10 @@ Scribe, capture any new skills or patterns we should preserve for future work.
 Get-ChildItem -Recurse -Name -Include *test*,*Test*,*spec* | Where-Object { $_ -notmatch 'node_modules' }
 
 # Check for skills
-Get-ChildItem -Recurse .copilot\skills\
+Get-ChildItem -Recurse .copilot/skills/
 
 # Check wisdom
-Get-Content .squad\identity\wisdom.md
+Get-Content .squad/identity/wisdom.md
 ```
 
 This is where Squad is supposed to earn its keep. The solo-dev docs position the Lead as the safety net and the Tester as the discipline you would otherwise skip when tired, hungry, or overconfident. Usually all three.
