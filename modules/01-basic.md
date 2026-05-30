@@ -6,6 +6,24 @@
 
 ---
 
+## At a glance
+
+**⏱️ ~90 min** · build a working .NET 10 + React reading-list app with the team.
+
+| Step | What you do |
+|---|---|
+| 0 | Create the repo and initialize Squad |
+| 1 | Launch Copilot CLI with the Squad agent |
+| 2 | Cast a lean solo-dev team |
+| 3 | Make the team explore before writing code |
+| 4 | Build the first vertical slice |
+| 5 | Force an architectural decision (recorded in `decisions.md`) |
+| 6 | Use the reviewer on purpose |
+
+> New here? Keep the [cheat sheet](../docs/cheat-sheet.md) open in a second tab.
+
+---
+
 ## Goal
 
 In one sitting, build a small but real app — a **Personal Reading List** — with:
