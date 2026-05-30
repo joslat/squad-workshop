@@ -12,8 +12,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Check markdown links
+      - name: Check markdown links (learner-facing surface only)
         uses: gaurav-nelson/github-action-markdown-link-check@v1
         with:
           use-quiet-mode: 'yes'
           config-file: '.github/mlc_config.json'
+          # Scope to the docs a learner actually follows. The maintainer/
+          # planning docs under docs/maintainers/ are intentionally excluded —
+          # they're internal and carry many deep/external links (review item R-22).
+          folder-path: 'modules'
+          file-path: 'README.md, CONTRIBUTING.md, docs/prerequisites.md, docs/troubleshooting.md, docs/cheat-sheet.md, docs/budget-and-models.md'

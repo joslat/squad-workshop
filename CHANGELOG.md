@@ -25,20 +25,21 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - `.gitignore`: Squad runtime artifacts (`.squad/ralph-stop`, `ralph.log`, `*.ralph.log`) — documents the pattern for downstream Squad users
 - Navigation footers on all three modules
 - `README.md`: **Acknowledgements** section crediting Brady Gaster (creator of the Squad CLI) and Tamir Dresher (Squad co-creator; author of `tamirdresher/squad-skills`)
-- `docs/01 EarlierWorkshopReviewAnd-Implementation-Plan.md`: §0 Reassessment (2026-05-30) — challenges the doc's status, reverses its command-name premise to `squad watch`, and corrects the `--once` / `loop.md` / Teams-path / `gh copilot` assumptions against live Squad source
-- `docs/02 Post-PR1-Verification-and-Fixes.md`: per-item verification of PR #1 (each claim cited to `bradygaster/squad` source) plus a repo-wide fix inventory
-- **Tier 1 adoption from `squad-skills`** (per `docs/01` §0.8): new `docs/cheat-sheet.md` (prompt patterns + verified current CLI commands), per-module **"At a glance"** maps with ⏱️ time estimates on all three modules, and two optional **"Try if interested"** side-quests in Module 3. Cheat sheet linked from the README "Structured help" list.
+- `docs/maintainers/01 EarlierWorkshopReviewAnd-Implementation-Plan.md`: §0 Reassessment (2026-05-30) — challenges the doc's status, reverses its command-name premise to `squad watch`, and corrects the `--once` / `loop.md` / Teams-path / `gh copilot` assumptions against live Squad source
+- `docs/maintainers/02 Post-PR1-Verification-and-Fixes.md`: per-item verification of PR #1 (each claim cited to `bradygaster/squad` source) plus a repo-wide fix inventory
+- **Tier 1 adoption from `squad-skills`** (per `docs/maintainers/01` §0.8): new `docs/cheat-sheet.md` (prompt patterns + verified current CLI commands), per-module **"At a glance"** maps with ⏱️ time estimates on all three modules, and two optional **"Try if interested"** side-quests in Module 3. Cheat sheet linked from the README "Structured help" list.
 - **Tier 2a adoption (team extensions):** Module 2 **Step 9.5 — "Skills"** (inspects the skills `squad init` already installs in `.copilot/skills/`, then tests whether one changes behavior; no dependency on external repos) and Module 3 **Step 11.6 — "Add @copilot to your team"** (`squad copilot --auto-assign`, the bounded-autonomy alternative to Ralph `--execute`). Commands verified against Squad CLI v0.9.4 + dev source.
 - **Tier 2b adoption (models & budget):** new `docs/budget-and-models.md` — per-agent model tiers via `squad config model` (writes `.squad/config.json`), the model-resolution order, a sensible tier mix, and a rough premium-request budget (closes the W-012 budget gap). Linked from the README and Module 1's model-selection step.
-- `docs/03 Workshop-Review-and-Analysis.md` — full 5-lens pedagogical + technical review of the workshop (strong points, prioritized findings R-01…R-27, action plan); every CLI claim verified against `@bradygaster/squad-cli@0.9.4`.
+- `docs/maintainers/03 Workshop-Review-and-Analysis.md` — full 5-lens pedagogical + technical review of the workshop (strong points, prioritized findings R-01…R-27, action plan); every CLI claim verified against `@bradygaster/squad-cli@0.9.4`.
 
 ### Changed
+- **Reorganized `docs/` by audience.** Learner-facing docs (`prerequisites`, `troubleshooting`, `cheat-sheet`, `budget-and-models`) stay at `docs/` root; the planning / review / maintenance docs moved to **`docs/maintainers/`**. The older `docs/done/` audits and the stale `SQUAD-WORKSHOP-STANDALONE-PLAN.md` (.NET 9 / Apache-2.0 — superseded, review item R-19) were removed. `check-links` CI scoped to the learner-facing surface (review item R-22).
 - **Upgraded from .NET 9 (STS, EOL May 2026) to .NET 10 LTS** (supported through November 2028) — all module prompts, prerequisite tables, and `scripts/Verify-Prerequisites.ps1` updated
 - `docs/prerequisites.md`: added Windows-only note (workshop uses `winget` throughout)
 - `README.md`: added Windows-only note near prerequisites section; removed redundant "Module summaries" prose section (the table + scope-note already cover the same information)
 - `docs/troubleshooting.md`: renamed `squad watch --execute` heading to `squad triage --execute` (formerly `squad watch`) — body now uses the modern name, with a single parenthetical alias for search discoverability
 - **Relicensed Apache-2.0 → MIT** (`LICENSE`, `README.md` badge + License section, `CONTRIBUTING.md`) — aligns with the MIT-licensed `tamirdresher/squad-skills` and simplifies external contribution ahead of accepting PR #1
-- **Command-name direction reversed → adopting `squad watch` as the primary name** (per the authoritative PR [#1](https://github.com/joslat/squad-workshop/pull/1) from Squad co-creator Tamir Dresher). This supersedes the `squad watch → squad triage` change two bullets above — both names route to the same command, but `watch` is the original/native one and the only one that accepts `--health`. Repo-wide sweep tracked in `docs/02 Post-PR1-Verification-and-Fixes.md`.
+- **Command-name direction reversed → adopting `squad watch` as the primary name** (per the authoritative PR [#1](https://github.com/joslat/squad-workshop/pull/1) from Squad co-creator Tamir Dresher). This supersedes the `squad watch → squad triage` change two bullets above — both names route to the same command, but `watch` is the original/native one and the only one that accepts `--health`. Repo-wide sweep tracked in `docs/maintainers/02 Post-PR1-Verification-and-Fixes.md`.
 - `CONTRIBUTING.md`: fixed broken `../LICENSE` link → `LICENSE`
 
 ### Fixed
@@ -58,9 +59,9 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - `modules/03-advanced.md`: `gh copilot -p` → `copilot -p` at the round description (`:218`) and in the "Ralph, Go!" script — `gh copilot` (extension) has no `-p`/`--agent`/`--yolo`; Squad spawns the standalone `copilot`
 - **`scripts/Verify-Prerequisites.ps1` — two front-door bugs** (found by the full workshop review, reproduced against real binaries): the **Copilot CLI** check false-FAILed valid installs (`copilot --version` is multi-line; `-match` on an array doesn't populate `$Matches`) — now joined to a scalar first; and the **`gh auth status`** check false-PASSed when logged out ("not logged **into**" matched the success substring "logged in") — now matches `'Logged in to'`. Same multi-line guard applied defensively to the `squad --version` check.
 
-### Pending verification — deferred to Tamir (trust vote; see `docs/02 Post-PR1-Verification-and-Fixes.md`)
+### Pending verification — deferred to Tamir (trust vote; see `docs/maintainers/02 Post-PR1-Verification-and-Fixes.md`)
 - Correct troubleshooting for upstream #1017 / #1062 / #1081 — verified fixed on `dev` / `v0.9.6-insider.3`, **not** in v0.9.4 stable (PR #1's "fixed in 0.9.4+" and "#1081 by design" are both inaccurate; v0.9.4 still pins the broken `@github/copilot-sdk ^0.1.32`)
-- Reframe the Teams `~/.squad/teams-webhook.url` instructions (PR #1 Step 11g + `docs/01` §B3): that path is read by **Tamir's `ralph-watch.ps1` wrapper**, not by the built-in `squad watch`; built-in Teams uses the `teams-graph` OAuth adapter + the `notification-routing` skill
+- Reframe the Teams `~/.squad/teams-webhook.url` instructions (PR #1 Step 11g + `docs/maintainers/01` §B3): that path is read by **Tamir's `ralph-watch.ps1` wrapper**, not by the built-in `squad watch`; built-in Teams uses the `teams-graph` OAuth adapter + the `notification-routing` skill
 
 ### Deferred
 - Premium-request budget guidance (W-012) — requires a measured end-to-end workshop run
