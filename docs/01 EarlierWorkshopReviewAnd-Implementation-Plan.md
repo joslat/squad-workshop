@@ -86,9 +86,36 @@ Re-checked `tamirdresher/squad-skills` on 2026-05-30: **last push 2026-05-04** (
 - **Teams + human-members placement:** PR #1 inlines both into mainline (Module 3 Step 11g / Module 1 Step 2); this doc routes them to **bonus** (§B3, T-016). Keep bonus as the target — but since the PR ships them inline and is authoritative, the post-merge task is to **relocate/dedupe**, not re-add.
 - **T-003 model names:** refresh to the current era (Opus 4.8 / Sonnet 4.6 / Haiku 4.5) when writing the tier table; the IDs in Tamir's `squad.config.ts` are illustrative only.
 
-### 0.8 New status
+### 0.8 Adoption strategy — what to adopt now, ranked by impact (the source repo is unmaintained)
 
-🟡 **Active — corrected, partially superseded by PR #1.** Mainline T-001/T-003/T-004/T-005/T-006 + style T-026/T-027 are ready (apply §0 corrections). T-002 is blocked on CLI verification (§0.2). Teams/human-members are now owned by PR #1 (relocate to bonus, don't re-add). Command-name, `loop.md`, Teams-path, and invocation corrections are tracked for the fix-later pass in the companion doc.
+**The fact that reshapes this whole plan:** `tamirdresher/squad-skills` is **unmaintained and targets an older Squad** — re-confirmed 2026-05-30: last push **2026-05-04** ("add cross-squad-communication"), MIT. Its workshop uses `agency copilot`, `squad watch --once`, `npx … watch`, `.squad/skills` copy-install, and stale model IDs — all aged out. So the rule is: **harvest the durable ideas; take no runtime dependency on the repo; verify every command against current Squad before shipping.**
+
+Three guardrails:
+
+1. **Snapshot, not dependency.** If a step installs from the repo (the Skills demo), pin a commit and label it a "community snapshot (unmaintained)". Prefer skills that are pure markdown (evergreen) over any wired to CLI internals — and prefer a skill that **ships with Squad** (the CLI bundles `templates/skills/`, e.g. `notification-routing`) so there's no external dependency at all.
+2. **Verify-before-ship.** Every command goes through the binary-grep check we did this week. Already done for `watch` / `loop.md` / `copilot` / `--health`.
+3. **Durability over breadth.** Prefer items whose value survives version bumps (format, framing, concepts) over items wired to a specific CLI surface (Actions YAML, Teams plumbing).
+
+Ranked by impact-per-maintenance-cost:
+
+**Tier 1 — adopt now (high impact, ≈zero staleness risk):**
+- **T-004 🎯 "Try if interested" side-quests** + **T-026 per-module TOC** + **T-027 friendly tone / ⏱️ badges** — pure format. Biggest readability/engagement lift for the least risk. Do these first.
+- **T-005 quick-reference cheat sheet** — authored with *current* commands (`squad watch`, `copilot --agent squad --yolo`, `./loop.md`). High "I'll actually use this" value.
+
+**Tier 2 — adopt now, with a verified mechanism:**
+- **T-003 model tiers + budget** — evergreen concept; ship with current model IDs (Opus 4.8 / Sonnet 4.6 / Haiku 4.5) after confirming the per-agent config surface on the target build. Also closes the W-012 budget gap.
+- **T-001 Skills demo** — teach the concept via the **native `copilot plugin` / `squad plugin` flow** (not Tamir's `cp -r … .squad/skills`); demo **`reflect`** (pure markdown, no deps) or a Squad-shipped skill; label any squad-skills source a pinned snapshot.
+- **T-006 @copilot coding agent** (`squad copilot`) — the bounded-autonomy contrast to Ralph `--execute`; verify the add-to-team flow on the current build.
+
+**Tier 3 — defer / rework (blocked or infra-heavy):**
+- **T-002 GitHub-Actions Ralph** — **blocked**: depends on `squad watch --once`, which does not exist (verified). Rework only after confirming a real single-pass mechanism; do **not** ship Tamir's stale YAML.
+- **Bonus (Teams, MCP, DevBox, cross-machine, human/multi-person)** — keep in `modules/04-bonus.md`; lowest priority given infra cost + the stale repo. For Teams, describe the built-in `teams-graph` / `notification-routing` path, not the wrapper's `teams-webhook.url`.
+
+**Net recommendation:** ship **Tier 1 as one small, safe PR** (format + cheat-sheet) for immediate impact; do **Tier 2 as a second PR** once the model-config and plugin flows are spot-checked; leave **Tier 3** tracked as bonus/blocked. This keeps the workshop's depth-first discipline, absorbs the genuinely durable parts of Tamir's breadth, and takes no dependency on an unmaintained repo.
+
+### 0.9 New status
+
+🟡 **Active — corrected; PR #1 follow-ups landed; adoption now governed by §0.8 tiers.** The command-name / `loop.md` / `gh copilot` corrections (§0.1, §0.3, §0.5) are **applied to the active workshop** (commit `2fb3003`); §2.4/§2.5 (issue-version wording, Teams reframe) are deferred to Tamir as a trust vote. The adoption proposals in §4–§5 remain the plan of record, executed in the **Tier 1 → Tier 2 → Tier 3** order above. T-002 is blocked on CLI verification (§0.2). See companion [`02 Post-PR1-Verification-and-Fixes.md`](02%20Post-PR1-Verification-and-Fixes.md).
 
 ---
 
