@@ -57,8 +57,8 @@ All lines should show `PASS`. Fix any that don't before proceeding.
 | .NET SDK | 10.0.0 |
 | Git | any recent |
 | GitHub CLI | 2.89.0 |
-| GitHub Copilot CLI | 1.0.24 |
-| Squad CLI | 0.9.4 |
+| GitHub Copilot CLI | 1.0.59 |
+| Squad CLI | 0.11.0 |
 | PowerShell 7 | 7.x |
 
 ---
@@ -132,9 +132,11 @@ git push
 squad doctor
 ```
 
-**Expected (v0.9.4):** `9 passed, 0 failed, 0 warnings, 2 info` — no manual fixes needed.
+**What success looks like:** the invariant is **`0 failed`** (ideally **`0 warnings`** too) — the exact `passed` / `info` counts vary by Squad CLI version and aren't something to match. Note that 0.11.0's `squad init` now also scaffolds the **Rai** (Responsible-AI reviewer) and **Fact-Checker** built-ins alongside Scribe and Ralph, so the agent count in doctor output is higher than on older versions — don't try to match an exact number. No manual fixes needed.
 
-#### Expected output (v0.9.4)
+> Targets Squad CLI 0.11.0 — CLI commands/scaffolding paths verified against 0.11.0; newer versions work if `squad doctor` reports `0 failed`. Generated app code varies by model/session.
+
+#### Expected output (illustrative for 0.11.0)
 
 ```
 🩺 Squad Doctor
@@ -146,7 +148,7 @@ Mode: local
 ✅  config.json valid — parses as JSON, schema OK
 ✅  team.md found with ## Members header — file present, header found
 ✅  routing.md found — file present
-✅  agents/ directory exists — directory present (2 agents)
+✅  agents/ directory exists — directory present (4 agents)
 ✅  casting/registry.json exists — file present, valid JSON
 ✅  decisions.md exists — file present
 ✅  .github/agents/squad.agent.md — file present (Copilot agent discovery file)
@@ -161,7 +163,7 @@ The two `ℹ️` info lines are not warnings — Squad explicitly tells you they
 
 > The exact `v22.5.0` Node line will show your installed Node version — anything ≥22.5.0 is fine.
 
-> **If you're stuck on v0.9.1:** `squad init` won't scaffold `casting/registry.json` and `squad doctor` will report two warnings instead of info. Either upgrade (`npm install -g @bradygaster/squad-cli@latest`) or check the [CHANGELOG](https://github.com/bradygaster/squad/blob/main/CHANGELOG.md) for your version.
+> **If you're on an older Squad CLI:** upgrade with `npm install -g @bradygaster/squad-cli@latest` (or pin this workshop's target with `npm install -g @bradygaster/squad-cli@0.11.0`). Older versions scaffold fewer built-in agents and may report warnings where 0.11.0 reports info. Check the [CHANGELOG](https://github.com/bradygaster/squad/blob/main/CHANGELOG.md) for your version.
 
 > **If you're on a newer Squad CLI than this workshop targets** (see the version declared at the top of the [README](../README.md)) and the summary numbers differ — different `passed` count, different `info` count — that's expected. Squad CLI adds checks on minor bumps. The signal that matters is **`0 failed`**.
 
@@ -181,7 +183,9 @@ From inside the `reading-list-squad-lab` directory, start the Copilot CLI:
 copilot --agent squad
 ```
 
-You should see the Copilot CLI banner with `GitHub Copilot v1.0.24`, a connected VS Code notification, and a prompt ready for input.
+You should see the Copilot CLI banner showing the installed version (**v1.0.59 or later** is required for this workshop — the banner shows whatever version you have installed), a connected VS Code notification, and a prompt ready for input.
+
+> **First launch — trust the folder.** Copilot CLI 1.0.59+ has a folder-trust gate. The first time you launch `copilot` in the lab repo, do it **interactively** (as above) and trust the folder when prompted. Do this once before any non-interactive, `--yolo`, or automated (`squad watch` / `squad loop`) use — otherwise automation can stall waiting on the trust prompt.
 
 > **Why Copilot CLI and not the VS Code Chat panel?**
 > The Squad README says it directly: *"The interactive shell (squad with no arguments) has been deprecated. For the best Squad experience, use the GitHub Copilot CLI instead."*
@@ -265,7 +269,7 @@ Do you have a PRD or spec document? (file path, paste it, or skip)
 dir .squad/agents/
 ```
 
-You should see directories for each team member. `ralph/` and `scribe/` are scaffolded by `squad init`; the themed directories alongside them are the agents you just cast.
+You should see directories for each team member. `ralph/` and `scribe/` are scaffolded by `squad init` — and on 0.11.0 you'll also see the always-on **Rai** (Responsible-AI reviewer) and **Fact-Checker** built-ins. The themed directories alongside them are the agents you just cast.
 
 > **Tip — add yourself as a human member.** Open `.squad/team.md` and add yourself to the `## Members` table with role `👤 Human — Project Owner` and no charter path (a charter is the per-agent instruction file under `.squad/agents/<name>/` that defines that member's role and behavior — you don't have one). This tells every agent that you are the decision-maker and that notifications/escalations should reach you:
 >
@@ -407,12 +411,12 @@ invalid status values. Add tests for them.
 Scribe, capture any new skills or patterns we should preserve for future work.
 ```
 
-> **Skills** are small reusable markdown modules under `.copilot/skills/` that capture team conventions — `squad init` ships a starter set; Module 2 Step 9.5 inspects them in depth.
+> **Skills** are small reusable markdown modules that capture team conventions — `squad init` ships a starter set (0.11.0 scaffolds ~19 bundled Squad skills under `.github/skills/`); Module 2 Step 9.5 inspects them in depth. (Other Copilot-level skill locations may still use `.copilot/skills/`.)
 
 **What to watch for:**
 - The Lead should give concrete review feedback (not just "looks good")
 - The Tester should find and write tests for edge cases you didn't think of
-- The Scribe should update skills in `.copilot/skills/` or `.squad/identity/wisdom.md`
+- The Scribe should update skills in `.github/skills/` or `.squad/identity/wisdom.md`
 
 **Verify:**
 
@@ -420,8 +424,8 @@ Scribe, capture any new skills or patterns we should preserve for future work.
 # Check for new test files or updated tests
 Get-ChildItem -Recurse -Name -Include *test*,*Test*,*spec* | Where-Object { $_ -notmatch 'node_modules' }
 
-# Check for skills
-Get-ChildItem -Recurse .copilot/skills/
+# Check for bundled Squad skills scaffolded by squad init
+Get-ChildItem -Recurse .github/skills/
 
 # Check wisdom
 Get-Content .squad/identity/wisdom.md

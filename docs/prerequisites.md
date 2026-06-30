@@ -17,8 +17,8 @@ This page is the authoritative prerequisites reference for the Squad Workshop. A
 | Git | any recent | `git --version` | `winget install Git.Git` |
 | GitHub CLI | 2.89.0 | `gh version` | `winget install GitHub.cli` |
 | GitHub CLI auth | logged in | `gh auth status` | `gh auth login` |
-| GitHub Copilot CLI | 1.0.24 | `copilot --version` | `winget install GitHub.Copilot` |
-| Squad CLI | 0.9.4 | `squad --version` | `npm install -g @bradygaster/squad-cli` |
+| GitHub Copilot CLI | 1.0.59 | `copilot --version` | `winget install GitHub.Copilot` |
+| Squad CLI | 0.11.0 | `squad --version` | `npm install -g @bradygaster/squad-cli@0.11.0` |
 | PowerShell 7 | 7.x | `pwsh --version` | bundled with Copilot CLI on Windows; install separately on macOS/Linux |
 
 > **Install Node.js first** — both the Squad CLI and the npm route for the Copilot CLI require Node ≥ 22.5.0.
@@ -93,13 +93,15 @@ gh auth status       # Expected: ✓ Logged in to github.com account <your-usern
 
 ---
 
-### 6. GitHub Copilot CLI (standalone) — 1.0.24 or later
+### 6. GitHub Copilot CLI (standalone) — 1.0.59 or later
 
 This is the standalone `copilot` binary — the primary interface for the workshop — **not** the old `gh copilot` extension and **not** VS Code Chat.
 
 ```powershell
-copilot --version    # Expected: GitHub Copilot CLI 1.0.24 or later
+copilot --version    # Expected: GitHub Copilot CLI 1.0.59 or later
 ```
+
+> **Why 1.0.59?** Squad CLI 0.10.0 needs Copilot CLI ≥ 1.0.54 for its permission contract; Squad 0.11.0 adds a **folder-trust security gate** that needs ≥ 1.0.59. On these versions, Copilot CLI prompts you to **trust a folder** the first time you run it there. Open the lab folder interactively once (`copilot --agent squad` in `reading-list-squad-lab`) and approve the trust prompt **before** any non-interactive, `--yolo`, or automation (Ralph) run — otherwise those runs can appear silently blocked.
 
 - **Windows:** `winget install GitHub.Copilot --accept-source-agreements --accept-package-agreements`
 - **macOS:** `brew install copilot-cli` *(Homebrew formula is `copilot-cli`; the installed binary is `copilot`)* — or `npm install -g @github/copilot` (needs Node 22+)
@@ -110,21 +112,22 @@ copilot --version    # Expected: GitHub Copilot CLI 1.0.24 or later
 
 ---
 
-### 7. Squad CLI — 0.9.4 or later
+### 7. Squad CLI — 0.11.0 or later
 
 ```powershell
-squad --version      # Expected: 0.9.4 or later
+squad --version      # Expected: 0.11.0 or later
 ```
 
 **All OSes** (requires Node 22.5.0+ from §1):
 
 ```powershell
-npm install -g @bradygaster/squad-cli
-# upgrade:
+# Pin the workshop-validated version:
+npm install -g @bradygaster/squad-cli@0.11.0
+# Or take the newest release (forward-compatible; the workshop is written against 0.11.0):
 npm install -g @bradygaster/squad-cli@latest
 ```
 
-> Earlier versions (0.9.1 and below) had two rough edges in `squad doctor` — a missing `casting/registry.json` and noisy false-positive warnings. Both are fixed in 0.9.4, so just upgrade and move on.
+> On an older Squad CLI? Just upgrade with one of the commands above. Older releases had rough edges in `squad doctor` and scaffolding that newer versions resolve. `squad init` on 0.11.0 scaffolds the built-in agents **Scribe, Ralph, Rai** (Responsible-AI reviewer) and **Fact-Checker**.
 
 ---
 

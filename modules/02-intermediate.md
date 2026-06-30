@@ -95,7 +95,7 @@ Get-Content .squad/routing.md
 Get-Content .squad/team.md
 
 # Skills — did anything get captured?
-Get-ChildItem -Recurse .copilot/skills/
+Get-ChildItem -Recurse .github/skills/
 
 # Agent histories — did they learn?
 Get-ChildItem .squad/agents/ -Recurse -Include history.md | ForEach-Object {
@@ -130,12 +130,12 @@ Either outcome is data. The point of inspecting is to know which one you're gett
 
 ## Step 9.5: Skills — extend what the team knows (optional)
 
-Squad agents draw on **skills** — small, portable markdown modules (sometimes with scripts) that encode reusable knowledge: review protocols, test discipline, error recovery, git conventions. You already have some: `squad init` installs a curated set into `.copilot/skills/`. This step makes them visible and asks the only question that matters — do they actually change behavior?
+Squad agents draw on **skills** — small, portable markdown modules (sometimes with scripts) that encode reusable knowledge: review protocols, test discipline, error recovery, git conventions. You already have some: `squad init` scaffolds a curated set into `.github/skills/`. In 0.11.0 that bundled set grew to ~19 skills — including `reviewer-protocol`, `test-discipline`, `error-recovery`, and `reflect`. (Bundled Squad skills scaffolded by `squad init` live under `.github/skills/`; other Copilot-level skill locations may still use `.copilot/skills/`.) This step makes them visible and asks the only question that matters — do they actually change behavior?
 
 ### 9.5a. See what's installed
 
 ```powershell
-Get-ChildItem .copilot/skills/
+Get-ChildItem .github/skills/
 ```
 
 You should see directories such as `squad-conventions`, `reviewer-protocol`, `test-discipline`, `error-recovery`, `git-workflow`, `secret-handling`, `session-recovery`, and `agent-collaboration`. Each is a skill any agent can read and apply.
@@ -145,7 +145,7 @@ You should see directories such as `squad-conventions`, `reviewer-protocol`, `te
 ### 9.5b. Read one — is it real guidance or boilerplate?
 
 ```powershell
-Get-Content .copilot/skills/reviewer-protocol/SKILL.md
+Get-Content .github/skills/reviewer-protocol/SKILL.md
 ```
 
 Read it as if you were the Lead agent about to do a review. Would you actually want this applied — or is it generic filler?
@@ -168,7 +168,7 @@ The community publishes skills in the APM (`owner/repo`) format. You can add one
 squad skill install <owner>/<repo>/<skill-name>
 ```
 
-Tamir Dresher's [`squad-skills`](https://github.com/tamirdresher/squad-skills) marketplace is one source — note it's a community snapshot, not officially maintained, so vendor or fork it if you come to depend on it. Installed skills land under `.copilot/skills/<name>/`.
+Tamir Dresher's [`squad-skills`](https://github.com/tamirdresher/squad-skills) marketplace is one source — note it's a community snapshot, not officially maintained, so vendor or fork it if you come to depend on it. Skills scaffolded by `squad init` land under `.github/skills/<name>/`; marketplace or other Copilot-level installs may land under `.copilot/skills/<name>/`.
 
 ---
 

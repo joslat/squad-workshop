@@ -58,6 +58,6 @@ body:
     id: squad-version
     attributes:
       label: Squad CLI version
-      placeholder: "e.g. 0.9.4"
+      placeholder: "e.g. 0.11.0"
     validations:
       required: false

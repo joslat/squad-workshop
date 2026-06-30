@@ -20,7 +20,7 @@ You know the full content of all three workshop modules (Basic, Intermediate, Ad
 
 Squad CLI (`@bradygaster/squad-cli`) gives a Git repository a resident AI development team. `squad init` scaffolds the team workspace. `copilot --agent squad` is the primary interface — it starts a Copilot CLI session with the Squad agent attached.
 
-The team roles: **Lead** (architecture, review, coordination), **Backend**, **Frontend**, **Tester**, **Scribe** (memory, decisions, logging). Ralph is the polling persona for autonomous mode.
+The team roles: **Lead** (architecture, review, coordination), **Backend**, **Frontend**, **Tester**, **Scribe** (memory, decisions, logging). Squad 0.11.0 also includes always-on built-in agents — **Ralph** (the polling persona for autonomous mode), **Rai** (Responsible-AI reviewer), and **Fact-Checker** — alongside the Scribe.
 
 ### Core commands and what they actually do
 
@@ -41,13 +41,13 @@ The team roles: **Lead** (architecture, review, coordination), **Backend**, **Fr
 3. After any step, the inbox is **empty** — this is correct, not a problem
 4. The merged decision lives in `.squad/decisions.md` — check there, not the inbox
 
-### `squad doctor` expected output on v0.9.4
+### `squad doctor` expected output on v0.11.0
 
 ```
 Summary: 9 passed, 0 failed, 0 warnings, 2 info
 ```
 
-**`0 failed, 0 warnings` is the signal** — that's what tells you the install is healthy. The exact passed/info counts (illustratively 9 passed, 2 info on v0.9.4) can shift between versions and don't matter. The two `ℹ️` info lines about `vscode-jsonrpc` and `copilot-sdk session.js` are expected for global CLI installs. They are **not** warnings. If the summary shows actual warnings, the user is probably on v0.9.1 and needs to upgrade.
+**`0 failed, 0 warnings` is the signal** — that's what tells you the install is healthy. The exact passed/info counts (illustratively 9 passed, 2 info on v0.11.0) can shift between versions and don't matter. The two `ℹ️` info lines about `vscode-jsonrpc` and `copilot-sdk session.js` are expected for global CLI installs. They are **not** warnings. If the summary shows actual warnings, the user is probably on v0.9.1 and needs to upgrade.
 
 ### Key `.squad/` files and what they mean
 
@@ -59,7 +59,7 @@ Summary: 9 passed, 0 failed, 0 warnings, 2 info
 | `.squad/identity/now.md` | Current project focus and active context |
 | `.squad/identity/wisdom.md` | Captured patterns and lessons that should survive to a different project |
 | `.squad/agents/<name>/history.md` | Agent-specific project facts — should be specific, not "I completed the task" |
-| `.copilot/skills/` | Curated skills scaffolded by `squad init` (e.g. reviewer-protocol, test-discipline, error-recovery) that any agent can read and apply — see Module 2 Step 9.5 |
+| `.github/skills/` | Bundled Squad skills scaffolded by `squad init` (~19 in 0.11.0; e.g. reviewer-protocol, test-discipline, error-recovery) that any agent can read and apply — see Module 2 Step 9.5. Other Copilot-level skill locations may still use `.copilot/skills/` |
 
 ### Ralph — what he reads and what he doesn't
 
@@ -153,7 +153,7 @@ If it's thin or generic, the memory is decorative. This is data, not a bug — i
 | 7 | Add filtering + validation — tests whether memory compounds |
 | 8 | Commit and push |
 | 9 | Inspect `.squad/` artifacts — the honest evaluation |
-| 9.5 | Skills — inspect the skills `squad init` installs in `.copilot/skills/`, test whether one changes behavior |
+| 9.5 | Skills — inspect the skills `squad init` installs in `.github/skills/`, test whether one changes behavior |
 
 ### Module 3 — Advanced (optional)
 

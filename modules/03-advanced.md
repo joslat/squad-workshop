@@ -129,7 +129,7 @@ Now switch back to the Aspire dashboard. You should start seeing:
 If the dashboard stays empty after the agent has obviously done work, the most likely causes are:
 
 1. **Aspire wasn't actually running** (see the Docker note above — the `✓` line lies if Docker isn't up).
-2. **Telemetry not auto-wired** — older Squad versions required manual `initSquadTelemetry()` calls. v0.9.0+ auto-wires it, so this is unlikely on 0.9.4 but possible on weird upgrades. Try `squad upgrade` and restart the session.
+2. **Telemetry not auto-wired** — older Squad versions required manual `initSquadTelemetry()` calls. v0.9.0+ auto-wires it, so this is unlikely on 0.11.0 but possible on weird upgrades. Try `squad upgrade` and restart the session.
 3. **Firewall** is blocking `localhost:4317`. Allow it once and move on.
 
 ### 10f. When done, exit both
@@ -209,6 +209,10 @@ Ralph finishes the current round and exits. Delete `ralph-stop` afterward so the
 ### 11d. Run Ralph with execution (fully autonomous)
 
 Now the real thing — Ralph will spawn a Copilot session to actually work on issues he finds.
+
+> **Folder-trust gate (Copilot CLI 1.0.59+).** Squad 0.11.0 requires GitHub Copilot CLI **1.0.59 or newer**, which adds a folder-trust prompt the first time you open a directory. Ralph spawns Copilot **non-interactively** (`--yolo`), and a non-interactive session **cannot answer that prompt** — it will stall or refuse. Fix it once: run `copilot --agent squad` interactively in the lab folder, accept the trust prompt for this directory, then `/quit`. After that, `--yolo`/`--execute`/loop runs work without interruption. Do this before any of the autonomous steps below.
+>
+> **Under rate limits?** Consider `squad economy on` for cost-conscious model selection while Ralph runs unattended — it favours cheaper models, which helps when a long autonomous session would otherwise burn through your quota. Turn it back off with `squad economy off`.
 
 **Pre-flight:**
 

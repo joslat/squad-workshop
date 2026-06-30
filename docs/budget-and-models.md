@@ -1,6 +1,6 @@
 # Budget & Model Tiers
 
-> How to control which model each agent uses, and roughly what a workshop run costs. The **mechanism** here is verified against Squad CLI **v0.9.4**; the model **catalog** changes between releases, so always run `squad config model` to see what your installed version actually offers.
+> How to control which model each agent uses, and roughly what a workshop run costs. The **mechanism** here is verified against Squad CLI **v0.11.0**; the model **catalog** changes between releases, so always run `squad config model` to see what your installed version actually offers.
 
 ← Back to [Workshop Index](../README.md)
 
@@ -34,9 +34,20 @@ Get-Content .squad/config.json
 
 > Run `squad config model` with no model-id **first** — it prints the catalog your installed version supports. Model IDs change between releases, so prefer the list it shows over any hard-coded name. (Hard-coding `claude-opus-4`-style IDs in docs is exactly how older guides go stale.)
 
+## The fast path: `squad economy`
+
+Squad 0.11.0 adds a one-shot, cost-conscious toggle:
+
+```powershell
+squad economy on     # bias the team toward cheaper models
+squad economy off    # return to your normal model selection
+```
+
+`squad economy` is the quick "spend less now" switch — use it when you want to conserve premium requests without hand-tuning per-agent overrides. For precise control (premium only on the Lead, fast on Ralph/Scribe, etc.) keep using `squad config model` as described above; the two work together.
+
 ## Tiers
 
-Squad groups models into three tiers. As of v0.9.4 the catalog has 18+ models; representative examples (confirm the exact IDs with `squad config model`):
+Squad groups models into three tiers. As of v0.11.0 the catalog has 18+ models; representative examples (confirm the exact IDs with `squad config model`):
 
 | Tier | Good for | Examples |
 |---|---|---|
@@ -56,7 +67,7 @@ Squad's source documents this as a **5-layer hierarchy** (`Layer 0` → `Layer 4
 
 So a per-agent override (Layer 0) beats everything; the session `/model` you picked in Module 1 sits at Layer 1.
 
-> Squad ships a `model-selection` skill that documents this in more depth. It is **not** installed by default — `squad init` (v0.9.4) installs only 8 skills, and `model-selection` is not one of them. It ships only upstream in the Squad CLI's `templates/skills/` directory, so read it there (`templates/skills/model-selection/SKILL.md`).
+> Squad ships a `model-selection` skill that documents this in more depth. It is **not** scaffolded into your repo by default — `squad init` (v0.11.0) lays down its bundled skills under `.github/skills/` (~19 of them), and `model-selection` is not one of them. It ships only upstream in the Squad CLI's `templates/skills/` directory, so read it there (`templates/skills/model-selection/SKILL.md`).
 
 ## A sensible tier mix
 

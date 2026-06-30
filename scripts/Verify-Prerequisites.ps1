@@ -116,9 +116,9 @@ $copilotRaw = (copilot --version 2>&1) -join ' '
 $copilotOk  = $false
 if ($copilotRaw -match '(\d+)\.(\d+)\.(\d+)') {
     $major = [int]$Matches[1]; $minor = [int]$Matches[2]; $patch = [int]$Matches[3]
-    $copilotOk = ($major -gt 1) -or ($major -eq 1 -and $minor -gt 0) -or ($major -eq 1 -and $minor -eq 0 -and $patch -ge 24)
+    $copilotOk = ($major -gt 1) -or ($major -eq 1 -and $minor -gt 0) -or ($major -eq 1 -and $minor -eq 0 -and $patch -ge 59)
 }
-$r = Test-Result 'Copilot CLI' $copilotOk ($copilotRaw -join '') '1.0.24+' `
+$r = Test-Result 'Copilot CLI' $copilotOk ($copilotRaw -join '') '1.0.59+' `
     (Get-Fix 'Copilot CLI' 'winget install GitHub.Copilot --accept-source-agreements --accept-package-agreements')
 if ($r.Ok) { $pass++ } else { $fail++ }
 
@@ -128,9 +128,9 @@ $squadRaw = (squad --version 2>&1) -join ' '
 $squadOk  = $false
 if ($squadRaw -match '(\d+)\.(\d+)\.(\d+)') {
     $major = [int]$Matches[1]; $minor = [int]$Matches[2]; $patch = [int]$Matches[3]
-    $squadOk = ($major -gt 0) -or ($minor -gt 9) -or ($minor -eq 9 -and $patch -ge 4)
+    $squadOk = ($major -gt 0) -or ($minor -gt 11) -or ($minor -eq 11 -and $patch -ge 0)
 }
-$r = Test-Result 'Squad CLI' $squadOk ($squadRaw -join '') '0.9.4+' `
+$r = Test-Result 'Squad CLI' $squadOk ($squadRaw -join '') '0.11.0+' `
     'npm install -g @bradygaster/squad-cli@latest'
 if ($r.Ok) { $pass++ } else { $fail++ }
 

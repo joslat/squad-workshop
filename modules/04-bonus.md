@@ -19,7 +19,7 @@
 | B5 | [Cross-machine coordination](#b5--cross-machine-coordination) | You work from a laptop *and* a DevBox/VM | ~10 min read |
 | B6 | [Choosing what to keep on real work](#b6--choosing-what-to-keep-on-real-work) | You finished and want a decision framework | ~5 min read |
 
-> **None of this is on the mainline.** Modules 1–2 are the workshop. Module 3 is the optional tour. This is the appendix — breadth, not depth. Everything here was checked against the shipped `@bradygaster/squad-cli` (v0.9.4); where a command or path is fragile or a pattern is a published *specification* rather than turnkey behavior, the section says so plainly.
+> **None of this is on the mainline.** Modules 1–2 are the workshop. Module 3 is the optional tour. This is the appendix — breadth, not depth. Everything here was checked against the shipped `@bradygaster/squad-cli` (v0.11.0); where a command or path is fragile or a pattern is a published *specification* rather than turnkey behavior, the section says so plainly. (The workshop is pinned to 0.11.0; later releases should be largely compatible, but the appendix hasn't been re-validated end-to-end against them.)
 
 ---
 
@@ -96,13 +96,15 @@ This is the part most write-ups get wrong: **Squad scaffolds no MCP config of it
 
 ### Where the config actually lives
 
-On the current standalone `copilot` CLI, configured MCP servers are stored in a single file:
+As of Squad 0.11.0 and the current `copilot` CLI, MCP servers can be configured in three places — know all three rather than assuming there's only one:
 
 ```
-$HOME/.copilot/mcp-config.json      # overridable via the COPILOT_HOME env var
+.mcp.json                           # project root — canonical per-project MCP config in 0.11.0; commit it to share with your team
+.copilot/mcp-config.json            # project-level — may STILL be emitted for backward compatibility; the CLI continues to read it
+$HOME/.copilot/mcp-config.json      # personal/global — your machine-wide servers (overridable via the COPILOT_HOME env var)
 ```
 
-You can also add a server interactively from a Copilot session with `/mcp add`.
+Project-root `.mcp.json` is the canonical location to add per-project servers in 0.11.0; the older `.copilot/mcp-config.json` may still be written out for compatibility; and `$HOME/.copilot/mcp-config.json` remains the personal, machine-wide location. You can also add a server interactively from a Copilot session with `/mcp add`.
 
 > **Correction to older notes:** there is **no `.vscode/mcp.json`** for the standalone CLI — that path is VS Code's MCP convention, not the CLI's. (The Copilot CLI does read a per-project file for *LSP* at `.github/lsp.json`, but not for MCP.)
 
@@ -275,7 +277,7 @@ Squad's dual-root resolver then finds the team identity in `teamRoot` while you 
 
 ### The specified pattern: the cross-machine task queue
 
-Squad ships a **`cross-machine-coordination` skill** (installed into `.copilot/skills/` by `squad init`) describing a Git-based task queue: a machine drops a YAML task file under `.squad/cross-machine/tasks/`, commits and pushes; Ralph on the target machine pulls it, validates it against a command whitelist, executes it, and writes a result under `.squad/cross-machine/results/`. A task file looks like:
+Squad ships a **`cross-machine-coordination` skill** (installed into `.github/skills/` by `squad init`) describing a Git-based task queue: a machine drops a YAML task file under `.squad/cross-machine/tasks/`, commits and pushes; Ralph on the target machine pulls it, validates it against a command whitelist, executes it, and writes a result under `.squad/cross-machine/results/`. A task file looks like:
 
 ```yaml
 # .squad/cross-machine/tasks/2026-03-14T1530Z-laptop-gpu-001.yaml
@@ -333,7 +335,7 @@ Whether to keep Squad is now a judgement you can make with evidence instead of m
 
 - [Squad documentation](https://bradygaster.github.io/squad/) — official guides and the command reference
 - [Squad cookbook — recipes](https://bradygaster.github.io/squad/docs/cookbook/recipes) — loop and triage patterns
-- [GitHub Copilot CLI docs](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/use-copilot-cli) — the authoritative source for MCP config (`$HOME/.copilot/mcp-config.json`)
+- [GitHub Copilot CLI docs](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/use-copilot-cli) — the authoritative source for MCP config (project-root `.mcp.json`, with `.copilot/mcp-config.json` and `$HOME/.copilot/mcp-config.json` still read for compatibility/global use)
 - [tamirdresher/squad-skills](https://github.com/tamirdresher/squad-skills) — the companion workshop these topics draw on (pin to a commit; it targets an older Squad)
 - [Open issues on bradygaster/squad](https://github.com/bradygaster/squad/issues) — current known bugs and feature proposals
 

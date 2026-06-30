@@ -6,11 +6,11 @@
 
 > Workshop: assemble your AI dev team with Squad and ship a full-stack app in minutes.
 
-> **Targets Squad CLI `0.9.4`.** Newer Squad CLI versions should work — if `squad doctor` reports `0 failed`, you're fine even if the `passed` / `info` counts differ from what the workshop shows. The minimums for every other tool are in the [prerequisites table](#prerequisites) below.
+> **Targets Squad CLI `0.11.0`** — CLI commands and scaffolding paths are verified against 0.11.0; newer versions should work if `squad doctor` reports `0 failed` (even if the `passed` / `info` counts differ from what the workshop shows). The generated app's code can vary by model/session. The minimums for every other tool are in the [prerequisites table](#prerequisites) below.
 
 You've used AI assistants. You've pasted context fifty times. You've re-explained the architecture to a new chat window.
 
-**Squad is different.** It gives your repo a resident team — Lead, Backend Engineer, Frontend Engineer, Tester — with persistent memory, specialist roles, and a routing layer that sends work to the right agent automatically. One session, real decisions, compounding context.
+**Squad is different.** It gives your repo a resident team — Lead, Backend Engineer, Frontend Engineer, Tester — plus always-on built-ins (Scribe, Ralph, Rai for Responsible-AI review, and Fact-Checker) — with persistent memory, specialist roles, and a routing layer that sends work to the right agent automatically. One session, real decisions, compounding context.
 
 This workshop is the fastest honest way to find out whether it actually changes how you work. You build a real .NET 10 + React app from scratch using the team, record architectural decisions through them, run a regression-aware second feature, and — if you want to go further — observe live telemetry with .NET Aspire and hand autonomous issue triage to Ralph.
 
@@ -55,8 +55,8 @@ The app is a vehicle. The point is to experience the team model, not to ship the
 | Git | any recent | `git --version` |
 | GitHub CLI | 2.89.0 | `gh version` |
 | GitHub CLI auth | logged in | `gh auth status` |
-| GitHub Copilot CLI | 1.0.24 | `copilot --version` |
-| Squad CLI | 0.9.4 | `squad --version` |
+| GitHub Copilot CLI | 1.0.59 | `copilot --version` |
+| Squad CLI | 0.11.0 | `squad --version` |
 | PowerShell 7 | 7.x | `pwsh --version` |
 
 See [docs/prerequisites.md](docs/prerequisites.md) for full install instructions and version-specific troubleshooting.

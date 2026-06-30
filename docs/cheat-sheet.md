@@ -1,6 +1,6 @@
 # Squad — Quick Reference Cheat Sheet
 
-> A compact list of the most useful prompt patterns and CLI commands from this workshop. Print it, tape it, come back to it after the workshop. Commands verified against Squad CLI **v0.9.4**.
+> A compact list of the most useful prompt patterns and CLI commands from this workshop. Print it, tape it, come back to it after the workshop. Commands verified against Squad CLI **v0.11.0**.
 
 ← Back to [Workshop Index](../README.md)
 
@@ -35,6 +35,8 @@
 | `squad loop --init` | Create a starter `./loop.md` at the repo root |
 | `squad loop` | Run the `./loop.md` prompt on a schedule (fire-and-forget — no chat) |
 | `squad aspire` | Launch the .NET Aspire OTLP dashboard (requires Docker running, or the .NET Aspire workload) |
+| `squad config model` | Show / set the model for the team (writes `.squad/config.json`) — see [budget-and-models.md](budget-and-models.md) |
+| `squad economy [on\|off]` | One-shot cost-saving toggle — biases the team toward cheaper models |
 | `squad copilot` | Add GitHub's `@copilot` coding agent to the team |
 
 > Stop Ralph cleanly: `New-Item -Path .squad/ralph-stop -ItemType File` (he exits after the current round); delete that file before the next run. `Ctrl+C` also stops the watch loop.

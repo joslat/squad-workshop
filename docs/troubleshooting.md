@@ -46,16 +46,16 @@ If `where.exe` finds it but `Get-Command` doesn't, your `$env:PATH` in the curre
 
 ---
 
-### `squad doctor` reports warnings on version 0.9.1
+### `squad doctor` reports warnings
 
-**Symptom (v0.9.1 only):**
+**Symptom:**
 
 ```
 ⚠️  casting/registry.json missing
 ⚠️  <some other warning>
 ```
 
-**Cause:** `squad init` in v0.9.1 doesn't scaffold `casting/registry.json`. Both warnings are false positives fixed in v0.9.4.
+**Cause:** An older `squad init` didn't scaffold everything `squad doctor` expects (for example `casting/registry.json`), producing false-positive warnings. Newer releases fix this.
 
 **Fix:**
 
@@ -63,7 +63,24 @@ If `where.exe` finds it but `Get-Command` doesn't, your `$env:PATH` in the curre
 npm install -g @bradygaster/squad-cli@latest
 ```
 
-Re-run `squad doctor` — you should see `9 passed, 0 failed, 0 warnings, 2 info`.
+Re-run `squad doctor`. The invariant that matters is **`0 failed`** (ideally `0 warnings`) — the exact `passed`/`info` counts vary by version, so don't treat them as must-match. A healthy 0.11.0 global install looks like `9 passed, 0 failed, 0 warnings, 2 info` (the 2 `info` lines about `vscode-jsonrpc` / `copilot-sdk session.js` are expected for global installs).
+
+---
+
+### Non-interactive / automation runs appear blocked (folder-trust gate)
+
+**Symptom:** A `--yolo`, scripted, or Ralph (`squad watch` / `squad loop`) run against the lab folder seems to do nothing, hang, or exit without progress — even though the same work succeeds interactively.
+
+**Cause:** GitHub Copilot CLI 1.0.59+ adds a **folder-trust security gate**. The first time you use Copilot CLI in a folder it asks you to trust it. Non-interactive and automation runs can't answer that prompt, so they stall or back off.
+
+**Fix:** Launch Copilot CLI interactively in the lab folder once and approve the trust prompt, then re-run your automation:
+
+```powershell
+cd reading-list-squad-lab
+copilot --agent squad     # approve the "trust this folder" prompt, then /quit
+```
+
+After the folder is trusted, non-interactive / `--yolo` / Ralph runs proceed normally.
 
 ---
 

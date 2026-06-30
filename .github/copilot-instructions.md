@@ -21,7 +21,7 @@ The lab repo created *during* the workshop is called **`reading-list-squad-lab`*
 ## Key Squad concepts
 
 ### Team model
-`squad init` scaffolds a resident team in `.squad/` and `.github/`. Each team member is an AI agent with a role, a name from a thematic cast, and persistent memory. The `copilot --agent squad` CLI invokes the whole system.
+`squad init` scaffolds a resident team in `.squad/` and `.github/`. Each team member is an AI agent with a role, a name from a thematic cast, and persistent memory. The `copilot --agent squad` CLI invokes the whole system. Squad 0.11.0 also scaffolds always-on built-in agents — **Scribe**, **Ralph**, **Rai** (Responsible-AI reviewer), and **Fact-Checker** — in addition to the specialist roles (Lead, Backend, Frontend, Tester).
 
 ### Core commands
 | Command | What it does |
@@ -41,7 +41,7 @@ Agents write draft decisions to `.squad/decisions/inbox/<agent>-<topic>.md`. The
 Ralph is the name for Squad's polling persona (`squad watch` / `squad loop`). He reads GitHub Issues as his queue. He does **not** read chat history, scan TODO comments, or invent work. To stop Ralph cleanly: `New-Item -Path .squad/ralph-stop -ItemType File`. Delete that file before the next run.
 
 ### `squad doctor` healthy output
-The signal that matters is **`0 failed, 0 warnings`** — the `passed` / `info` counts vary by Squad CLI version and aren't something to match exactly. For example, on v0.9.4 a healthy run looks like:
+The signal that matters is **`0 failed, 0 warnings`** — the `passed` / `info` counts vary by Squad CLI version and aren't something to match exactly. For example, on v0.11.0 a healthy run looks like:
 ```
 Summary: 9 passed, 0 failed, 0 warnings, 2 info
 ```
@@ -68,8 +68,8 @@ The 2 `ℹ️` info lines about `vscode-jsonrpc` and `copilot-sdk session.js` ar
 | Node.js | 22.5.0 |
 | .NET SDK | 10.0.0 |
 | GitHub CLI | 2.89.0 |
-| GitHub Copilot CLI | 1.0.24 |
-| Squad CLI | 0.9.4 |
+| GitHub Copilot CLI | 1.0.59 |
+| Squad CLI | 0.11.0 |
 
 ---
 
@@ -79,7 +79,7 @@ The 2 `ℹ️` info lines about `vscode-jsonrpc` and `copilot-sdk session.js` ar
 - **"I'm stuck on step N of module M"** → Help them diagnose by asking for the exact error output and their tool versions from `./scripts/Verify-Prerequisites.ps1`. Check `docs/troubleshooting.md` for known patterns.
 - **"Why is the Aspire dashboard empty?"** → Three causes: Docker not running (most common — `✓ lies when Docker is down`), Squad version too old, or firewall blocking `localhost:4317`.
 - **"The inbox under `.squad/decisions/inbox/` is empty"** → This is correct. The Scribe merged the decision into `.squad/decisions.md`.
-- **"squad doctor shows warnings"** → If on v0.9.1, upgrade with `npm install -g @bradygaster/squad-cli@latest`. If on v0.9.4+ and still seeing warnings (not info), paste the full output.
+- **"squad doctor shows warnings"** → If on v0.9.1, upgrade with `npm install -g @bradygaster/squad-cli@latest`. If on v0.11.0+ and still seeing warnings (not info), paste the full output.
 - **"Should I use the coach agent?"** → Yes. Run `./scripts/Install-WorkshopAgents.ps1` once from the workshop repo root to install the coach into the lab repo's `.github/agents/`, then `copilot --agent squad-coach` from inside `reading-list-squad-lab` gives step-by-step help and Squad expertise on demand.
 
 ---
