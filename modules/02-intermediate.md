@@ -126,6 +126,8 @@ Get-Content .squad/identity/wisdom.md
 
 Either outcome is data. The point of inspecting is to know which one you're getting *before* you decide whether to use Squad on real work.
 
+> **Keep the memory lean as it grows — `squad nap`.** The flip side of compounding memory is that `.squad/` state (decisions, histories, logs) keeps growing. `squad nap` is Squad's context-hygiene command: it compresses, prunes, and archives that state so agents aren't dragged down by stale context. Run `squad nap --dry-run` to preview what it would trim, then `squad nap` (or `squad nap --deep` for a thorough pass that touches older history) to apply it. Reach for it whenever the inspection above starts turning up bloated, low-signal files.
+
 ---
 
 ## Step 9.5: Skills — extend what the team knows (optional)

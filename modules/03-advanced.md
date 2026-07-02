@@ -213,6 +213,8 @@ Now the real thing — Ralph will spawn a Copilot session to actually work on is
 > **Folder-trust gate (Copilot CLI 1.0.59+).** Squad 0.11.0 requires GitHub Copilot CLI **1.0.59 or newer**, which adds a folder-trust prompt the first time you open a directory. Ralph spawns Copilot **non-interactively** (`--yolo`), and a non-interactive session **cannot answer that prompt** — it will stall or refuse. Fix it once: run `copilot --agent squad` interactively in the lab folder, accept the trust prompt for this directory, then `/quit`. After that, `--yolo`/`--execute`/loop runs work without interruption. Do this before any of the autonomous steps below.
 >
 > **Under rate limits?** Consider `squad economy on` for cost-conscious model selection while Ralph runs unattended — it favours cheaper models, which helps when a long autonomous session would otherwise burn through your quota. Turn it back off with `squad economy off`.
+>
+> **Check the spend afterward — `squad cost`.** Once Ralph has done a few rounds, `squad cost` reports token usage pulled from the orchestration logs (`--all` for every logged session, `--agent <name>` to focus one specialist). It's the natural companion to `squad economy`: `economy` biases the spend down, `cost` shows you where the budget actually went.
 
 **Pre-flight:**
 
@@ -230,6 +232,8 @@ squad watch --execute --interval 5 `
   --timeout 20 `
   --log-file ./ralph.log
 ```
+
+> **0.11.0 adds opt-in Ralph capabilities.** Beyond the core flags above, `triage`/`watch` expose an opt-in capabilities layer — enable per-run with `--<name>` or in `.squad/config.json`, disable with `--no-<name>`: `--self-pull` (git fetch/pull each round), `--board` (project-board lifecycle, with `--board-project N`), `--two-pass` (list then hydrate), `--wave-dispatch` (wave-based parallel dispatch), `--monitor-teams`, `--monitor-email`, `--retro`, and `--decision-hygiene` (auto-merge the decision inbox). You don't need any of these for this workshop — run `squad triage --help` for the full list.
 
 > **Known limitation — specialists don't act like specialists in `--execute` mode** (upstream [issue #1081](https://github.com/bradygaster/squad/issues/1081), closed — routing behaviour is by design): When Ralph spawns a session for a `squad:bishop`-labeled issue, the spawned agent receives a **generic Ralph prompt**, not Bishop's actual charter. The `squad:{member}` label is used only as a routing filter — it is never injected into the spawn prompt as a role assignment. The spawned agent has no specialist knowledge of who it's supposed to be. For quality specialist work, use interactive `copilot --agent squad` sessions instead. `--execute` is most useful for small, well-defined tasks where specialist nuance doesn't matter much.
 

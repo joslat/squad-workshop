@@ -15,6 +15,8 @@ The workshop content was bumped from **Squad CLI 0.9.4 → 0.11.0** (commit `b9f
 
 Nothing here is a blocker. The gaps are prioritized below.
 
+> **Update (2026-07-02): all six gaps below (G1–G6) have been applied to the workshop content** in the same pass that produced this document. Each gap heading is annotated with its resolution. See the priority table in §4 for the file-by-file summary.
+
 ---
 
 ## 2. Verified correct on 0.11.0 (no action needed)
@@ -33,7 +35,7 @@ Nothing here is a blocker. The gaps are prioritized below.
 
 ## 3. Gaps & issues
 
-### G1 — `squad doctor` "0 warnings" invariant is too strict on 0.11.0  · **Medium**
+### G1 — `squad doctor` "0 warnings" invariant is too strict on 0.11.0  · **Medium** · ✅ Resolved
 
 **Where:** `modules/01-basic.md` (doctor step), `docs/troubleshooting.md`, `docs/cheat-sheet.md`.
 
@@ -51,7 +53,7 @@ This fires whenever `copilot` isn't on `PATH` in the shell running `doctor` (com
 
 ---
 
-### G2 — 0.11.0 commands that reinforce the workshop's own themes are untaught  · **Medium**
+### G2 — 0.11.0 commands that reinforce the workshop's own themes are untaught  · **Medium** · ✅ Resolved
 
 **Where:** `docs/cheat-sheet.md`, `modules/02-intermediate.md` (memory theme), `modules/03-advanced.md` (budget/economy theme).
 
@@ -69,7 +71,7 @@ This fires whenever `copilot` isn't on `PATH` in the shell running `doctor` (com
 
 ---
 
-### G3 — Module 3 omits 0.11.0 `triage`/`watch` opt-in capability flags  · **Low–Medium**
+### G3 — Module 3 omits 0.11.0 `triage`/`watch` opt-in capability flags  · **Low–Medium** · ✅ Resolved
 
 **Where:** `modules/03-advanced.md` (Ralph / `squad watch --execute` sections).
 
@@ -86,7 +88,7 @@ Plus `--copilot-flags "…"` and `--log-file <path>`. None are mentioned, so a l
 
 ---
 
-### G4 — `squad init` flag surface expanded; lab-relevant flags unmentioned  · **Low**
+### G4 — `squad init` flag surface expanded; lab-relevant flags unmentioned  · **Low** · ✅ Resolved
 
 **Where:** `modules/01-basic.md` Step 0 (init).
 
@@ -96,7 +98,7 @@ Plus `--copilot-flags "…"` and `--log-file <path>`. None are mentioned, so a l
 
 ---
 
-### G5 — Large advanced 0.11.0 surface entirely outside the workshop  · **Low (scope)**
+### G5 — Large advanced 0.11.0 surface entirely outside the workshop  · **Low (scope)** · ✅ Resolved
 
 **Where:** would be a new appendix in `modules/04-bonus.md`.
 
@@ -106,7 +108,7 @@ Plus `--copilot-flags "…"` and `--log-file <path>`. None are mentioned, so a l
 
 ---
 
-### G6 — Historical maintainer docs still read as "current, target v0.9.4"  · **Low (housekeeping)**
+### G6 — Historical maintainer docs still read as "current, target v0.9.4"  · **Low (housekeeping)** · ✅ Resolved
 
 **Where:** `docs/maintainers/01`, `02`, `03`.
 
@@ -118,14 +120,14 @@ Plus `--copilot-flags "…"` and `--log-file <path>`. None are mentioned, so a l
 
 ## 4. Priority & suggested order
 
-| # | Gap | Severity | Effort | Recommendation |
-|---|-----|----------|--------|----------------|
-| G1 | doctor "0 warnings" too strict | Medium | S | **Do first** — directly causes false "I failed" moments |
-| G2 | `nap` / `cost` / `status` untaught | Medium | S | **Do** — reinforces existing themes cheaply |
-| G3 | Module 3 capability flags | Low–Med | S | Do — one note + `--help` pointer |
-| G4 | `init` flags (`--no-workflows`, presets) | Low | S | Optional |
-| G5 | advanced-surface appendix | Low | M | Optional — nice orientation |
-| G6 | maintainer-doc banners | Low | XS | Optional housekeeping |
+| # | Gap | Severity | Effort | Status |
+|---|-----|----------|--------|--------|
+| G1 | doctor "0 warnings" too strict | Medium | S | ✅ Applied — reframed hard gate to `0 failed` + benign-warning note in `modules/01-basic.md`, `docs/troubleshooting.md`, `.github/copilot-instructions.md` |
+| G2 | `nap` / `cost` / `status` untaught | Medium | S | ✅ Applied — cheat-sheet rows + `nap` callout in Module 2, `cost` callout in Module 3 |
+| G3 | Module 3 capability flags | Low–Med | S | ✅ Applied — opt-in capabilities note + `squad triage --help` pointer |
+| G4 | `init` flags (`--no-workflows`, presets) | Low | S | ✅ Applied — flags aside at Module 1 Step 0d |
+| G5 | advanced-surface appendix | Low | M | ✅ Applied — "Beyond this workshop" appendix in Module 4 |
+| G6 | maintainer-doc banners | Low | XS | ✅ Applied — superseded banners on docs `01`/`02`/`03` |
 
 ## 5. Maintainer notes (precision, not errors)
 

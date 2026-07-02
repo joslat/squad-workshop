@@ -63,7 +63,7 @@ If `where.exe` finds it but `Get-Command` doesn't, your `$env:PATH` in the curre
 npm install -g @bradygaster/squad-cli@latest
 ```
 
-Re-run `squad doctor`. The invariant that matters is **`0 failed`** (ideally `0 warnings`) — the exact `passed`/`info` counts vary by version, so don't treat them as must-match. A healthy 0.11.0 global install looks like `9 passed, 0 failed, 0 warnings, 2 info` (the 2 `info` lines about `vscode-jsonrpc` / `copilot-sdk session.js` are expected for global installs).
+Re-run `squad doctor`. The invariant that matters is **`0 failed`** — the exact `passed`/`info` counts vary by version, so don't treat them as must-match. A healthy 0.11.0 global install looks like `9 passed, 0 failed, 0 warnings, 2 info` (the 2 `info` lines about `vscode-jsonrpc` / `copilot-sdk session.js` are expected for global installs). **A single ⚠️ warning about "Copilot CLI available — 'copilot --version' failed" is environmental, not a failure** — it fires when the `copilot` binary isn't on `PATH` in the shell running `doctor`. If `copilot --version` works in your interactive shell, ignore it; the hard gate is `0 failed`.
 
 ---
 

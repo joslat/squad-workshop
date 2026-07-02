@@ -37,6 +37,9 @@
 | `squad aspire` | Launch the .NET Aspire OTLP dashboard (requires Docker running, or the .NET Aspire workload) |
 | `squad config model` | Show / set the model for the team (writes `.squad/config.json`) — see [budget-and-models.md](budget-and-models.md) |
 | `squad economy [on\|off]` | One-shot cost-saving toggle — biases the team toward cheaper models |
+| `squad cost` | Report token usage from the orchestration logs (`--all` = every session, `--agent <name>` = one specialist) |
+| `squad nap` | Context hygiene — compress / prune / archive `.squad/` state as it grows (`--deep`, `--dry-run`) |
+| `squad status` | Show which squad is active and why (resolved dir, repo-vs-global reason, personal-squad path) |
 | `squad copilot` | Add GitHub's `@copilot` coding agent to the team |
 
 > Stop Ralph cleanly: `New-Item -Path .squad/ralph-stop -ItemType File` (he exits after the current round); delete that file before the next run. `Ctrl+C` also stops the watch loop.

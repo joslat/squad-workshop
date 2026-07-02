@@ -41,11 +41,11 @@ Agents write draft decisions to `.squad/decisions/inbox/<agent>-<topic>.md`. The
 Ralph is the name for Squad's polling persona (`squad watch` / `squad loop`). He reads GitHub Issues as his queue. He does **not** read chat history, scan TODO comments, or invent work. To stop Ralph cleanly: `New-Item -Path .squad/ralph-stop -ItemType File`. Delete that file before the next run.
 
 ### `squad doctor` healthy output
-The signal that matters is **`0 failed, 0 warnings`** — the `passed` / `info` counts vary by Squad CLI version and aren't something to match exactly. For example, on v0.11.0 a healthy run looks like:
+The hard gate is **`0 failed`** — the `passed` / `warnings` / `info` counts vary by Squad CLI version and aren't something to match exactly. For example, on v0.11.0 a healthy run looks like:
 ```
 Summary: 9 passed, 0 failed, 0 warnings, 2 info
 ```
-The 2 `ℹ️` info lines about `vscode-jsonrpc` and `copilot-sdk session.js` are **expected** for global CLI installs — not warnings.
+The 2 `ℹ️` info lines about `vscode-jsonrpc` and `copilot-sdk session.js` are **expected** for global CLI installs — not warnings. Note that 0.11.0 can also emit **one ⚠️ warning** — *"Copilot CLI available — 'copilot --version' failed"* — when the `copilot` binary isn't on `PATH` in the shell running `doctor`. That warning is environmental, not a failure: if `copilot --version` works in the learner's interactive shell, it's benign. Don't treat `0 warnings` as the pass condition; `0 failed` is.
 
 ---
 
@@ -79,7 +79,7 @@ The 2 `ℹ️` info lines about `vscode-jsonrpc` and `copilot-sdk session.js` ar
 - **"I'm stuck on step N of module M"** → Help them diagnose by asking for the exact error output and their tool versions from `./scripts/Verify-Prerequisites.ps1`. Check `docs/troubleshooting.md` for known patterns.
 - **"Why is the Aspire dashboard empty?"** → Three causes: Docker not running (most common — `✓ lies when Docker is down`), Squad version too old, or firewall blocking `localhost:4317`.
 - **"The inbox under `.squad/decisions/inbox/` is empty"** → This is correct. The Scribe merged the decision into `.squad/decisions.md`.
-- **"squad doctor shows warnings"** → If on v0.9.1, upgrade with `npm install -g @bradygaster/squad-cli@latest`. If on v0.11.0+ and still seeing warnings (not info), paste the full output.
+- **"squad doctor shows warnings"** → The hard gate is `0 failed`, not `0 warnings`. A single ⚠️ *"Copilot CLI available — 'copilot --version' failed"* is environmental (the `copilot` binary isn't on `PATH` in that shell) — benign if `copilot --version` works interactively. If on an old version, upgrade with `npm install -g @bradygaster/squad-cli@latest`. If on v0.11.0+ and seeing other failures, paste the full output.
 - **"Should I use the coach agent?"** → Yes. Run `./scripts/Install-WorkshopAgents.ps1` once from the workshop repo root to install the coach into the lab repo's `.github/agents/`, then `copilot --agent squad-coach` from inside `reading-list-squad-lab` gives step-by-step help and Squad expertise on demand.
 
 ---

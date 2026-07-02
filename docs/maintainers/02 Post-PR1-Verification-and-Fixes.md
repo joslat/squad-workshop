@@ -1,5 +1,7 @@
 # Post-PR #1 — Verification & Fix Checklist
 
+> ⚠️ **Superseded for version target — see [`04 Squad-0.11.0-Modernization-Review.md`](<04 Squad-0.11.0-Modernization-Review.md>).** This document targets **Squad CLI v0.9.4** and is retained as a historical record. Doc `04` is the current source of truth for the **0.11.0** target.
+
 > **Document type:** Post-merge verification log + actionable fix inventory
 > **Created:** 2026-05-30 · **Last verified:** 2026-05-30 (exhaustive, binary-level)
 > **Author:** Claude (independent verification against the live Squad CLI source **and the published npm binaries**)

@@ -1,5 +1,7 @@
 # Earlier Workshop Review & Adoption Plan
 
+> ⚠️ **Superseded for version target — see [`04 Squad-0.11.0-Modernization-Review.md`](<04 Squad-0.11.0-Modernization-Review.md>).** This document targets **Squad CLI v0.9.4** and is retained as a historical record of the 0.9.4-era review. Doc `04` is the current source of truth for the **0.11.0** target.
+
 > **Document type:** External-workshop analysis + adoption proposal
 > **Review date:** 2026-05-28
 > **Reviewer:** Claude

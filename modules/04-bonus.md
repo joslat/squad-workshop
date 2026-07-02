@@ -331,6 +331,26 @@ Whether to keep Squad is now a judgement you can make with evidence instead of m
 
 ---
 
+## Beyond this workshop — what else Squad 0.11.0 can do
+
+This workshop exercises the core loop: `init` · `doctor` · interactive `copilot --agent squad` sessions · `watch`/`loop` · `aspire` · `economy` · `@copilot`. Squad 0.11.0 ships a much larger surface you can explore on your own — run `squad --help` for the authoritative list. A quick map of what's out there:
+
+| Area | Commands | What it's for |
+|---|---|---|
+| **Context hygiene** | `squad nap` | Compress / prune / archive `.squad/` state as it grows (`--deep`, `--dry-run`) |
+| **Cost & orientation** | `squad cost`, `squad status` | Token-usage report from orchestration logs; show which squad is active and why |
+| **Cross-squad orchestration** | `squad discover`, `delegate`, `registry`, `upstream` | Route work between independent squads across repos |
+| **External state** | `squad externalize`, `internalize`, `link`, `init-remote` | Move `.squad/` state to an external root, or share one team across machines |
+| **Personal / ambient squad** | `squad personal`, `consult`, `extract` | A private, project-independent squad that advises in read-only "ghost" mode |
+| **Scaling & remote** | `squad subsquads`, `start`, `rc`, `copilot-bridge` | Multi-Codespace scaling and remote control (some remote-control paths are deprecated — see B5 above) |
+| **SDK & backends** | `squad build`, `migrate`, `sync`, `init --sdk`, `--state-backend` | SDK-first (`squad.config.ts`) authoring and alternate state backends |
+| **Portability** | `squad export`, `import`, `preset`, `roles`, `cast` / `hire` | Move teams between repos, apply curated presets, seed base roles, add members |
+| **Governed memory** | `squad memory`, `state-mcp`, `scrub-emails` | Class-based memory writes, an MCP state server, and PII scrubbing |
+
+None of these are required for the workshop — but knowing they exist tells you how far Squad scales past a 3-hour intro. If you try three, make them `squad nap` (keep state lean), `squad cost` (see the spend), and `squad status` (know which squad you're in).
+
+---
+
 ## Learn more
 
 - [Squad documentation](https://bradygaster.github.io/squad/) — official guides and the command reference

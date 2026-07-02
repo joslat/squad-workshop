@@ -1,5 +1,7 @@
 # Squad Workshop — End-to-End Review & Analysis
 
+> ⚠️ **Superseded for version target — see [`04 Squad-0.11.0-Modernization-Review.md`](<04 Squad-0.11.0-Modernization-Review.md>).** This document targets **Squad CLI v0.9.4** and is retained as a historical record. Doc `04` is the current source of truth for the **0.11.0** target.
+
 > **Document type:** Full pedagogical + technical review of the entire workshop
 > **Review date:** 2026-05-30
 > **Reviewer:** Claude (5-lens multi-agent review: pedagogy/flow, entry-docs, module CLI accuracy, supporting agents/prompts, scripts/CI/config)

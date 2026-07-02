@@ -116,6 +116,8 @@ squad init
 
 **Expected output:** A list of created files under `.squad/`, `.github/`, and `.copilot/`, ending with `Your team is ready. Run squad to start.`
 
+> **Handy `init` flags (0.11.0).** Plain `squad init` is all this workshop needs, but for a throwaway lab repo with no CI you may prefer `squad init --no-workflows` (skips the GitHub Actions files). Other options worth knowing: `--preset <name>` applies a curated agent collection (see `squad preset list`), `--roles` seeds the built-in base roles, `--sdk` scaffolds SDK-builder syntax (`squad.config.ts`), and `--state-backend local|orphan|two-layer` selects where `.squad/` state lives. Run `squad init --help` for the full list.
+
 > **Note on Squad's "Run squad to start" line:** ignore it. The interactive `squad` shell is deprecated. Use `copilot --agent squad` as shown in Step 1 below.
 
 ### 0e. Commit the Squad scaffolding
@@ -132,7 +134,9 @@ git push
 squad doctor
 ```
 
-**What success looks like:** the invariant is **`0 failed`** (ideally **`0 warnings`** too) — the exact `passed` / `info` counts vary by Squad CLI version and aren't something to match. Note that 0.11.0's `squad init` now also scaffolds the **Rai** (Responsible-AI reviewer) and **Fact-Checker** built-ins alongside Scribe and Ralph, so the agent count in doctor output is higher than on older versions — don't try to match an exact number. No manual fixes needed.
+**What success looks like:** the invariant that matters is **`0 failed`** — the exact `passed` / `info` counts vary by Squad CLI version and aren't something to match. Note that 0.11.0's `squad init` now also scaffolds the **Rai** (Responsible-AI reviewer) and **Fact-Checker** built-ins alongside Scribe and Ralph, so the agent count in doctor output is higher than on older versions — don't try to match an exact number. No manual fixes needed.
+
+> **One ⚠️ warning can be environmental, not a failure.** 0.11.0's doctor added a check that warns *"Copilot CLI available — 'copilot --version' failed — watch capabilities … require the Copilot CLI"* whenever the `copilot` binary isn't resolvable on `PATH` **in the shell running `doctor`** (common in non-interactive shells or Copilot-as-a-`gh`-extension installs). If `copilot --version` works in your normal interactive shell, that warning is benign — ignore it. The hard gate is **`0 failed`**, not `0 warnings`.
 
 > Targets Squad CLI 0.11.0 — CLI commands/scaffolding paths verified against 0.11.0; newer versions work if `squad doctor` reports `0 failed`. Generated app code varies by model/session.
 
