@@ -4,6 +4,7 @@
 > **Reviewer:** Automated modernization pass (Copilot CLI)
 > **Method:** Every claim below verified against the **installed `@bradygaster/squad-cli@0.11.0`** binary on this machine (Node 22.22.2, .NET 10.0.102, gh 2.93.0, Copilot CLI 1.0.66). CLI surface captured via `squad --help`, `squad <cmd> --help`, `squad roles`, and a real `squad init --no-workflows` in a throwaday repo. Bundled `CHANGELOG.md` (top entry `0.10.0`) and `templates/skills/` read directly from the global install.
 > **Supersedes (for version target only):** docs `01`–`03`, which target **v0.9.4**. Those remain valid as historical records of the 0.9.4-era review; this document is the current source of truth for the **0.11.0** target.
+> **See also:** [`../versions/0.11.0.md`](../versions/0.11.0.md) — per-release notes, breaking changes, and a 0.11.0-specific workshop coverage audit.
 
 ---
 

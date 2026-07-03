@@ -116,7 +116,7 @@ squad init
 
 **Expected output:** A list of created files under `.squad/`, `.github/`, and `.copilot/`, ending with `Your team is ready. Run squad to start.`
 
-> **Handy `init` flags (0.11.0).** Plain `squad init` is all this workshop needs, but for a throwaway lab repo with no CI you may prefer `squad init --no-workflows` (skips the GitHub Actions files). Other options worth knowing: `--preset <name>` applies a curated agent collection (see `squad preset list`), `--roles` seeds the built-in base roles, `--sdk` scaffolds SDK-builder syntax (`squad.config.ts`), and `--state-backend local|orphan|two-layer` selects where `.squad/` state lives. Run `squad init --help` for the full list.
+> **Handy `init` flags (0.11.0).** Plain `squad init` is all this workshop needs, but for a throwaway lab repo with no CI you may prefer `squad init --no-workflows` (skips the GitHub Actions files). Other options worth knowing: `--preset <name>` applies a curated agent collection (browse with `squad preset list`, apply an existing one with `squad preset apply <name>`, or pull a shared one from GitHub/local with `squad preset install <source>`), `--roles` seeds the built-in base roles, `--sdk` scaffolds SDK-builder syntax (`squad.config.ts`), and `--state-backend local|orphan|two-layer` selects where `.squad/` state lives. Run `squad init --help` for the full list.
 
 > **Note on Squad's "Run squad to start" line:** ignore it. The interactive `squad` shell is deprecated. Use `copilot --agent squad` as shown in Step 1 below.
 
@@ -415,7 +415,7 @@ invalid status values. Add tests for them.
 Scribe, capture any new skills or patterns we should preserve for future work.
 ```
 
-> **Skills** are small reusable markdown modules that capture team conventions — `squad init` ships a starter set (0.11.0 scaffolds ~19 bundled Squad skills under `.github/skills/`); Module 2 Step 9.5 inspects them in depth. (Other Copilot-level skill locations may still use `.copilot/skills/`.)
+> **Skills** are small reusable markdown modules that capture team conventions — `squad init` ships a starter set (0.11.0 scaffolds ~19 bundled Squad skills under `.github/skills/`); Module 2 Step 9.5 inspects them in depth. (A fresh 0.11.0 init does **not** create a `.copilot/skills/` folder — that path only holds personal Copilot-CLI skills or leftovers from an older init.)
 
 **What to watch for:**
 - The Lead should give concrete review feedback (not just "looks good")

@@ -344,7 +344,7 @@ This workshop exercises the core loop: `init` · `doctor` · interactive `copilo
 | **Personal / ambient squad** | `squad personal`, `consult`, `extract` | A private, project-independent squad that advises in read-only "ghost" mode |
 | **Scaling & remote** | `squad subsquads`, `start`, `rc`, `copilot-bridge` | Multi-Codespace scaling and remote control (some remote-control paths are deprecated — see B5 above) |
 | **SDK & backends** | `squad build`, `migrate`, `sync`, `init --sdk`, `--state-backend` | SDK-first (`squad.config.ts`) authoring and alternate state backends |
-| **Portability** | `squad export`, `import`, `preset`, `roles`, `cast` / `hire` | Move teams between repos, apply curated presets, seed base roles, add members |
+| **Portability** | `squad export`, `import`, `preset` (`list`/`apply`/`install <source>`), `roles`, `cast` / `hire` | Move teams between repos, apply or install curated presets (incl. shared ones from a GitHub URL or local path), seed base roles, add members |
 | **Governed memory** | `squad memory`, `state-mcp`, `scrub-emails` | Class-based memory writes, an MCP state server, and PII scrubbing |
 
 None of these are required for the workshop — but knowing they exist tells you how far Squad scales past a 3-hour intro. If you try three, make them `squad nap` (keep state lean), `squad cost` (see the spend), and `squad status` (know which squad you're in).

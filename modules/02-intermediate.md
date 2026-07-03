@@ -132,7 +132,7 @@ Either outcome is data. The point of inspecting is to know which one you're gett
 
 ## Step 9.5: Skills — extend what the team knows (optional)
 
-Squad agents draw on **skills** — small, portable markdown modules (sometimes with scripts) that encode reusable knowledge: review protocols, test discipline, error recovery, git conventions. You already have some: `squad init` scaffolds a curated set into `.github/skills/`. In 0.11.0 that bundled set grew to ~19 skills — including `reviewer-protocol`, `test-discipline`, `error-recovery`, and `reflect`. (Bundled Squad skills scaffolded by `squad init` live under `.github/skills/`; other Copilot-level skill locations may still use `.copilot/skills/`.) This step makes them visible and asks the only question that matters — do they actually change behavior?
+Squad agents draw on **skills** — small, portable markdown modules (sometimes with scripts) that encode reusable knowledge: review protocols, test discipline, error recovery, git conventions. You already have some: `squad init` scaffolds a curated set into `.github/skills/`. In 0.11.0 that bundled set grew to ~19 skills — including `reviewer-protocol`, `test-discipline`, `error-recovery`, and `reflect`. (In 0.11.0 a fresh `squad init` puts **all** bundled skills under `.github/skills/` so they're visible on every Copilot surface — it does **not** create a `.copilot/skills/` folder. If you see one, it's a leftover from an older init or your own personal Copilot-CLI skills.) This step makes them visible and asks the only question that matters — do they actually change behavior?
 
 ### 9.5a. See what's installed
 
@@ -170,7 +170,7 @@ The community publishes skills in the APM (`owner/repo`) format. You can add one
 squad skill install <owner>/<repo>/<skill-name>
 ```
 
-Tamir Dresher's [`squad-skills`](https://github.com/tamirdresher/squad-skills) marketplace is one source — note it's a community snapshot, not officially maintained, so vendor or fork it if you come to depend on it. Skills scaffolded by `squad init` land under `.github/skills/<name>/`; marketplace or other Copilot-level installs may land under `.copilot/skills/<name>/`.
+Tamir Dresher's [`squad-skills`](https://github.com/tamirdresher/squad-skills) marketplace is one source — note it's a community snapshot, not officially maintained, so vendor or fork it if you come to depend on it. In 0.11.0, skills scaffolded by `squad init` all land under `.github/skills/<name>/`; a marketplace or personal Copilot-CLI install may instead land under `.copilot/skills/<name>/`.
 
 ---
 
